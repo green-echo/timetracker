@@ -1,3 +1,4 @@
+
 const router = require('express').Router();
 const { Ticket } = require('../db/models');
 module.exports = router;
@@ -40,3 +41,4 @@ router.put('/:id', (req, res, next) => {
     .then(t => res.json(t))
     .catch(next);
 });
+

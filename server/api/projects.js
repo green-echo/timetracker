@@ -1,3 +1,4 @@
+
 const router = require('express').Router();
 const { Project, Ticket } = require('../db/models');
 module.exports = router;
@@ -56,3 +57,4 @@ router.get('/:id/tickets/:status', async (req, res, next) => {
     next(error);
   }
 });
+

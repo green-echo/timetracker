@@ -1,16 +1,30 @@
 'use strict'
 
 const db = require('../server/db')
-const {User} = require('../server/db/models')
-
+const {User, Project, Ticket, UserTicket} = require('../server/db/models')
+ 
 async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
 
   const users = await Promise.all([
     User.create({email: 'cody@email.com', password: '123'}),
-    User.create({email: 'murphy@email.com', password: '123'})
+    User.create({email: 'murphy@email.com', password: '123'}),
+    User.create({email: 'test@email.com', password: '123'})
   ])
+
+  const projects = await Promise.all([
+    Project.create({name: 'Netflix', totalTime: 20}), 
+    
+  ])
+
+  const tickets = await Promise.all([
+    Ticket.create({title: 'API', description: 'create routes', points:3, status: 'in progress'}), 
+    Ticket.create({title: 'REACT component', description: 'create component', points:5, status: 'to do'}), 
+    Ticket.create({title: 'seed file', description: 'create seed file', points:3, status: 'in review'}), 
+    Ticket.create({title: 'bootstrap', description: 'install bootstrap', points:3, status: 'done'}), 
+  ])
+
 
   console.log(`seeded ${users.length} users`)
   console.log(`seeded successfully`)

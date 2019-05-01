@@ -1,12 +1,12 @@
 const Sequelize = require('sequelize');
 const db = require('../db');
 
-const Ticket = db.define('ticket', {
+const Ticket = db.define('ticket', { 
   title: {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      notEmpty: true,
+      notEmpty: true, 
     },
   },
   description: {

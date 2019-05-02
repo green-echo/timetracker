@@ -7,9 +7,12 @@ Project.belongsToMany(User, { through: 'user-project' });
 User.belongsToMany(Project, { through: 'user-project' });
 User.belongsToMany(Ticket, { through: UserTicket });
 Ticket.belongsToMany(User, { through: UserTicket });
+Project.hasMany(Ticket);
+Ticket.belongsTo(Project)
 
 module.exports = {
   User,
   Project,
-  Ticket
+  Ticket,
+  UserTicket
 };

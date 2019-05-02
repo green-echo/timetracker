@@ -1,12 +1,12 @@
 const Sequelize = require('sequelize');
 const db = require('../db');
 
-const Ticket = db.define('ticket', {
+const Ticket = db.define('ticket', { 
   title: {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      notEmpty: true,
+      notEmpty: true, 
     },
   },
   description: {
@@ -25,7 +25,7 @@ const Ticket = db.define('ticket', {
     },
   },
   status: {
-    type: Sequelize.ENUM('to do', 'in progress', 'in review', 'done'),
+    type: Sequelize.ENUM('to_do', 'in_progress', 'in_review', 'done'),
     allowNull: false,
   },
 });

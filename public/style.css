@@ -33,3 +33,6 @@ form div {
   border: 2px solid white;
   background-color: #c9c7c7;
 }
+.data-react-beautiful-dnd-droppable {
+  height: 100% !important;
+}

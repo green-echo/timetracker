@@ -22,19 +22,25 @@ async function seed() {
       title: 'API',
       description: 'create routes',
       points: 3,
-      status: 'in progress'
+
+      status: 'in_progress'
+
     }),
     Ticket.create({
       title: 'REACT component',
       description: 'create component',
       points: 5,
-      status: 'to do'
+
+      status: 'to_do'
+
     }),
     Ticket.create({
       title: 'seed file',
       description: 'create seed file',
       points: 3,
-      status: 'in review'
+
+      status: 'in_review'
+
     }),
     Ticket.create({
       title: 'bootstrap',

@@ -19,3 +19,17 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+/* project board styles */
+.board-container {
+  min-height: 300px;
+}
+.board-header.row .col {
+  border: 2px solid #c9c7c7;
+  padding: 8px 5px;
+  margin: 2px;
+}
+.board-container.row .col {
+  border: 2px solid white;
+  background-color: #c9c7c7;
+}

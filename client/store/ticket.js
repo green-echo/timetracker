@@ -41,7 +41,6 @@ const updateTicket = singleTicket => ({
   ticket: singleTicket
 });
 
-
 export const createTicketThunk = ticket => {
   return async dispatch => {
     try {
@@ -85,7 +84,6 @@ export const updateTicketThunk = (id, ticket) => {
     }
   };
 };
-
 
 export const removeTicketThunk = ticket => {
   return async dispatch => {
@@ -177,7 +175,6 @@ export default function(state = initialState, action) {
           newState.inProgressTickets.filter(ticket => {
             ticket.id !== action.ticket.id;
           });
-          break;
           break;
         case 'in_review':
           newState.inReviewTickets.filter(ticket => {

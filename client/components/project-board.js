@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import Ticket from './ticket-ph';
+import Ticket from './ticket';
 import StatusColumn from './status-column';
 
 const inProgressTickets = [

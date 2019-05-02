@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {  createTicket } from '../store';
+import {  createTicketThunk } from '../store';
+import { Button, Container, Row, Col, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+
 
 class CreateTicket extends Component {
   constructor(props) {
@@ -27,15 +29,17 @@ class CreateTicket extends Component {
 
   async handleSubmit(event) {
     event.preventDefault();
-    this.props.update(this.props.data.id, {
+    this.props.create({
       title: this.state.title,
       description: this.state.description,
       points: this.state.points
     });
+    this.setState({title: '', description: '', points:''})
   }
 
   render() {
     return (
+    
       <form onSubmit={this.handleSubmit}>
         <label className="formLabel" htmlFor="title">
           Title:{' '}
@@ -77,6 +81,7 @@ class CreateTicket extends Component {
           Submit
         </button>
       </form>
+  
     );
   }
 }
@@ -87,10 +92,10 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = function(dispatch) {
-  const ticketId = this.props.match.params.id;
+ // const ticketId = this.props.match.params.id;
   return {
     create: ticket => {
-      dispatch(createTicket(ticket));
+      dispatch(createTicketThunk(ticket));
     }
   };
 };

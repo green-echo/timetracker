@@ -4,6 +4,8 @@ import { withRouter, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Login, Signup, UserHome, ProjectBoard } from './components';
 import { me } from './store';
+import CreateTicket from './components/CreateTicket';
+import Projects from './components/Projects'
 
 /**
  * COMPONENT
@@ -28,6 +30,8 @@ class Routes extends Component {
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
+        <Route path='/projects'  component={Projects}  /> 
+        <Route path='/newticket'  component={CreateTicket}  /> 
         <Route component={ProjectBoard} />
       </Switch>
     );

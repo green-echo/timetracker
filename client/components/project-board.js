@@ -1,8 +1,10 @@
 import React from 'react';
-import { Container, Row, Col } from 'reactstrap';
+import { Button, Container, Row, Col, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Ticket from './ticket';
 import StatusColumn from './status-column';
+import CreateTicket from './CreateTicket';
+import {Link} from 'react-router-dom'
 
 const inProgressTickets = [
   {
@@ -21,10 +23,18 @@ const inProgressTickets = [
   }
 ];
 export default class ProjectBoard extends React.Component {
+ 
   onDragEnd = result => {};
   render() {
     return (
+      <div>
+       <Link to='/newticket'> <Button color="danger" >
+       New Ticket</Button>
+    
+       </Link>
+
       <DragDropContext onDragEnd={this.onDragEnd}>
+
         <Container className="project-board">
           <Row>
             <Col>Project Name</Col>
@@ -139,6 +149,7 @@ export default class ProjectBoard extends React.Component {
           </Row>
         </Container>
       </DragDropContext>
+      </div>
     );
   }
 }

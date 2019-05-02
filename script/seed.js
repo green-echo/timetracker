@@ -14,8 +14,14 @@ async function seed() {
   ]);
 
   const projects = await Promise.all([
-    Project.create({ name: 'Netflix', totalTime: 20 })
+    Project.create({ name: 'Netflix', totalTime: 20 }),
+    Project.create({ name: 'Hersheys Frontend', totalTime: 30 }),
+    Project.create({ name: 'Hersheys Backend', totalTime: 60 })
   ]);
+
+  projects[0].setUsers([users[0], users[1], users[2]]);
+  projects[1].setUsers([users[0], users[1]]);
+  projects[2].setUsers([users[1]]);
 
   const tickets = await Promise.all([
     Ticket.create({
@@ -52,6 +58,10 @@ async function seed() {
   //putting all tickets under first Project
   for (let i=0; i<tickets.length; i++) {
     await tickets[i].setProject(projects[0]);
+  }
+
+  for (let i = 0; i < tickets.length; i++) {
+    await tickets[i].setProject(projects[1]);
   }
  
   console.log(`seeded ${users.length} users`);

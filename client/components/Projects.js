@@ -7,41 +7,31 @@ import {
   ListGroupItemHeading,
   ListGroupItemText
 } from 'reactstrap';
+import { getProjectsThunk } from '../store/ticket';
 
 class Project extends React.Component {
+ 
+
+  componentDidMount() {
+    this.props.getProjects();
+  }
   render() {
-    return (
-      <div>
-        <ListGroup>
-          <ListGroupItem active>
-            <ListGroupItemHeading>List group item heading</ListGroupItemHeading>
-            <ListGroupItemText>
-              Donec id elit non mi porta gravida at eget metus. Maecenas sed
-              diam eget risus varius blandit.
-            </ListGroupItemText>
-          </ListGroupItem>
-          <ListGroupItem>
-            <ListGroupItemHeading>List group item heading</ListGroupItemHeading>
-            <ListGroupItemText>
-              Donec id elit non mi porta gravida at eget metus. Maecenas sed
-              diam eget risus varius blandit.
-            </ListGroupItemText>
-          </ListGroupItem>
-          <ListGroupItem>
-            <ListGroupItemHeading>List group item heading</ListGroupItemHeading>
-            <ListGroupItemText>
-              Donec id elit non mi porta gravida at eget metus. Maecenas sed
-              diam eget risus varius blandit.
-            </ListGroupItemText>
-          </ListGroupItem>
-        </ListGroup>
-      </div>
-    );
+    console.log(this.props.data);
+    return <div />;
   }
 }
 
 const mapStateToProps = state => {
+  console.log('!!!!', state.ticket.projects);
   return { data: state.projects };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getProjects: () => {
+      dispatch(getProjectsThunk());
+    }
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Project);

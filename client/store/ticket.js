@@ -143,8 +143,13 @@ export default function(state = initialState, action) {
         }
       });
       return newState;
+
+      
   case GET_PROJECTS:
       return newState.action.projects
+
+
+
     case UPDATE_TICKET:
       switch (ticket.status) {
         case 'to_do':

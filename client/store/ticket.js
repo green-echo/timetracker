@@ -6,7 +6,8 @@ const initialState = {
   inReviewTickets: [],
   doneTickets: [],
   ticket: {},
-  projects:[]
+  projects: [],
+  currentProject: {}
 };
 
 const GET_TICKETS = 'GET_TICKETS';
@@ -18,7 +19,10 @@ const CREATE_TICKET = 'CREATE_TICKET';
 const GET_TICKET = 'GET_TICKET';
 const UPDATE_TICKET = 'UPDATE_TICKET';
 
-const GET_PROJECTS = 'GET_PROJECTS'
+const CREATE_PROJECT = 'CREATE_PROJECT';
+const GET_PROJECTS = 'GET_PROJECTS';
+
+const SET_PROJECT = 'SET_PROJECT';
 
 const removeTicket = ticket => ({
   type: REMOVE_TICKET,
@@ -29,6 +33,11 @@ const createTicket = singleTicket => ({
   ticket: singleTicket
 });
 
+const createProject = singleProject => ({
+  type: CREATE_PROJECT,
+  project: singleProject
+});
+
 const getTickets = tickets => ({
   type: GET_TICKETS,
   tickets
@@ -37,7 +46,11 @@ const getTickets = tickets => ({
 const getProjects = projects => ({
   type: GET_PROJECTS,
   projects
+});
 
+const setProject = project => ({
+  type: SET_PROJECT,
+  currentProject: project
 });
 
 const getTicket = singleTicket => ({
@@ -55,6 +68,19 @@ export const createTicketThunk = ticket => {
     try {
       const { data } = await axios.post('api/tickets', ticket);
       dispatch(createTicket(data));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+export const createProjectThunk = project => {
+  return async dispatch => {
+    try {
+      const { data } = await axios.post('api/projects', project);
+      console.log('adat', data);
+      dispatch(createProject(data));
+      dispatch(setProject(data));
     } catch (err) {
       console.log(err);
     }
@@ -81,8 +107,7 @@ export const getProjectsThunk = () => {
       console.log(err);
     }
   };
-  }
-
+};
 
 export const getTicketThunk = ticketId => {
   return async dispatch => {
@@ -144,11 +169,8 @@ export default function(state = initialState, action) {
       });
       return newState;
 
-      
-  case GET_PROJECTS:
-      return newState.action.projects
-
-
+    case GET_PROJECTS:
+      return { ...state, projects: action.projects };
 
     case UPDATE_TICKET:
       switch (ticket.status) {
@@ -218,6 +240,13 @@ export default function(state = initialState, action) {
           break;
       }
       return newState;
+    case CREATE_PROJECT:
+      return {
+        ...state,
+        projects: [...this.state.projects, action.singleProject]
+      };
+    case SET_PROJECT:
+      return { ...state, currentProject: action.currentProject };
     default:
       return state;
   }

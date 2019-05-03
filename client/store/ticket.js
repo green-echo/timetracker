@@ -49,7 +49,7 @@ const updateTicket = singleTicket => ({
   ticket: singleTicket
 });
 
-export const createTicketThunk = (ticket, id )=> {
+export const createTicketThunk = (ticket, id) => {
   return async dispatch => {
     try {
       const { data } = await axios.post(`/api/projects/${id}`, ticket);
@@ -83,7 +83,7 @@ export const getTicketsThunk = () => {
 export const getProjectsThunk = () => {
   return async dispatch => {
     try {
-      const { data } = await axios.get('api/projects');
+      const { data } = await axios.get('api/projects/');
       dispatch(getProjects(data));
     } catch (err) {
       console.log(err);

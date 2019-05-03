@@ -5,10 +5,18 @@ const UserTicket = require('./userTicket');
 
 Project.belongsToMany(User, { through: 'user-project' });
 User.belongsToMany(Project, { through: 'user-project' });
-User.belongsToMany(Ticket, { through: UserTicket });
-Ticket.belongsToMany(User, { through: UserTicket });
+
+User.hasMany(Ticket);
+Ticket.belongsTo(User);
+
+User.hasMany(UserTicket);
+UserTicket.belongsTo(User);
+
+Ticket.hasMany(UserTicket);
+UserTicket.belongsTo(Ticket);
+
 Project.hasMany(Ticket);
-Ticket.belongsTo(Project)
+Ticket.belongsTo(Project);
 
 module.exports = {
   User,

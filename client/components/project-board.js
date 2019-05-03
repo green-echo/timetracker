@@ -7,7 +7,11 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
-  ModalFooter
+  ModalFooter,
+  ButtonDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
 } from 'reactstrap';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Ticket from './ticket';
@@ -15,7 +19,9 @@ import { Link } from 'react-router-dom';
 import StatusColumn from './status-column';
 import CreateTicket from './CreateTicket';
 import { connect } from 'react-redux';
+
 import {getProjectThunk} from '../store/ticket'
+
 
 const tickets = {
   '1': {
@@ -76,14 +82,16 @@ const tickets = {
   }
 };
 const div = {
-  minHeight: '30px',
+  minHeight: '200px',
   height: '100%'
 };
+
  class ProjectBoard extends React.Component {
 
    componentDidMount() {
     this.props.getProject();
   }
+
   constructor() {
     super();
     this.state = {
@@ -104,8 +112,22 @@ const div = {
           id: 4,
           taskIds: [7, 8]
         }
-      }
+      },
+      dropdownOpen: false,
+      btnDropright: false
     };
+    this.toggle = this.toggle.bind(this);
+  }
+
+  componentDidMount() {
+    const { id } = this.props.match.params;
+    console.log('id');
+  }
+
+  toggle() {
+    this.setState({
+      dropdownOpen: !this.state.dropdownOpen
+    });
   }
   onDragEnd = result => {
     const { destination, source, draggableId } = result;
@@ -170,6 +192,46 @@ const div = {
     this.setState(newState);
   };
   render() {
+
+    console.log('PROPS', this.props);
+    return (
+      <div>
+        <Container className="project-board">
+          <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+            <DropdownToggle caret>
+              {this.props.currentProject.name}
+            </DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem header>Projects</DropdownItem>
+              <DropdownItem divider />
+              {this.props.projects.map(project => {
+                return (
+                  <Link to={`/projects/${project.id}`}>
+                    <DropdownItem>{project.name}</DropdownItem>
+                  </Link>
+                );
+              })}
+            </DropdownMenu>
+          </ButtonDropdown>
+          <Link to="/newticket">
+            {' '}
+            <Button color="danger">New Ticket</Button>
+          </Link>
+          <ButtonDropdown
+            direction="right"
+            isOpen={this.state.btnDropright}
+            toggle={() => {
+              this.setState({ btnDropright: !this.state.btnDropright });
+            }}
+          >
+            <DropdownToggle caret>Users</DropdownToggle>
+            <DropdownMenu>
+              {this.props.users.map(user => {
+                return <DropdownItem key={user.id}>{user.name}</DropdownItem>;
+              })}
+            </DropdownMenu>
+          </ButtonDropdown>
+
    
     return (
       <div>
@@ -178,8 +240,8 @@ const div = {
           <Button color="danger">New Ticket</Button>
         </Link>
 
-        <DragDropContext onDragEnd={this.onDragEnd}>
-          <Container className="project-board">
+
+          <DragDropContext onDragEnd={this.onDragEnd}>
             <Row>
               <Col>Project Name</Col>
             </Row>
@@ -214,7 +276,7 @@ const div = {
                         }
                       )}
                       {provided.placeholder}
-                      <div style={div}>Place contents Here</div>
+                      <div style={div} />
                     </StatusColumn>
                   </Col>
                 )}
@@ -243,7 +305,7 @@ const div = {
                         }
                       )}
                       {provided.placeholder}
-                      <div style={div}>Place contents Here</div>
+                      <div style={div} />
                     </StatusColumn>
                   </Col>
                 )}
@@ -272,7 +334,7 @@ const div = {
                         }
                       )}
                       {provided.placeholder}
-                      <div style={div}>Place contents Here</div>
+                      <div style={div} />
                     </StatusColumn>
                   </Col>
                 )}
@@ -301,24 +363,36 @@ const div = {
                         }
                       )}
                       {provided.placeholder}
-                      <div style={div}>Place contents Here</div>
+                      <div style={div} />
                     </StatusColumn>
                   </Col>
                 )}
               </Droppable>
-            </Row> 
-          </Container>
-        </DragDropContext>
+
+            </Row>
+          </DragDropContext>
+        </Container>
+
       </div>
     );
   }
 }
 
 const mapStateToProps = state => {
-  console.log('??', state.ticket.project);
 
- return { data: state.ticket.project};
+  // console.log('mapping state to store', state.selectedCampus)
+  return {
+    currentProject: { id: 1, name: 'Hersheys' },
+    users: [
+      { id: 1, name: 'Ariel' },
+      { id: 2, name: 'Christina' },
+      { id: 3, name: 'Katarina' }
+    ],
+    data: state.ticket.project
+  }
 };
+
+
 
 const mapDispatchToProps =  (dispatch, id) => {
   return {
@@ -328,5 +402,6 @@ const mapDispatchToProps =  (dispatch, id) => {
     }
   };
 };
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectBoard);

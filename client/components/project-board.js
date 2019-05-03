@@ -7,13 +7,18 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
-  ModalFooter
+  ModalFooter,
+  ButtonDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
 } from 'reactstrap';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Ticket from './ticket';
 import { Link } from 'react-router-dom';
 import StatusColumn from './status-column';
 import CreateTicket from './CreateTicket';
+import { connect } from 'react-redux';
 
 const tickets = {
   '1': {
@@ -74,10 +79,10 @@ const tickets = {
   }
 };
 const div = {
-  minHeight: '30px',
+  minHeight: '200px',
   height: '100%'
 };
-export default class ProjectBoard extends React.Component {
+class ProjectBoard extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -98,8 +103,22 @@ export default class ProjectBoard extends React.Component {
           id: 4,
           taskIds: [7, 8]
         }
-      }
+      },
+      dropdownOpen: false,
+      btnDropright: false
     };
+    this.toggle = this.toggle.bind(this);
+  }
+
+  componentDidMount() {
+    const { id } = this.props.match.params;
+    console.log('id');
+  }
+
+  toggle() {
+    this.setState({
+      dropdownOpen: !this.state.dropdownOpen
+    });
   }
   onDragEnd = result => {
     const { destination, source, draggableId } = result;
@@ -164,15 +183,46 @@ export default class ProjectBoard extends React.Component {
     this.setState(newState);
   };
   render() {
+    console.log('PROPS', this.props);
     return (
       <div>
-        <Link to="/newticket">
-          {' '}
-          <Button color="danger">New Ticket</Button>
-        </Link>
+        <Container className="project-board">
+          <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+            <DropdownToggle caret>
+              {this.props.currentProject.name}
+            </DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem header>Projects</DropdownItem>
+              <DropdownItem divider />
+              {this.props.projects.map(project => {
+                return (
+                  <Link to={`/projects/${project.id}`}>
+                    <DropdownItem>{project.name}</DropdownItem>
+                  </Link>
+                );
+              })}
+            </DropdownMenu>
+          </ButtonDropdown>
+          <Link to="/newticket">
+            {' '}
+            <Button color="danger">New Ticket</Button>
+          </Link>
+          <ButtonDropdown
+            direction="right"
+            isOpen={this.state.btnDropright}
+            toggle={() => {
+              this.setState({ btnDropright: !this.state.btnDropright });
+            }}
+          >
+            <DropdownToggle caret>Users</DropdownToggle>
+            <DropdownMenu>
+              {this.props.users.map(user => {
+                return <DropdownItem key={user.id}>{user.name}</DropdownItem>;
+              })}
+            </DropdownMenu>
+          </ButtonDropdown>
 
-        <DragDropContext onDragEnd={this.onDragEnd}>
-          <Container className="project-board">
+          <DragDropContext onDragEnd={this.onDragEnd}>
             <Row>
               <Col>Project Name</Col>
             </Row>
@@ -207,7 +257,7 @@ export default class ProjectBoard extends React.Component {
                         }
                       )}
                       {provided.placeholder}
-                      <div style={div}>Place contents Here</div>
+                      <div style={div} />
                     </StatusColumn>
                   </Col>
                 )}
@@ -236,7 +286,7 @@ export default class ProjectBoard extends React.Component {
                         }
                       )}
                       {provided.placeholder}
-                      <div style={div}>Place contents Here</div>
+                      <div style={div} />
                     </StatusColumn>
                   </Col>
                 )}
@@ -265,7 +315,7 @@ export default class ProjectBoard extends React.Component {
                         }
                       )}
                       {provided.placeholder}
-                      <div style={div}>Place contents Here</div>
+                      <div style={div} />
                     </StatusColumn>
                   </Col>
                 )}
@@ -294,15 +344,37 @@ export default class ProjectBoard extends React.Component {
                         }
                       )}
                       {provided.placeholder}
-                      <div style={div}>Place contents Here</div>
+                      <div style={div} />
                     </StatusColumn>
                   </Col>
                 )}
               </Droppable>
             </Row>
-          </Container>
-        </DragDropContext>
+          </DragDropContext>
+        </Container>
       </div>
     );
   }
 }
+
+const mapStateToProps = state => {
+  // console.log('mapping state to store', state.selectedCampus)
+  return {
+    projects: [
+      { id: 1, name: 'Hersheys' },
+      { id: 2, name: 'Nike' },
+      { id: 3, name: 'idk' }
+    ],
+    currentProject: { id: 1, name: 'Hersheys' },
+    users: [
+      { id: 1, name: 'Ariel' },
+      { id: 2, name: 'Christina' },
+      { id: 3, name: 'Katarina' }
+    ]
+  };
+};
+
+const mapDispatchToProps = function(dispatch) {
+  return {};
+};
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectBoard);

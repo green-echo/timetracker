@@ -39,8 +39,8 @@ class Project extends React.Component {
 }
 
 const mapStateToProps = state => {
-  console.log('!!!!', state.ticket.projects);
-  console.log('!!!!', state);
+  // console.log('!!!!', state.ticket.projects);
+  // console.log('!!!!', state);
 
   return { data: state.ticket.projects };
 };

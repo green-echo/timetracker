@@ -4,6 +4,10 @@ import { withRouter, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Login, Signup, UserHome, ProjectBoard } from './components';
 import { me } from './store';
+import CreateTicket from './components/CreateTicket';
+import CreateProject from './components/CreateProject';
+
+import Projects from './components/Projects';
 
 /**
  * COMPONENT
@@ -24,11 +28,15 @@ class Routes extends Component {
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}
+            <Route exact path="/newproject" component={CreateProject} />
             <Route path="/home" component={UserHome} />
+            <Route exact path="/projects" component={Projects} />
+            <Route path="/newticket" component={CreateTicket} />
+            <Route path="/projects/:id" component={ProjectBoard} />
+            <Route component={Projects} />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
-        <Route component={ProjectBoard} />
       </Switch>
     );
   }

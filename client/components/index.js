@@ -6,5 +6,5 @@
 export { default as Navbar } from './navbar';
 export { default as UserHome } from './user-home';
 export { default as ProjectBoard } from './project-board';
-export { default as Ticket } from './ticket-ph';
+export { default as Ticket } from './ticket';
 export { Login, Signup } from './auth-form';

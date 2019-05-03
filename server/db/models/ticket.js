@@ -27,6 +27,7 @@ const Ticket = db.define('ticket', {
   status: {
     type: Sequelize.ENUM('to_do', 'in_progress', 'in_review', 'done'),
     allowNull: false,
+    defaultValue: 'to_do' 
   },
 });
 

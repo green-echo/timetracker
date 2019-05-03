@@ -1,8 +1,20 @@
 import React from 'react';
-import { Container, Row, Col } from 'reactstrap';
+import {
+  Button,
+  Container,
+  Row,
+  Col,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter
+} from 'reactstrap';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Ticket from './ticket';
+import { Link } from 'react-router-dom';
 import StatusColumn from './status-column';
+import CreateTicket from './CreateTicket';
+
 const tickets = {
   '1': {
     id: 1,
@@ -153,129 +165,144 @@ export default class ProjectBoard extends React.Component {
   };
   render() {
     return (
-      <DragDropContext onDragEnd={this.onDragEnd}>
-        <Container className="project-board">
-          <Row>
-            <Col>Project Name</Col>
-          </Row>
-          <Row className="board-header">
-            <Col>To Do</Col>
-            <Col>In Progress</Col>
-            <Col>In Review</Col>
-            <Col>Done</Col>
-          </Row>
-          <Row className="board-container">
-            <Droppable droppableId="1" style={div}>
-              {provided => (
-                <Col>
-                  <StatusColumn
-                    provided={provided}
-                    innerRef={provided.innerRef}
-                  >
-                    {this.state.columns['1'].taskIds.map((ticketId, index) => {
-                      const ticket = tickets[ticketId];
-                      return (
-                        <Draggable draggableId={ticket.id} index={index}>
-                          {provided => (
-                            <Ticket
-                              provided={provided}
-                              innerRef={provided.innerRef}
-                              ticket={ticket}
-                            />
-                          )}
-                        </Draggable>
-                      );
-                    })}
-                    {provided.placeholder}
-                  </StatusColumn>
-                  <div style={div}>Place contents Here</div>
-                </Col>
-              )}
-            </Droppable>
-            <Droppable droppableId="2" style={div}>
-              {provided => (
-                <Col>
-                  <StatusColumn
-                    provided={provided}
-                    innerRef={provided.innerRef}
-                  >
-                    {this.state.columns['2'].taskIds.map((ticketId, index) => {
-                      const ticket = tickets[ticketId];
-                      return (
-                        <Draggable draggableId={ticket.id} index={index}>
-                          {provided => (
-                            <Ticket
-                              provided={provided}
-                              innerRef={provided.innerRef}
-                              ticket={ticket}
-                            />
-                          )}
-                        </Draggable>
-                      );
-                    })}
-                    {provided.placeholder}
-                  </StatusColumn>
-                  <div style={div}>Place contents Here</div>
-                </Col>
-              )}
-            </Droppable>
-            <Droppable droppableId="3" style={div}>
-              {provided => (
-                <Col>
-                  <StatusColumn
-                    provided={provided}
-                    innerRef={provided.innerRef}
-                  >
-                    {this.state.columns['3'].taskIds.map((ticketId, index) => {
-                      const ticket = tickets[ticketId];
-                      return (
-                        <Draggable draggableId={ticket.id} index={index}>
-                          {provided => (
-                            <Ticket
-                              provided={provided}
-                              innerRef={provided.innerRef}
-                              ticket={ticket}
-                            />
-                          )}
-                        </Draggable>
-                      );
-                    })}
-                    {provided.placeholder}
-                  </StatusColumn>
-                  <div style={div}>Place contents Here</div>
-                </Col>
-              )}
-            </Droppable>
-            <Droppable droppableId="4" style={div}>
-              {provided => (
-                <Col>
-                  <StatusColumn
-                    provided={provided}
-                    innerRef={provided.innerRef}
-                  >
-                    {this.state.columns['4'].taskIds.map((ticketId, index) => {
-                      const ticket = tickets[ticketId];
-                      return (
-                        <Draggable draggableId={ticket.id} index={index}>
-                          {provided => (
-                            <Ticket
-                              provided={provided}
-                              innerRef={provided.innerRef}
-                              ticket={ticket}
-                            />
-                          )}
-                        </Draggable>
-                      );
-                    })}
-                    {provided.placeholder}
-                  </StatusColumn>
-                  <div style={div}>Place contents Here</div>
-                </Col>
-              )}
-            </Droppable>
-          </Row>
-        </Container>
-      </DragDropContext>
+      <div>
+        <Link to="/newticket">
+          {' '}
+          <Button color="danger">New Ticket</Button>
+        </Link>
+
+        <DragDropContext onDragEnd={this.onDragEnd}>
+          <Container className="project-board">
+            <Row>
+              <Col>Project Name</Col>
+            </Row>
+            <Row className="board-header">
+              <Col>To Do</Col>
+              <Col>In Progress</Col>
+              <Col>In Review</Col>
+              <Col>Done</Col>
+            </Row>
+            <Row className="board-container">
+              <Droppable droppableId="1" style={div}>
+                {provided => (
+                  <Col>
+                    <StatusColumn
+                      provided={provided}
+                      innerRef={provided.innerRef}
+                    >
+                      {this.state.columns['1'].taskIds.map(
+                        (ticketId, index) => {
+                          const ticket = tickets[ticketId];
+                          return (
+                            <Draggable draggableId={ticket.id} index={index}>
+                              {provided => (
+                                <Ticket
+                                  provided={provided}
+                                  innerRef={provided.innerRef}
+                                  ticket={ticket}
+                                />
+                              )}
+                            </Draggable>
+                          );
+                        }
+                      )}
+                      {provided.placeholder}
+                      <div style={div}>Place contents Here</div>
+                    </StatusColumn>
+                  </Col>
+                )}
+              </Droppable>
+              <Droppable droppableId="2" style={div}>
+                {provided => (
+                  <Col>
+                    <StatusColumn
+                      provided={provided}
+                      innerRef={provided.innerRef}
+                    >
+                      {this.state.columns['2'].taskIds.map(
+                        (ticketId, index) => {
+                          const ticket = tickets[ticketId];
+                          return (
+                            <Draggable draggableId={ticket.id} index={index}>
+                              {provided => (
+                                <Ticket
+                                  provided={provided}
+                                  innerRef={provided.innerRef}
+                                  ticket={ticket}
+                                />
+                              )}
+                            </Draggable>
+                          );
+                        }
+                      )}
+                      {provided.placeholder}
+                      <div style={div}>Place contents Here</div>
+                    </StatusColumn>
+                  </Col>
+                )}
+              </Droppable>
+              <Droppable droppableId="3" style={div}>
+                {provided => (
+                  <Col>
+                    <StatusColumn
+                      provided={provided}
+                      innerRef={provided.innerRef}
+                    >
+                      {this.state.columns['3'].taskIds.map(
+                        (ticketId, index) => {
+                          const ticket = tickets[ticketId];
+                          return (
+                            <Draggable draggableId={ticket.id} index={index}>
+                              {provided => (
+                                <Ticket
+                                  provided={provided}
+                                  innerRef={provided.innerRef}
+                                  ticket={ticket}
+                                />
+                              )}
+                            </Draggable>
+                          );
+                        }
+                      )}
+                      {provided.placeholder}
+                      <div style={div}>Place contents Here</div>
+                    </StatusColumn>
+                  </Col>
+                )}
+              </Droppable>
+              <Droppable droppableId="4" style={div}>
+                {provided => (
+                  <Col>
+                    <StatusColumn
+                      provided={provided}
+                      innerRef={provided.innerRef}
+                    >
+                      {this.state.columns['4'].taskIds.map(
+                        (ticketId, index) => {
+                          const ticket = tickets[ticketId];
+                          return (
+                            <Draggable draggableId={ticket.id} index={index}>
+                              {provided => (
+                                <Ticket
+                                  provided={provided}
+                                  innerRef={provided.innerRef}
+                                  ticket={ticket}
+                                />
+                              )}
+                            </Draggable>
+                          );
+                        }
+                      )}
+                      {provided.placeholder}
+                      <div style={div}>Place contents Here</div>
+                    </StatusColumn>
+                  </Col>
+                )}
+              </Droppable>
+            </Row>
+          </Container>
+        </DragDropContext>
+      </div>
     );
   }
 }

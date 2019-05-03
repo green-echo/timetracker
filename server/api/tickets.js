@@ -20,7 +20,7 @@ router.get('/:id', async (req, res, next) => {
         id: Number(ticketId)
       }
     });
-    res.json(singleTicket);
+    res.json(singleTicket); 
   } catch (error) {
     next(error);
   }

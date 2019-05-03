@@ -20,7 +20,7 @@ async function seed() {
   ]);
 
   projects[0].setUsers([users[0], users[1], users[2]]);
-  projects[1].setUsers([users[0], users[1]]);
+  projects[1].setUsers([users[0], users[1], users[2]]);
   projects[2].setUsers([users[1]]);
 
   const tickets = await Promise.all([
@@ -30,7 +30,6 @@ async function seed() {
       points: 3,
 
       status: 'in_progress'
-
     }),
     Ticket.create({
       title: 'REACT component',
@@ -38,7 +37,6 @@ async function seed() {
       points: 5,
 
       status: 'to_do'
-
     }),
     Ticket.create({
       title: 'seed file',
@@ -46,7 +44,6 @@ async function seed() {
       points: 3,
 
       status: 'in_review'
-
     }),
     Ticket.create({
       title: 'bootstrap',
@@ -56,14 +53,14 @@ async function seed() {
     })
   ]);
   //putting all tickets under first Project
-  for (let i=0; i<tickets.length; i++) {
+  for (let i = 0; i < tickets.length; i++) {
     await tickets[i].setProject(projects[0]);
   }
 
   for (let i = 0; i < tickets.length; i++) {
     await tickets[i].setProject(projects[1]);
   }
- 
+
   console.log(`seeded ${users.length} users`);
   console.log(`seeded successfully`);
 }

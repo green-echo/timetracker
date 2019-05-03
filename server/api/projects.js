@@ -80,7 +80,7 @@ router.get('/:id/tickets/:status', async (req, res, next) => {
     next(error);
   }
 });
-
+/* This gets all the projects that blongs to a user */
 router.get('/', async (req, res, next) => {
   try {
     const user = await User.findOne({

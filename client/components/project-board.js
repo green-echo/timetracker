@@ -20,8 +20,7 @@ import StatusColumn from './status-column';
 import CreateTicket from './CreateTicket';
 import { connect } from 'react-redux';
 
-import {getProjectThunk} from '../store/ticket'
-
+import { getProjectThunk, getProjectsThunk } from '../store/ticket';
 
 const tickets = {
   '1': {
@@ -86,10 +85,10 @@ const div = {
   height: '100%'
 };
 
- class ProjectBoard extends React.Component {
-
-   componentDidMount() {
+class ProjectBoard extends React.Component {
+  componentDidMount() {
     this.props.getProject();
+    this.props.loadProjects();
   }
 
   constructor() {
@@ -117,11 +116,6 @@ const div = {
       btnDropright: false
     };
     this.toggle = this.toggle.bind(this);
-  }
-
-  componentDidMount() {
-    const { id } = this.props.match.params;
-    console.log('id');
   }
 
   toggle() {
@@ -192,8 +186,8 @@ const div = {
     this.setState(newState);
   };
   render() {
-return(
-    <div>
+    return (
+      <div>
         <Container className="project-board">
           <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
             <DropdownToggle caret>
@@ -211,11 +205,9 @@ return(
               })}
             </DropdownMenu>
           </ButtonDropdown>
-        <Link to={`/projects/${this.props.data.id}/newticket`}>
-        
-          <Button color="danger">New Ticket</Button>
-        </Link>
-
+          <Link to={`/projects/${this.props.data.id}/newticket`}>
+            <Button color="danger">New Ticket</Button>
+          </Link>
 
           <DragDropContext onDragEnd={this.onDragEnd}>
             <Row>
@@ -344,18 +336,15 @@ return(
                   </Col>
                 )}
               </Droppable>
-
             </Row>
           </DragDropContext>
         </Container>
-
       </div>
     );
-  }}
-
+  }
+}
 
 const mapStateToProps = state => {
-
   // console.log('mapping state to store', state.selectedCampus)
   return {
     currentProject: { id: 1, name: 'Hersheys' },
@@ -364,20 +353,21 @@ const mapStateToProps = state => {
       { id: 2, name: 'Christina' },
       { id: 3, name: 'Katarina' }
     ],
-    data: state.ticket.project
-  }
+    data: state.ticket.project,
+    projects: state.ticket.projects
+  };
 };
 
-
-
-const mapDispatchToProps =  (dispatch, id) => {
+const mapDispatchToProps = (dispatch, id) => {
   return {
     getProject: () => {
       const projectId = id.match.params.id;
       dispatch(getProjectThunk(projectId));
+    },
+    loadProjects: () => {
+      dispatch(getProjectsThunk());
     }
   };
 };
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectBoard);

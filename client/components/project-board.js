@@ -192,10 +192,8 @@ const div = {
     this.setState(newState);
   };
   render() {
-
-    console.log('PROPS', this.props);
-    return (
-      <div>
+return(
+    <div>
         <Container className="project-board">
           <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
             <DropdownToggle caret>
@@ -213,28 +211,6 @@ const div = {
               })}
             </DropdownMenu>
           </ButtonDropdown>
-          <Link to="/newticket">
-            {' '}
-            <Button color="danger">New Ticket</Button>
-          </Link>
-          <ButtonDropdown
-            direction="right"
-            isOpen={this.state.btnDropright}
-            toggle={() => {
-              this.setState({ btnDropright: !this.state.btnDropright });
-            }}
-          >
-            <DropdownToggle caret>Users</DropdownToggle>
-            <DropdownMenu>
-              {this.props.users.map(user => {
-                return <DropdownItem key={user.id}>{user.name}</DropdownItem>;
-              })}
-            </DropdownMenu>
-          </ButtonDropdown>
-
-   
-    return (
-      <div>
         <Link to={`/projects/${this.props.data.id}/newticket`}>
         
           <Button color="danger">New Ticket</Button>
@@ -375,8 +351,8 @@ const div = {
 
       </div>
     );
-  }
-}
+  }}
+
 
 const mapStateToProps = state => {
 

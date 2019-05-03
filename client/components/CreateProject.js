@@ -41,7 +41,7 @@ class CreateProject extends Component {
       totalTime: this.state.totalTime
     });
     this.setState({ name: '', totalTime: '' });
-    console.log('!!!!', this.props);
+   // console.log('!!!!', this.props.currentProject);
     this.props.history.push(`/projects/${this.props.currentProject.id}`);
   }
 
@@ -83,7 +83,7 @@ class CreateProject extends Component {
 }
 
 const mapStateToProps = state => {
-  // console.log('mapping state to store', state.selectedCampus)
+   console.log('????', state.ticket.currentProject)
   return {
     data: state.ticket.projects,
     currentProject: state.ticket.currentProject

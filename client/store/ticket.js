@@ -48,10 +48,11 @@ const updateTicket = singleTicket => ({
   type: GET_TICKET,
   ticket: singleTicket
 });
-export const createTicketThunk = ticket => {
+
+export const createTicketThunk = (ticket, id )=> {
   return async dispatch => {
     try {
-      const { data } = await axios.post('api/projects/:id/newticket', ticket);
+      const { data } = await axios.post(`/api/projects/${id}`, ticket);
       dispatch(createTicket(data));
     } catch (err) {
       console.log(err);

@@ -14,6 +14,8 @@ import Ticket from './ticket';
 import { Link } from 'react-router-dom';
 import StatusColumn from './status-column';
 import CreateTicket from './CreateTicket';
+import { connect } from 'react-redux';
+import {getProjectThunk} from '../store/ticket'
 
 const tickets = {
   '1': {
@@ -77,7 +79,11 @@ const div = {
   minHeight: '30px',
   height: '100%'
 };
-export default class ProjectBoard extends React.Component {
+ class ProjectBoard extends React.Component {
+
+   componentDidMount() {
+    this.props.getProject();
+  }
   constructor() {
     super();
     this.state = {
@@ -164,10 +170,11 @@ export default class ProjectBoard extends React.Component {
     this.setState(newState);
   };
   render() {
+   
     return (
       <div>
-        <Link to="/newticket">
-          {' '}
+        <Link to={`/projects/${this.props.data.id}/newticket`}>
+        
           <Button color="danger">New Ticket</Button>
         </Link>
 
@@ -299,10 +306,27 @@ export default class ProjectBoard extends React.Component {
                   </Col>
                 )}
               </Droppable>
-            </Row>
+            </Row> 
           </Container>
         </DragDropContext>
       </div>
     );
   }
 }
+
+const mapStateToProps = state => {
+  console.log('??', state.ticket.project);
+
+ return { data: state.ticket.project};
+};
+
+const mapDispatchToProps =  (dispatch, id) => {
+  return {
+    getProject: () => {
+      const projectId = id.match.params.id;
+      dispatch(getProjectThunk(projectId));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectBoard);

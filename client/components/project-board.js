@@ -20,6 +20,9 @@ import StatusColumn from './status-column';
 import CreateTicket from './CreateTicket';
 import { connect } from 'react-redux';
 
+import {getProjectThunk} from '../store/ticket'
+
+
 const tickets = {
   '1': {
     id: 1,
@@ -82,7 +85,13 @@ const div = {
   minHeight: '200px',
   height: '100%'
 };
-class ProjectBoard extends React.Component {
+
+ class ProjectBoard extends React.Component {
+
+   componentDidMount() {
+    this.props.getProject();
+  }
+
   constructor() {
     super();
     this.state = {
@@ -183,6 +192,7 @@ class ProjectBoard extends React.Component {
     this.setState(newState);
   };
   render() {
+
     console.log('PROPS', this.props);
     return (
       <div>
@@ -221,6 +231,15 @@ class ProjectBoard extends React.Component {
               })}
             </DropdownMenu>
           </ButtonDropdown>
+
+   
+    return (
+      <div>
+        <Link to={`/projects/${this.props.data.id}/newticket`}>
+        
+          <Button color="danger">New Ticket</Button>
+        </Link>
+
 
           <DragDropContext onDragEnd={this.onDragEnd}>
             <Row>
@@ -349,32 +368,40 @@ class ProjectBoard extends React.Component {
                   </Col>
                 )}
               </Droppable>
+
             </Row>
           </DragDropContext>
         </Container>
+
       </div>
     );
   }
 }
 
 const mapStateToProps = state => {
+
   // console.log('mapping state to store', state.selectedCampus)
   return {
-    projects: [
-      { id: 1, name: 'Hersheys' },
-      { id: 2, name: 'Nike' },
-      { id: 3, name: 'idk' }
-    ],
     currentProject: { id: 1, name: 'Hersheys' },
     users: [
       { id: 1, name: 'Ariel' },
       { id: 2, name: 'Christina' },
       { id: 3, name: 'Katarina' }
-    ]
+    ],
+    data: state.ticket.project
+  }
+};
+
+
+
+const mapDispatchToProps =  (dispatch, id) => {
+  return {
+    getProject: () => {
+      const projectId = id.match.params.id;
+      dispatch(getProjectThunk(projectId));
+    }
   };
 };
 
-const mapDispatchToProps = function(dispatch) {
-  return {};
-};
+
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectBoard);

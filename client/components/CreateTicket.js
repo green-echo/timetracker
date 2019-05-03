@@ -10,7 +10,8 @@ class CreateTicket extends Component {
     this.state = {
       title: '',
       description: '',
-      points: ''
+      points: '',
+      projectId:  this.props.match.params.id
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -33,11 +34,12 @@ class CreateTicket extends Component {
       title: this.state.title,
       description: this.state.description,
       points: this.state.points
-    });
+    }, this.state.projectId);
     this.setState({title: '', description: '', points:''})
   }
 
   render() {
+  // console.log('PROJECTID', this.state.projectId);
     return (
     
       <form onSubmit={this.handleSubmit}>
@@ -92,11 +94,14 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = function(dispatch) {
- // const ticketId = this.props.match.params.id;
+
+
   return {
-    create: ticket => {
-      dispatch(createTicketThunk(ticket));
-    }
+    
+    create: (ticket, id) => {
+      dispatch(createTicketThunk(ticket, id));
+    },
+    
   };
 };
 

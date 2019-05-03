@@ -31,7 +31,7 @@ class Routes extends Component {
             <Route exact path="/newproject" component={CreateProject} />
             <Route path="/home" component={UserHome} />
             <Route exact path="/projects" component={Projects} />
-            <Route path="/newticket" component={CreateTicket} />
+            <Route path="/projects/:id/newticket" component={CreateTicket} />
             <Route path="/projects/:id" component={ProjectBoard} />
             <Route component={Projects} />
           </Switch>

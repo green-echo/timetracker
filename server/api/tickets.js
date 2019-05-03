@@ -1,6 +1,6 @@
 
 const router = require('express').Router();
-const { Ticket } = require('../db/models');
+const { Ticket , User, Project} = require('../db/models');
 module.exports = router;
 
 router.get('/', async (req, res, next) => {
@@ -26,14 +26,9 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
-  try {
-    const newTicket = await Ticket.create(req.body);
-    res.json(newTicket);
-  } catch (error) {
-    next(error);
-  }
-});
+
+
+
 
 router.put('/:id', (req, res, next) => {
   Ticket.findById(req.params.id)

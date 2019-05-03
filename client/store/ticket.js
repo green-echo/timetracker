@@ -1,5 +1,4 @@
 import axios from 'axios';
-
 const initialState = {
   toDoTickets: [],
   inProgressTickets: [],
@@ -7,23 +6,16 @@ const initialState = {
   doneTickets: [],
   ticket: {},
   projects: [],
-  currentProject: {}
+  project: {}
 };
-
 const GET_TICKETS = 'GET_TICKETS';
-
 const REMOVE_TICKET = 'REMOVE_TICKET';
-
 const CREATE_TICKET = 'CREATE_TICKET';
-
 const GET_TICKET = 'GET_TICKET';
 const UPDATE_TICKET = 'UPDATE_TICKET';
-
 const CREATE_PROJECT = 'CREATE_PROJECT';
 const GET_PROJECTS = 'GET_PROJECTS';
-
-const SET_PROJECT = 'SET_PROJECT';
-
+const GET_PROJECT = 'GET_PROJECT';
 const removeTicket = ticket => ({
   type: REMOVE_TICKET,
   ticket
@@ -32,61 +24,51 @@ const createTicket = singleTicket => ({
   type: CREATE_TICKET,
   ticket: singleTicket
 });
-
 const createProject = singleProject => ({
   type: CREATE_PROJECT,
   project: singleProject
 });
-
 const getTickets = tickets => ({
   type: GET_TICKETS,
   tickets
 });
-
 const getProjects = projects => ({
   type: GET_PROJECTS,
   projects
 });
-
-const setProject = project => ({
-  type: SET_PROJECT,
-  currentProject: project
+const getProject = project => ({
+  type: GET_PROJECT,
+  project
 });
-
 const getTicket = singleTicket => ({
   type: GET_TICKET,
   ticket: singleTicket
 });
-
 const updateTicket = singleTicket => ({
   type: GET_TICKET,
   ticket: singleTicket
 });
-
 export const createTicketThunk = ticket => {
   return async dispatch => {
     try {
-      const { data } = await axios.post('api/tickets', ticket);
+      const { data } = await axios.post('api/projects/:id/newticket', ticket);
       dispatch(createTicket(data));
     } catch (err) {
       console.log(err);
     }
   };
 };
-
 export const createProjectThunk = project => {
   return async dispatch => {
     try {
       const { data } = await axios.post('api/projects', project);
-      console.log('adat', data);
       dispatch(createProject(data));
-      dispatch(setProject(data));
+      dispatch(getProject(data));
     } catch (err) {
       console.log(err);
     }
   };
 };
-
 export const getTicketsThunk = () => {
   return async dispatch => {
     try {
@@ -97,7 +79,6 @@ export const getTicketsThunk = () => {
     }
   };
 };
-
 export const getProjectsThunk = () => {
   return async dispatch => {
     try {
@@ -108,7 +89,6 @@ export const getProjectsThunk = () => {
     }
   };
 };
-
 export const getTicketThunk = ticketId => {
   return async dispatch => {
     try {
@@ -119,7 +99,17 @@ export const getTicketThunk = ticketId => {
     }
   };
 };
-
+////////
+export const getProjectThunk = projectId => {
+  return async dispatch => {
+    try {
+      const { data } = await axios.get(`/api/projects/${projectId}`);
+      dispatch(getProject(data));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
 export const updateTicketThunk = (id, ticket) => {
   return async dispatch => {
     try {
@@ -130,7 +120,6 @@ export const updateTicketThunk = (id, ticket) => {
     }
   };
 };
-
 export const removeTicketThunk = ticket => {
   return async dispatch => {
     try {
@@ -141,7 +130,6 @@ export const removeTicketThunk = ticket => {
     }
   };
 };
-
 export default function(state = initialState, action) {
   const newState = { ...state };
   switch (action.type) {
@@ -168,10 +156,10 @@ export default function(state = initialState, action) {
         }
       });
       return newState;
-
     case GET_PROJECTS:
       return { ...state, projects: action.projects };
-
+    case GET_PROJECT:
+      return { ...state, project: action.project };
     case UPDATE_TICKET:
       switch (ticket.status) {
         case 'to_do':
@@ -245,8 +233,6 @@ export default function(state = initialState, action) {
         ...state,
         projects: [...this.state.projects, action.singleProject]
       };
-    case SET_PROJECT:
-      return { ...state, currentProject: action.currentProject };
     default:
       return state;
   }

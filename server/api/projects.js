@@ -113,7 +113,7 @@ router.post('/', async (req, res, next) => {
     const user = await User.findOne({
       where: { id: req.session.passport.user }
     });
-    newProject.addUser(user);
+    await newProject.addUser(user);
     res.json(newProject);
   } catch (error) {
     next(error);
@@ -126,7 +126,7 @@ router.delete('/:id', async (req, res, next) => {
     if (!project) {
       next();
     } else {
-      project.destroy();
+      await project.destroy();
     }
   } catch (error) {
     next(error);

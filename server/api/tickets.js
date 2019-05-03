@@ -85,7 +85,7 @@ router.delete('/:id', async (req, res, next) => {
     if (!ticket) {
       next();
     } else {
-      ticket.destroy();
+      await ticket.destroy();
       res.sendStatus(200);
     }
   } catch (error) {

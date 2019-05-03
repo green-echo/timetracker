@@ -13,13 +13,12 @@ router.get('/all', async (req, res, next) => {
 
 router.get('/:id', async (req, res, next) => {
   try {
-    const projectId = req.params.id;
-    const singleProject = await Project.findOne({
-      where: {
-        id: Number(projectId)
-      }
-    });
-    res.json(singleProject);
+    const project = await Project.findByPk(Number(req.params.id));
+    if (!project) {
+      next();
+    } else {
+      res.json(project);
+    }
   } catch (error) {
     next(error);
   }
@@ -27,14 +26,27 @@ router.get('/:id', async (req, res, next) => {
 
 router.get('/:id/tickets', async (req, res, next) => {
   try {
-    const projectId = req.params.id;
-    const singleProject = await Project.findOne({
-      where: {
-        id: Number(projectId)
-      },
-      include: Ticket
-    });
-    res.json(singleProject);
+    const project = await Project.findByPk(Number(req.params.id));
+    if (!project) {
+      next();
+    } else {
+      const tickets = await project.getTickets();
+      res.json(tickets);
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/:id/users', async (req, res, next) => {
+  try {
+    const project = Project.findByPk(Number(req.params.id));
+    if (!project) {
+      next();
+    } else {
+      const users = await project.getUsers();
+      res.json(users);
+    }
   } catch (error) {
     next(error);
   }
@@ -59,6 +71,7 @@ router.get('/:id/tickets/:status', async (req, res, next) => {
 
 router.get('/', async (req, res, next) => {
   try {
+    console.log(req.user);
     const user = await User.findOne({
       where: { id: req.session.passport.user }
     });
@@ -74,7 +87,8 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    const newProject = await Project.create(req.body);
+    const { name, totalTime } = req.body;
+    const newProject = await Project.create({ name, totalTime });
     const user = await User.findOne({
       where: { id: req.session.passport.user }
     });

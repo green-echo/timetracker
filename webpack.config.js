@@ -1,4 +1,6 @@
-const isDev = process.env.NODE_ENV === 'development'
+const isDev = process.env.NODE_ENV === 'development';
+const { resolve } = require('path');
+var LiveReloadPlugin = require('webpack-livereload-plugin');
 
 module.exports = {
   mode: isDev ? 'development' : 'production',
@@ -25,5 +27,6 @@ module.exports = {
         loader: 'babel-loader'
       }
     ]
-  }
-}
+  },
+  plugins: [new LiveReloadPlugin()]
+};

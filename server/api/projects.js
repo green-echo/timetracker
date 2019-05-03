@@ -90,10 +90,9 @@ router.get('/:id/tickets/:status', async (req, res, next) => {
     next(error);
   }
 });
-/* This gets all the projects that blongs to a user */
+/* This gets all the projects that belongs to a user */
 router.get('/', async (req, res, next) => {
   try {
-    console.log(req.user);
     const user = await User.findOne({
       where: { id: req.session.passport.user }
     });

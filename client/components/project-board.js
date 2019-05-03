@@ -61,7 +61,10 @@ const tickets = {
     status: 'done'
   }
 };
-
+const div = {
+  minHeight: '30px',
+  height: '100%'
+};
 export default class ProjectBoard extends React.Component {
   constructor() {
     super();
@@ -162,7 +165,7 @@ export default class ProjectBoard extends React.Component {
             <Col>Done</Col>
           </Row>
           <Row className="board-container">
-            <Droppable droppableId="1" style={{ height: '100% !important' }}>
+            <Droppable droppableId="1" style={div}>
               {provided => (
                 <Col>
                   <StatusColumn
@@ -185,10 +188,11 @@ export default class ProjectBoard extends React.Component {
                     })}
                     {provided.placeholder}
                   </StatusColumn>
+                  <div style={div}>Place contents Here</div>
                 </Col>
               )}
             </Droppable>
-            <Droppable droppableId="2" style={{ height: '100%' }}>
+            <Droppable droppableId="2" style={div}>
               {provided => (
                 <Col>
                   <StatusColumn
@@ -211,10 +215,11 @@ export default class ProjectBoard extends React.Component {
                     })}
                     {provided.placeholder}
                   </StatusColumn>
+                  <div style={div}>Place contents Here</div>
                 </Col>
               )}
             </Droppable>
-            <Droppable droppableId="3" style={{ height: '100%' }}>
+            <Droppable droppableId="3" style={div}>
               {provided => (
                 <Col>
                   <StatusColumn
@@ -237,10 +242,11 @@ export default class ProjectBoard extends React.Component {
                     })}
                     {provided.placeholder}
                   </StatusColumn>
+                  <div style={div}>Place contents Here</div>
                 </Col>
               )}
             </Droppable>
-            <Droppable droppableId="4" style={{ height: '100%' }}>
+            <Droppable droppableId="4" style={div}>
               {provided => (
                 <Col>
                   <StatusColumn
@@ -263,6 +269,7 @@ export default class ProjectBoard extends React.Component {
                     })}
                     {provided.placeholder}
                   </StatusColumn>
+                  <div style={div}>Place contents Here</div>
                 </Col>
               )}
             </Droppable>

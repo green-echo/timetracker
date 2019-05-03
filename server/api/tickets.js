@@ -68,9 +68,9 @@ router.put('/:id', async (req, res, next) => {
         userId
       });
 
-      // if (userId) {
-      //   await ticket.setUser(Number(userId));
-      // }
+      if (userId) {
+        await ticket.setUser(Number(userId));
+      }
 
       res.json(ticket);
     }

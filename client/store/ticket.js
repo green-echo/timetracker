@@ -62,7 +62,7 @@ export const createTicketThunk = (ticket, id) => {
 export const createProjectThunk = project => {
   return async dispatch => {
     try {
-      const { data } = await axios.post('api/projects', project);
+      const { data } = await axios.post('/api/projects', project);
       dispatch(createProject(data));
       dispatch(getProject(data));
     } catch (err) {
@@ -73,7 +73,7 @@ export const createProjectThunk = project => {
 export const getTicketsThunk = () => {
   return async dispatch => {
     try {
-      const { data } = await axios.get('api/projects/:id/tickets/');
+      const { data } = await axios.get('/api/projects/:id/tickets/');
       dispatch(getTickets(data));
     } catch (err) {
       console.log(err);
@@ -83,7 +83,7 @@ export const getTicketsThunk = () => {
 export const getProjectsThunk = () => {
   return async dispatch => {
     try {
-      const { data } = await axios.get('api/projects/');
+      const { data } = await axios.get('/api/projects');
       dispatch(getProjects(data));
     } catch (err) {
       console.log(err);
@@ -93,7 +93,7 @@ export const getProjectsThunk = () => {
 export const getTicketThunk = ticketId => {
   return async dispatch => {
     try {
-      const { data } = await axios.get('api/tickets/' + ticketId);
+      const { data } = await axios.get('/api/tickets/' + ticketId);
       dispatch(getTicket(data));
     } catch (err) {
       console.log(err);
@@ -114,7 +114,7 @@ export const getProjectThunk = projectId => {
 export const updateTicketThunk = (id, ticket) => {
   return async dispatch => {
     try {
-      const { data } = await axios.put('api/tickets/' + id, ticket);
+      const { data } = await axios.put('/api/tickets/' + id, ticket);
       dispatch(updateTicket(data));
     } catch (err) {
       console.log(err);
@@ -124,7 +124,7 @@ export const updateTicketThunk = (id, ticket) => {
 export const removeTicketThunk = ticket => {
   return async dispatch => {
     try {
-      const { data } = await axios.delete(`api/tickets/${ticket.id}`);
+      const { data } = await axios.delete(`/api/tickets/${ticket.id}`);
       dispatch(removeTicket(ticket.id));
     } catch (err) {
       console.log(err);

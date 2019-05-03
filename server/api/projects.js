@@ -24,25 +24,23 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
+// add a ticket to a specific project
 router.post('/:id', async (req, res, next) => {
   try {
-    const projectId = req.params.id;
-    console.log(projectId)
-    const project =  await Project.findOne({
-      where: {
-        id: projectId
-      }
-    });
+    const project = await Project.findByPk(Number(req.params.id));
+    if (!project) {
+      next();
+    } else {
+      const newTicket = await Ticket.create({
+        title: req.body.title,
+        description: req.body.description,
+        points: req.body.points
+      });
 
-    const newTicket = await Ticket.create({
-      title: req.body.title,
-      description: req.body.description,
-      points: req.body.points,
-      projectId: projectId
-    });
-    newTicket.setProject(project)
+      await newTicket.setProject(project);
 
-    res.json(newTicket);
+      res.json(newTicket);
+    }
   } catch (error) {
     next(error);
   }
@@ -118,6 +116,19 @@ router.post('/', async (req, res, next) => {
     });
     newProject.addUser(user);
     res.json(newProject);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const project = await Project.findByPk(Number(req.params.id));
+    if (!project) {
+      next();
+    } else {
+      project.destroy();
+    }
   } catch (error) {
     next(error);
   }

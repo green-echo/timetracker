@@ -78,3 +78,17 @@ router.put('/:id', async (req, res, next) => {
     next(error);
   }
 });
+
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const ticket = await Ticket.findByPk(Number(req.params.id));
+    if (!ticket) {
+      next();
+    } else {
+      ticket.destroy();
+      res.sendStatus(200);
+    }
+  } catch (error) {
+    next(error);
+  }
+});

@@ -25,6 +25,30 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
+router.post('/:id', async (req, res, next) => {
+  try {
+    const projectId = req.params.id;
+    console.log(projectId)
+    const project =  await Project.findOne({
+      where: {
+        id: projectId
+      }
+    });
+
+    const newTicket = await Ticket.create({
+      title: req.body.title,
+      description: req.body.description,
+      points: req.body.points,
+      projectId: projectId
+    });
+    newTicket.setProject(project)
+
+    res.json(newTicket);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get('/:id/tickets', async (req, res, next) => {
   try {
     const projectId = req.params.id;

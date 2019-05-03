@@ -6,7 +6,8 @@ const initialState = {
   doneTickets: [],
   ticket: {},
   projects: [],
-  project: {}
+  project: {},
+  users: []
 };
 const GET_TICKETS = 'GET_TICKETS';
 const REMOVE_TICKET = 'REMOVE_TICKET';
@@ -16,6 +17,8 @@ const UPDATE_TICKET = 'UPDATE_TICKET';
 const CREATE_PROJECT = 'CREATE_PROJECT';
 const GET_PROJECTS = 'GET_PROJECTS';
 const GET_PROJECT = 'GET_PROJECT';
+const GET_USERS = 'GET_USERS';
+
 const removeTicket = ticket => ({
   type: REMOVE_TICKET,
   ticket
@@ -49,7 +52,12 @@ const updateTicket = singleTicket => ({
   ticket: singleTicket
 });
 
-export const createTicketThunk = (ticket, id )=> {
+const getAllUsers = users => ({
+  type: GET_USERS,
+  users
+});
+
+export const createTicketThunk = (ticket, id) => {
   return async dispatch => {
     try {
       const { data } = await axios.post(`/api/projects/${id}`, ticket);
@@ -128,6 +136,17 @@ export const removeTicketThunk = ticket => {
       dispatch(removeTicket(ticket.id));
     } catch (err) {
       console.log(err);
+    }
+  };
+};
+
+export const getAllUsersThunk = () => {
+  return async dispatch => {
+    try {
+      const { data } = await axios.get('/api/users');
+      dispatch(getAllUsers(data));
+    } catch (error) {
+      console.error(error);
     }
   };
 };
@@ -234,6 +253,8 @@ export default function(state = initialState, action) {
         ...state,
         projects: [...this.state.projects, action.singleProject]
       };
+    case GET_USERS:
+      return { ...state, users: action.users };
     default:
       return state;
   }

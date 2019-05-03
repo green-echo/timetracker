@@ -15,7 +15,8 @@ import { Link } from 'react-router-dom';
 import StatusColumn from './status-column';
 import CreateTicket from './CreateTicket';
 import { connect } from 'react-redux';
-import {getProjectThunk} from '../store/ticket'
+import { getProjectThunk } from '../store/ticket';
+import { getAllUsersThunk } from '../store/ticket';
 
 const tickets = {
   '1': {
@@ -79,10 +80,10 @@ const div = {
   minHeight: '30px',
   height: '100%'
 };
- class ProjectBoard extends React.Component {
-
-   componentDidMount() {
+class ProjectBoard extends React.Component {
+  componentDidMount() {
     this.props.getProject();
+    this.props.loadUsers();
   }
   constructor() {
     super();
@@ -170,11 +171,11 @@ const div = {
     this.setState(newState);
   };
   render() {
-   
+    console.log('users', this.props.users);
     return (
       <div>
+        <Button color="primary">Add User</Button>
         <Link to={`/projects/${this.props.data.id}/newticket`}>
-        
           <Button color="danger">New Ticket</Button>
         </Link>
 
@@ -306,7 +307,7 @@ const div = {
                   </Col>
                 )}
               </Droppable>
-            </Row> 
+            </Row>
           </Container>
         </DragDropContext>
       </div>
@@ -315,16 +316,20 @@ const div = {
 }
 
 const mapStateToProps = state => {
-  console.log('??', state.ticket.project);
-
- return { data: state.ticket.project};
+  return {
+    data: state.ticket.project,
+    users: state.ticket.users
+  };
 };
 
-const mapDispatchToProps =  (dispatch, id) => {
+const mapDispatchToProps = (dispatch, id) => {
   return {
     getProject: () => {
       const projectId = id.match.params.id;
       dispatch(getProjectThunk(projectId));
+    },
+    loadUsers: () => {
+      dispatch(getAllUsersThunk());
     }
   };
 };

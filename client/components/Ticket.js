@@ -12,6 +12,7 @@ class Ticket extends Component {
         <div>{ticket.title}</div>
         <div>{ticket.description}</div>
         <div>{ticket.points}</div>
+        {ticket.userId && <div>Assigned To: {ticket.currentUserEmail}</div>}
       </div>
     );
   }

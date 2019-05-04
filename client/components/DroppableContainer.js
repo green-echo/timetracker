@@ -16,7 +16,7 @@ const inProgressTickets = [
   }
 ];
 
-export default class StatusColumn extends React.Component {
+export default class DroppableContainer extends React.Component {
   render() {
     const { provided, innerRef, children } = this.props;
     return (

@@ -16,11 +16,12 @@ import {
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Ticket from './Ticket';
 import { Link } from 'react-router-dom';
-import StatusColumn from './status-column';
+import DroppableContainer from './DroppableContainer';
 import CreateTicket from './CreateTicket';
 import { connect } from 'react-redux';
 
 import { getProjectThunk, getProjectsThunk } from '../actions/project';
+import Column from './Column';
 
 const tickets = {
   '1': {
@@ -81,8 +82,7 @@ const tickets = {
   }
 };
 const div = {
-  minHeight: '200px',
-  height: '100%'
+  minHeight: '50px'
 };
 
 class ProjectBoard extends React.Component {
@@ -198,7 +198,7 @@ class ProjectBoard extends React.Component {
               <DropdownItem divider />
               {this.props.projects.map(project => {
                 return (
-                  <Link to={`/projects/${project.id}`}>
+                  <Link key={project.id} to={`/projects/${project.id}`}>
                     <DropdownItem>{project.name}</DropdownItem>
                   </Link>
                 );
@@ -220,122 +220,10 @@ class ProjectBoard extends React.Component {
               <Col>Done</Col>
             </Row>
             <Row className="board-container">
-              <Droppable droppableId="1" style={div}>
-                {provided => (
-                  <Col>
-                    <StatusColumn
-                      provided={provided}
-                      innerRef={provided.innerRef}
-                    >
-                      {this.state.columns['1'].taskIds.map(
-                        (ticketId, index) => {
-                          const ticket = tickets[ticketId];
-                          return (
-                            <Draggable draggableId={ticket.id} index={index}>
-                              {provided => (
-                                <Ticket
-                                  provided={provided}
-                                  innerRef={provided.innerRef}
-                                  ticket={ticket}
-                                />
-                              )}
-                            </Draggable>
-                          );
-                        }
-                      )}
-                      {provided.placeholder}
-                      <div style={div} />
-                    </StatusColumn>
-                  </Col>
-                )}
-              </Droppable>
-              <Droppable droppableId="2" style={div}>
-                {provided => (
-                  <Col>
-                    <StatusColumn
-                      provided={provided}
-                      innerRef={provided.innerRef}
-                    >
-                      {this.state.columns['2'].taskIds.map(
-                        (ticketId, index) => {
-                          const ticket = tickets[ticketId];
-                          return (
-                            <Draggable draggableId={ticket.id} index={index}>
-                              {provided => (
-                                <Ticket
-                                  provided={provided}
-                                  innerRef={provided.innerRef}
-                                  ticket={ticket}
-                                />
-                              )}
-                            </Draggable>
-                          );
-                        }
-                      )}
-                      {provided.placeholder}
-                      <div style={div} />
-                    </StatusColumn>
-                  </Col>
-                )}
-              </Droppable>
-              <Droppable droppableId="3" style={div}>
-                {provided => (
-                  <Col>
-                    <StatusColumn
-                      provided={provided}
-                      innerRef={provided.innerRef}
-                    >
-                      {this.state.columns['3'].taskIds.map(
-                        (ticketId, index) => {
-                          const ticket = tickets[ticketId];
-                          return (
-                            <Draggable draggableId={ticket.id} index={index}>
-                              {provided => (
-                                <Ticket
-                                  provided={provided}
-                                  innerRef={provided.innerRef}
-                                  ticket={ticket}
-                                />
-                              )}
-                            </Draggable>
-                          );
-                        }
-                      )}
-                      {provided.placeholder}
-                      <div style={div} />
-                    </StatusColumn>
-                  </Col>
-                )}
-              </Droppable>
-              <Droppable droppableId="4" style={div}>
-                {provided => (
-                  <Col>
-                    <StatusColumn
-                      provided={provided}
-                      innerRef={provided.innerRef}
-                    >
-                      {this.state.columns['4'].taskIds.map(
-                        (ticketId, index) => {
-                          const ticket = tickets[ticketId];
-                          return (
-                            <Draggable draggableId={ticket.id} index={index}>
-                              {provided => (
-                                <Ticket
-                                  provided={provided}
-                                  innerRef={provided.innerRef}
-                                  ticket={ticket}
-                                />
-                              )}
-                            </Draggable>
-                          );
-                        }
-                      )}
-                      {provided.placeholder}
-                      <div style={div} />
-                    </StatusColumn>
-                  </Col>
-                )}
-              </Droppable>
+              <Column columns={this.state.columns} id="1" tickets={tickets} />
+              <Column columns={this.state.columns} id="2" tickets={tickets} />
+              <Column columns={this.state.columns} id="3" tickets={tickets} />
+              <Column columns={this.state.columns} id="4" tickets={tickets} />
             </Row>
           </DragDropContext>
         </Container>

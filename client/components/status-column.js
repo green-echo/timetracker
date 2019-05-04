@@ -20,7 +20,11 @@ export default class StatusColumn extends React.Component {
   render() {
     const { provided, innerRef, children } = this.props;
     return (
-      <div {...provided.droppableProps} ref={innerRef}>
+      <div
+        {...provided.droppableProps}
+        ref={innerRef}
+        style={{ height: '100%' }}
+      >
         {children}
       </div>
     );

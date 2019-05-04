@@ -14,7 +14,7 @@ import {
   DropdownItem
 } from 'reactstrap';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import Ticket from './ticket';
+import Ticket from './Ticket';
 import { Link } from 'react-router-dom';
 import StatusColumn from './status-column';
 import CreateTicket from './CreateTicket';

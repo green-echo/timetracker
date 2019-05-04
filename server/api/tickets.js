@@ -1,11 +1,16 @@
+/* eslint-disable no-lonely-if */
 const router = require('express').Router();
 const { Ticket, User, Project } = require('../db/models');
 module.exports = router;
 
 router.get('/', async (req, res, next) => {
   try {
-    const allTickets = await Ticket.findAll();
-    res.json(allTickets);
+    if (!req.user) {
+      res.sendStatus(403);
+    } else {
+      const allTickets = await Ticket.findAll();
+      res.json(allTickets);
+    }
   } catch (error) {
     next(error);
   }
@@ -13,25 +18,50 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:id', async (req, res, next) => {
   try {
-    const ticket = await Ticket.findByPk(Number(req.params.id));
-    if (!ticket) {
-      next();
+    if (!req.user) {
+      res.sendStatus(403);
     } else {
-      res.json(ticket);
+      const ticket = await Ticket.findByPk(Number(req.params.id));
+      const project = await Project.findByPk(ticket.projectId);
+
+      if (!ticket || !project) {
+        next();
+      } else {
+        const authorized = await project.hasUser(req.user);
+        if (!authorized) {
+          res.sendStatus(403);
+        } else {
+          res.json(ticket);
+        }
+      }
     }
   } catch (error) {
     next(error);
   }
 });
 
-router.get('/:id/users', async (req, res, next) => {
+router.get('/:id/user', async (req, res, next) => {
   try {
-    const ticket = await Ticket.findByPk(Number(req.params.id));
-    if (!ticket) {
-      next();
+    if (!req.user) {
+      res.sendStatus(403);
     } else {
-      const users = await ticket.getUsers();
-      res.json(users);
+      const ticket = await Ticket.findByPk(Number(req.params.id));
+      const project = await Project.findByPk(ticket.projectId);
+      if (!ticket || !project) {
+        next();
+      } else {
+        const authorized = await project.hasUser(req.user);
+        if (!authorized) {
+          res.sendStatus(403);
+        } else {
+          const user = await ticket.getUser();
+          if (!user) {
+            next();
+          } else {
+            res.json(user);
+          }
+        }
+      }
     }
   } catch (error) {
     next(error);
@@ -40,14 +70,18 @@ router.get('/:id/users', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    const { title, description, points, status } = req.body;
-    const newTicket = await Ticket.create({
-      title,
-      description,
-      points,
-      status
-    });
-    res.json(newTicket);
+    if (!req.user) {
+      res.sendStatus(403);
+    } else {
+      const { title, description, points, status } = req.body;
+      const newTicket = await Ticket.create({
+        title,
+        description,
+        points,
+        status
+      });
+      res.json(newTicket);
+    }
   } catch (error) {
     next(error);
   }
@@ -55,24 +89,33 @@ router.post('/', async (req, res, next) => {
 
 router.put('/:id', async (req, res, next) => {
   try {
-    const { title, description, points, status, userId } = req.body;
-    const ticket = await Ticket.findByPk(req.params.id);
-    if (!ticket) {
-      next();
+    if (!req.user) {
+      res.sendStatus(403);
     } else {
-      await ticket.update({
-        title,
-        description,
-        points,
-        status,
-        userId
-      });
+      const { title, description, points, status, userId } = req.body;
+      const ticket = await Ticket.findByPk(req.params.id);
+      const project = await Project.findByPk(ticket.projectId);
+      if (!ticket || !project) {
+        next();
+      } else {
+        const authorized = await project.hasUser(req.user);
+        if (!authorized) {
+          res.sendStatus(403);
+        } else {
+          await ticket.update({
+            title,
+            description,
+            points,
+            status,
+            userId
+          });
+        }
+        if (userId) {
+          await ticket.setUser(Number(userId));
+        }
 
-      if (userId) {
-        await ticket.setUser(Number(userId));
+        res.json(ticket);
       }
-
-      res.json(ticket);
     }
   } catch (error) {
     next(error);
@@ -81,12 +124,22 @@ router.put('/:id', async (req, res, next) => {
 
 router.delete('/:id', async (req, res, next) => {
   try {
-    const ticket = await Ticket.findByPk(Number(req.params.id));
-    if (!ticket) {
-      next();
+    if (!req.user) {
+      res.sendStatus(403);
     } else {
-      await ticket.destroy();
-      res.sendStatus(200);
+      const ticket = await Ticket.findByPk(Number(req.params.id));
+      const project = await Project.findByPk(ticket.projectId);
+      if (!ticket || !project) {
+        next();
+      } else {
+        const authorized = await project.hasUser(req.user);
+        if (!authorized) {
+          res.sendStatus(403);
+        } else {
+          await ticket.destroy();
+          res.sendStatus(200);
+        }
+      }
     }
   } catch (error) {
     next(error);

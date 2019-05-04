@@ -20,7 +20,7 @@ import StatusColumn from './status-column';
 import CreateTicket from './CreateTicket';
 import { connect } from 'react-redux';
 
-import { getProjectThunk, getProjectsThunk } from '../store/ticket';
+import { getProjectThunk, getProjectsThunk } from '../actions/project';
 
 const tickets = {
   '1': {
@@ -205,7 +205,7 @@ class ProjectBoard extends React.Component {
               })}
             </DropdownMenu>
           </ButtonDropdown>
-          <Link to={`/projects/${this.props.data.id}/newticket`}>
+          <Link to={`/projects/${this.props.project.id}/newticket`}>
             <Button color="danger">New Ticket</Button>
           </Link>
 
@@ -353,8 +353,8 @@ const mapStateToProps = state => {
       { id: 2, name: 'Christina' },
       { id: 3, name: 'Katarina' }
     ],
-    data: state.ticket.project,
-    projects: state.ticket.projects
+    project: state.project.project,
+    projects: state.project.projects
   };
 };
 

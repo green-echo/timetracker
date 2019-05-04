@@ -9,10 +9,11 @@ import {
   ListGroupItemText,
   Button
 } from 'reactstrap';
-import { getProjectsThunk } from '../store/ticket';
+import { getProjectsThunk } from '../actions/project';
 
 class Project extends React.Component {
   componentDidMount() {
+    console.log('PROPSSS', this.props);
     this.props.getProjects();
   }
   render() {
@@ -25,7 +26,7 @@ class Project extends React.Component {
           <Button color="danger">New Project</Button>
         </Link>
         <ListGroup>
-          {this.props.data.map(project => {
+          {this.props.projects.map(project => {
             return (
               <Link to={`/projects/${project.id}`}>
                 <ListGroupItem>{project.name}</ListGroupItem>
@@ -42,7 +43,7 @@ const mapStateToProps = state => {
   // console.log('!!!!', state.ticket.projects);
   // console.log('!!!!', state);
 
-  return { data: state.ticket.projects };
+  return { projects: state.project.projects };
 };
 
 const mapDispatchToProps = dispatch => {

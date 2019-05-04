@@ -1,8 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {  createTicketThunk } from '../store';
-import { Button, Container, Row, Col, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-
+import { createTicketThunk } from '../actions/ticket';
+import {
+  Button,
+  Container,
+  Row,
+  Col,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter
+} from 'reactstrap';
 
 class CreateTicket extends Component {
   constructor(props) {
@@ -11,7 +19,7 @@ class CreateTicket extends Component {
       title: '',
       description: '',
       points: '',
-      projectId:  this.props.match.params.id
+      projectId: this.props.match.params.id
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -30,18 +38,20 @@ class CreateTicket extends Component {
 
   async handleSubmit(event) {
     event.preventDefault();
-    this.props.create({
-      title: this.state.title,
-      description: this.state.description,
-      points: this.state.points
-    }, this.state.projectId);
-    this.setState({title: '', description: '', points:''})
+    this.props.create(
+      {
+        title: this.state.title,
+        description: this.state.description,
+        points: this.state.points
+      },
+      this.state.projectId
+    );
+    this.setState({ title: '', description: '', points: '' });
   }
 
   render() {
-  // console.log('PROJECTID', this.state.projectId);
+    // console.log('PROJECTID', this.state.projectId);
     return (
-    
       <form onSubmit={this.handleSubmit}>
         <label className="formLabel" htmlFor="title">
           Title:{' '}
@@ -83,7 +93,6 @@ class CreateTicket extends Component {
           Submit
         </button>
       </form>
-  
     );
   }
 }
@@ -94,14 +103,10 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = function(dispatch) {
-
-
   return {
-    
     create: (ticket, id) => {
       dispatch(createTicketThunk(ticket, id));
-    },
-    
+    }
   };
 };
 

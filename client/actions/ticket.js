@@ -20,7 +20,7 @@ export const getTicket = singleTicket => ({
   ticket: singleTicket
 });
 export const updateTicket = singleTicket => ({
-  type: ACTIONS.GET_TICKET,
+  type: ACTIONS.UPDATE_TICKET,
   ticket: singleTicket
 });
 

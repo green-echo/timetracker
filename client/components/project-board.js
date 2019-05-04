@@ -198,7 +198,7 @@ class ProjectBoard extends React.Component {
               <DropdownItem divider />
               {this.props.projects.map(project => {
                 return (
-                  <Link to={`/projects/${project.id}`}>
+                  <Link key={project.id} to={`/projects/${project.id}`}>
                     <DropdownItem>{project.name}</DropdownItem>
                   </Link>
                 );

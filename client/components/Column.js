@@ -33,7 +33,11 @@ const Column = ({ columns, tickets, id }) => {
             {columns[id].taskIds.map((ticketId, index) => {
               const ticket = tickets[ticketId];
               return (
-                <Draggable draggableId={ticket.id} index={index}>
+                <Draggable
+                  draggableId={ticket.id}
+                  index={index}
+                  key={ticket.id}
+                >
                   {provided => (
                     <Ticket
                       provided={provided}

@@ -1,20 +1,4 @@
 import React from 'react';
-const inProgressTickets = [
-  {
-    id: 1,
-    title: 'create nav',
-    desc: 'idk',
-    points: 1,
-    status: 'in progress'
-  },
-  {
-    id: 2,
-    title: 'create footer',
-    desc: 'idk2',
-    points: 3,
-    status: 'in progress'
-  }
-];
 
 export default class DroppableContainer extends React.Component {
   render() {

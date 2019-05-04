@@ -49,7 +49,7 @@ class UserHome extends Component {
 const mapState = state => {
   return {
     email: state.user.email,
-    projects: state.ticket.projects
+    projects: state.project.projects
   };
 };
 const mapDispatch = dispatch => ({

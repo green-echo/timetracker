@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import axios from 'axios';
 
 import * as ACTIONS from '../actions/action-types';
@@ -37,7 +38,7 @@ export default function(state = initialState, action) {
       });
       return newState;
     case ACTIONS.UPDATE_TICKET:
-      switch (ticket.status) {
+      switch (action.ticket.status) {
         case 'to_do':
           newState.toDoTickets.map(ticket => {
             if (ticket.id === action.ticket.id) {
@@ -79,26 +80,22 @@ export default function(state = initialState, action) {
       }
       return newState;
     case ACTIONS.REMOVE_TICKET:
-      switch (ticket.status) {
+      switch (action.ticket.status) {
         case 'to_do':
-          newState.toDoTickets.filter(ticket => {
-            ticket.id !== action.ticket.id;
-          });
+          newState.toDoTickets.filter(ticket => ticket.id !== action.ticket.id);
           break;
         case 'in_progress':
-          newState.inProgressTickets.filter(ticket => {
-            ticket.id !== action.ticket.id;
-          });
+          newState.inProgressTickets.filter(
+            ticket => ticket.id !== action.ticket.id
+          );
           break;
         case 'in_review':
-          newState.inReviewTickets.filter(ticket => {
-            ticket.id !== action.ticket.id;
-          });
+          newState.inReviewTickets.filter(
+            ticket => ticket.id !== action.ticket.id
+          );
           break;
         case 'done':
-          newState.doneTickets.filter(ticket => {
-            ticket.id !== action.ticket.id;
-          });
+          newState.doneTickets.filter(ticket => ticket.id !== action.ticket.id);
           break;
         default:
           break;

@@ -106,12 +106,15 @@ router.put('/:id', async (req, res, next) => {
             title,
             description,
             points,
-            status,
-            userId
+            status
           });
         }
         if (userId) {
-          await ticket.setUser(Number(userId));
+          const user = await User.findByPk(userId);
+          if (user) {
+            await ticket.setUser(user);
+            ticket.currentUserEmail = user.email;
+          }
         }
 
         res.json(ticket);

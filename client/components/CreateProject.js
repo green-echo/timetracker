@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { createProjectThunk } from '../store';
+import { createProjectThunk } from '../actions/project';
 import {
   Button,
   Container,
@@ -41,7 +41,7 @@ class CreateProject extends Component {
       totalTime: this.state.totalTime
     });
     this.setState({ name: '', totalTime: '' });
-   // console.log('!!!!', this.props.currentProject);
+    // console.log('!!!!', this.props.currentProject);
     this.props.history.push(`/projects/${this.props.currentProject.id}`);
   }
 
@@ -83,7 +83,7 @@ class CreateProject extends Component {
 }
 
 const mapStateToProps = state => {
-   console.log('????', state.ticket.currentProject)
+  console.log('????', state.ticket.currentProject);
   return {
     data: state.ticket.projects,
     currentProject: state.ticket.currentProject

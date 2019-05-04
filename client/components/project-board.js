@@ -81,8 +81,7 @@ const tickets = {
   }
 };
 const div = {
-  minHeight: '200px',
-  height: '100%'
+  minHeight: '50px'
 };
 
 class ProjectBoard extends React.Component {

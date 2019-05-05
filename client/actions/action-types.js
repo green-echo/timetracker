@@ -9,3 +9,4 @@ export const UPDATE_TICKET = 'UPDATE_TICKET';
 export const CREATE_PROJECT = 'CREATE_PROJECT';
 export const GET_PROJECTS = 'GET_PROJECTS';
 export const GET_PROJECT = 'GET_PROJECT';
+export const GET_USERS = 'GET_USERS';

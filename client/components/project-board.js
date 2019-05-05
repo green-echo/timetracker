@@ -20,7 +20,11 @@ import DroppableContainer from './DroppableContainer';
 import CreateTicket from './CreateTicket';
 import { connect } from 'react-redux';
 
-import { getProjectThunk, getProjectsThunk } from '../actions/project';
+import {
+  getProjectThunk,
+  getProjectsThunk,
+  getUsersThunk
+} from '../actions/project';
 import Column from './Column';
 
 const tickets = {
@@ -89,6 +93,7 @@ class ProjectBoard extends React.Component {
   componentDidMount() {
     this.props.getProject();
     this.props.loadProjects();
+    this.props.loadUsers();
   }
 
   constructor() {
@@ -113,14 +118,21 @@ class ProjectBoard extends React.Component {
         }
       },
       dropdownOpen: false,
+      userDropdownOpen: false,
       btnDropright: false
     };
     this.toggle = this.toggle.bind(this);
+    this.userToggle = this.userToggle.bind(this);
   }
 
   toggle() {
     this.setState({
       dropdownOpen: !this.state.dropdownOpen
+    });
+  }
+  userToggle() {
+    this.setState({
+      userDropdownOpen: !this.state.userDropdownOpen
     });
   }
   onDragEnd = result => {
@@ -186,6 +198,7 @@ class ProjectBoard extends React.Component {
     this.setState(newState);
   };
   render() {
+    console.log('all users', this.props.allUsers);
     return (
       <div>
         <Container className="project-board">
@@ -202,6 +215,20 @@ class ProjectBoard extends React.Component {
                     <DropdownItem>{project.name}</DropdownItem>
                   </Link>
                 );
+              })}
+            </DropdownMenu>
+          </ButtonDropdown>
+          {/* User Dropdown for addding users to a project */}
+          <ButtonDropdown
+            isOpen={this.state.userDropdownOpen}
+            toggle={this.userToggle}
+          >
+            <DropdownToggle caret>All Users</DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem header>All Users</DropdownItem>
+              <DropdownItem divider />
+              {this.props.allUsers.map(user => {
+                return <DropdownItem key={user.id}>{user.email}</DropdownItem>;
               })}
             </DropdownMenu>
           </ButtonDropdown>
@@ -242,7 +269,8 @@ const mapStateToProps = state => {
       { id: 3, name: 'Katarina' }
     ],
     project: state.project.project,
-    projects: state.project.projects
+    projects: state.project.projects,
+    allUsers: state.project.users
   };
 };
 
@@ -254,6 +282,9 @@ const mapDispatchToProps = (dispatch, id) => {
     },
     loadProjects: () => {
       dispatch(getProjectsThunk());
+    },
+    loadUsers: () => {
+      dispatch(getUsersThunk());
     }
   };
 };

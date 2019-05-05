@@ -15,6 +15,10 @@ export const createProject = singleProject => ({
   project: singleProject
 });
 
+export const getUsers = users => ({
+  type: ACTIONS.GET_USERS,
+  users
+});
 export const createProjectThunk = project => {
   return async dispatch => {
     try {
@@ -47,4 +51,13 @@ export const getProjectThunk = projectId => {
       console.log(err);
     }
   };
+};
+
+export const getUsersThunk = () => async dispatch => {
+  try {
+    const { data } = await axios.get('/api/users');
+    dispatch(getUsers(data));
+  } catch (error) {
+    console.error(error);
+  }
 };

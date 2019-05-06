@@ -23,6 +23,27 @@ export const updateTicket = singleTicket => ({
   type: ACTIONS.UPDATE_TICKET,
   ticket: singleTicket
 });
+export const deleteTicket = ticket => ({
+  type: ACTIONS.REMOVE_TICKET,
+  ticket
+});
+
+export const sort = (
+  droppableIdStart,
+  droppableIdEnd,
+  droppableIndexStart,
+  droppableIndexEnd,
+  draggableId
+) => ({
+  type: ACTIONS.DRAG_HAPPENED,
+  payload: {
+    droppableIdStart,
+    droppableIdEnd,
+    droppableIndexStart,
+    droppableIndexEnd,
+    draggableId
+  }
+});
 
 export const createTicketThunk = (ticket, id) => {
   return async dispatch => {
@@ -35,10 +56,12 @@ export const createTicketThunk = (ticket, id) => {
   };
 };
 
-export const getTicketsThunk = () => {
+export const getTicketsThunk = id => {
   return async dispatch => {
     try {
-      const { data } = await axios.get('/api/projects/:id/tickets/');
+      console.log('ID', id);
+      const { data } = await axios.get(`/api/projects/${id}/tickets`);
+      console.log('DATA', data);
       dispatch(getTickets(data));
     } catch (err) {
       console.log(err);
@@ -68,11 +91,12 @@ export const updateTicketThunk = (id, ticket) => {
     }
   };
 };
+
 export const removeTicketThunk = ticket => {
   return async dispatch => {
     try {
-      const { data } = await axios.delete(`/api/tickets/${ticket.id}`);
-      dispatch(removeTicket(ticket.id));
+      await axios.delete(`/api/tickets/${ticket.id}`);
+      dispatch(deleteTicket(ticket));
     } catch (err) {
       console.log(err);
     }

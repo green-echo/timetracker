@@ -9,3 +9,7 @@ export const UPDATE_TICKET = 'UPDATE_TICKET';
 export const CREATE_PROJECT = 'CREATE_PROJECT';
 export const GET_PROJECTS = 'GET_PROJECTS';
 export const GET_PROJECT = 'GET_PROJECT';
+
+// Drag and Drop Contants
+
+export const DRAG_HAPPENED = 'DRAG_HAPPENED';

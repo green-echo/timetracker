@@ -71,11 +71,13 @@ router.post('/:id', async (req, res, next) => {
 });
 
 router.get('/:id/tickets', async (req, res, next) => {
+  console.log('hitting correct route');
   try {
     if (!req.user) {
       res.sendStatus(403);
     } else {
       const project = await Project.findByPk(Number(req.params.id));
+      console.log('PROJECT', project);
       if (!project) {
         next();
       } else {
@@ -93,12 +95,13 @@ router.get('/:id/tickets', async (req, res, next) => {
   }
 });
 
+/* This route gets all the users for a specifc project  */
 router.get('/:id/users', async (req, res, next) => {
   try {
     if (!req.user) {
       res.sendStatus(403);
     } else {
-      const project = Project.findByPk(Number(req.params.id));
+      const project = await Project.findByPk(Number(req.params.id));
       if (!project) {
         next();
       } else {
@@ -183,3 +186,5 @@ router.delete('/:id', async (req, res, next) => {
     next(error);
   }
 });
+
+// add a user to a specific project

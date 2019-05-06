@@ -25,9 +25,9 @@ export const getProjectUsers = projectUsers => ({
   projectUsers
 });
 
-export const addUser = user => ({
+export const addUser = userId => ({
   type: ACTIONS.ADD_USER,
-  user
+  userId
 });
 
 export const createProjectThunk = project => {
@@ -82,9 +82,9 @@ export const getProjectUsersThunk = projectId => async dispatch => {
   }
 };
 
-export const addUserThunk = (projectId, user) => async dispatch => {
+export const addUserThunk = (projectId, userId) => async dispatch => {
   try {
-    const { data } = await axios.put(`/api/projects/${projectId}`, user);
+    const { data } = await axios.put(`/api/projects/${projectId}`, userId);
     dispatch(addUser(data));
   } catch (error) {
     console.error(error);

@@ -234,7 +234,7 @@ class ProjectBoard extends React.Component {
                 return (
                   <DropdownItem
                     key={user.id}
-                    onClick={() => this.props.addUser(user)}
+                    onClick={() => this.props.addUser(user.id)}
                   >
                     {user.email}
                   </DropdownItem>
@@ -300,9 +300,9 @@ const mapDispatchToProps = (dispatch, id) => {
       const projectId = id.match.params.id;
       dispatch(getProjectUsersThunk(projectId));
     },
-    addUser: user => {
+    addUser: userId => {
       const projectId = id.match.params.id;
-      dispatch(addUserThunk(projectId, user));
+      dispatch(addUserThunk(projectId, userId));
     }
   };
 };

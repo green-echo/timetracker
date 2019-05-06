@@ -186,38 +186,60 @@ router.delete('/:id', async (req, res, next) => {
   }
 });
 
-// add a user to a specific project
+// changing a project (not including adding users)
 router.put('/:id', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
-      const { title, description, points, status, userId } = req.body;
-      const ticket = await Ticket.findByPk(req.params.id);
-      const project = await Project.findByPk(ticket.projectId);
-      if (!ticket || !project) {
+      const { name, totalTime } = req.body;
+      const project = await Project.findByPk(req.params.id);
+      if (!project) {
         next();
       } else {
         const authorized = await project.hasUser(req.user);
         if (!authorized) {
           res.sendStatus(403);
         } else {
-          await ticket.update({
-            title,
-            description,
-            points,
-            status
+          await project.update({
+            name,
+            totalTime
           });
         }
-        if (userId) {
-          const user = await User.findByPk(userId);
-          if (user) {
-            await ticket.setUser(user);
-            ticket.currentUserEmail = user.email;
+        res.json(project);
+      }
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+// add a user to a specific project
+router.put('/:id/adduser', async (req, res, next) => {
+  try {
+    if (!req.isAuthenticated()) {
+      res.sendStatus(403);
+    } else {
+      const { userId } = req.body;
+      const project = await Project.findByPk(req.params.id);
+      const user = await User.findByPk(userId);
+      if (!project) {
+        next();
+      } else {
+        const authorized = await project.hasUser(req.user);
+        if (!authorized) {
+          res.sendStatus(403);
+        } else {
+          if (!user) {
+            next();
+          } else {
+            const exists = await project.hasUser(user);
+            if (!exists) {
+              await project.addUser(user);
+            }
           }
         }
-
-        res.json(ticket);
+        res.json(project);
       }
     }
   } catch (error) {

@@ -168,8 +168,10 @@ router.post('/', async (req, res, next) => {
       const newProject = await Project.create({ name, totalTime });
       await newProject.addUser(req.user);
       res.json(newProject);
+    //console.log('PROJECTID', newProject.id)
+   //   res.redirect(`/${newProject.id}`)
     }
-  } catch (error) {
+  } catch (error) { 
     next(error);
   }
 });

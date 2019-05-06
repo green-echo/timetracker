@@ -27,76 +27,56 @@ import {
   getProjectUsersThunk,
   addUserThunk
 } from '../actions/project';
+import { createTicketsObject } from '../utils';
+import { getTicketsThunk, getTicketIdsThunk } from '../actions/ticket';
 import Column from './Column';
 
-const tickets = {
-  '1': {
-    id: 1,
-    title: 'create User',
-    desc: 'idk',
-    points: 1,
-    status: 'to do'
-  },
-  '2': {
-    id: 2,
-    title: 'create footer',
-    desc: 'idk2',
-    points: 4,
-    status: 'to do'
-  },
-  '3': {
-    id: 3,
-    title: 'create nav',
-    desc: 'idk',
-    points: 1,
-    status: 'in progress'
-  },
-  '4': {
-    id: 4,
-    title: 'create footer',
-    desc: 'idk2',
-    points: 3,
-    status: 'in progress'
-  },
-  '5': {
-    id: 5,
-    title: 'have fun',
-    desc: 'idk',
-    points: 1,
-    status: 'in review'
-  },
-  '6': {
-    id: 6,
-    title: 'create footer',
-    desc: 'idk2',
-    points: 3,
-    status: 'in review'
-  },
-  '7': {
-    id: 7,
-    title: 'have fun',
-    desc: 'idk',
-    points: 1,
-    status: 'done'
-  },
-  '8': {
-    id: 8,
-    title: 'create footer',
-    desc: 'idk2',
-    points: 3,
-    status: 'done'
-  }
-};
 const div = {
   minHeight: '50px'
 };
 
 class ProjectBoard extends React.Component {
   componentDidMount() {
-    this.props.getProject();
+    const id = this.props.match.params.id;
+    this.props.getProject(id);
     this.props.loadProjects();
     this.props.loadUsers();
     this.props.loadProjectUser();
+    this.props.loadTickets(id);
+    // await Promise.all(
+    //   this.props.loadTicketIds(id, 'to_do'),
+    //   this.props.loadTicketIds(id, 'in_progress'),
+    //   this.props.loadTicketIds(id, 'in_review'),
+    //   this.props.loadTicketIds(id, 'done')
+    // );
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    // console.log(prevProps, this.props);
+    if (prevProps.allTickets.length !== this.props.allTickets.length) {
+      this.setState({
+        columns: {
+          '1': {
+            id: 1,
+            taskIds: this.props.toDoTickets
+          },
+          '2': {
+            id: 2,
+            taskIds: this.props.inProgressTickets
+          },
+          '3': {
+            id: 3,
+            taskIds: this.props.inReviewTickets
+          },
+          '4': {
+            id: 4,
+            taskIds: this.props.doneTickets
+          }
+        },
+        numTickets: this.props.allTickets.length,
+        tickets: createTicketsObject(this.props.allTickets)
+      });
+    }
   }
 
   constructor() {
@@ -105,24 +85,25 @@ class ProjectBoard extends React.Component {
       columns: {
         '1': {
           id: 1,
-          taskIds: [1, 2]
+          taskIds: []
         },
         '2': {
           id: 2,
-          taskIds: [3, 4]
+          taskIds: []
         },
         '3': {
           id: 3,
-          taskIds: [5, 6]
+          taskIds: []
         },
         '4': {
           id: 4,
-          taskIds: [7, 8]
+          taskIds: []
         }
       },
       dropdownOpen: false,
-      userDropdownOpen: false,
-      btnDropright: false
+      btnDropright: false,
+      numTickets: 0,
+      tickets: {}
     };
     this.toggle = this.toggle.bind(this);
     this.userToggle = this.userToggle.bind(this);
@@ -201,7 +182,8 @@ class ProjectBoard extends React.Component {
     this.setState(newState);
   };
   render() {
-    console.log('all users', this.props.allUsers);
+    console.log('props:', this.props);
+    console.log('state:', this.state);
     return (
       <div>
         <Container className="project-board">
@@ -260,10 +242,26 @@ class ProjectBoard extends React.Component {
               <Col>Done</Col>
             </Row>
             <Row className="board-container">
-              <Column columns={this.state.columns} id="1" tickets={tickets} />
-              <Column columns={this.state.columns} id="2" tickets={tickets} />
-              <Column columns={this.state.columns} id="3" tickets={tickets} />
-              <Column columns={this.state.columns} id="4" tickets={tickets} />
+              <Column
+                columns={this.state.columns}
+                id="1"
+                tickets={this.state.tickets}
+              />
+              <Column
+                columns={this.state.columns}
+                id="2"
+                tickets={this.state.tickets}
+              />
+              <Column
+                columns={this.state.columns}
+                id="3"
+                tickets={this.state.tickets}
+              />
+              <Column
+                columns={this.state.columns}
+                id="4"
+                tickets={this.state.tickets}
+              />
             </Row>
           </DragDropContext>
         </Container>
@@ -283,6 +281,11 @@ const mapStateToProps = state => {
     ],
     project: state.project.project,
     projects: state.project.projects,
+    toDoTickets: state.ticket.toDoTickets,
+    inProgressTickets: state.ticket.inProgressTickets,
+    inReviewTickets: state.ticket.inReviewTickets,
+    doneTickets: state.ticket.doneTickets,
+    allTickets: state.ticket.allTickets,
     allUsers: state.project.users
   };
 };
@@ -304,6 +307,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     addUser: userId => {
       dispatch(addUserThunk(projectId, userId));
+    },
+    loadTickets: () => {
+      dispatch(getTicketsThunk(projectId));
     }
   };
 };

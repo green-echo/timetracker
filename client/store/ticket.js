@@ -1,5 +1,5 @@
+/* eslint-disable no-case-declarations */
 /* eslint-disable complexity */
-import axios from 'axios';
 
 import * as ACTIONS from '../actions/action-types';
 
@@ -8,7 +8,8 @@ const initialState = {
   inProgressTickets: [],
   inReviewTickets: [],
   doneTickets: [],
-  ticket: {}
+  ticket: {},
+  allTickets: []
 };
 
 export default function(state = initialState, action) {
@@ -18,24 +19,19 @@ export default function(state = initialState, action) {
       newState.toDoTickets.push(action.ticket);
       return newState;
     case ACTIONS.GET_TICKETS:
-      action.tickets.forEach(ticket => {
-        switch (ticket.status) {
-          case 'to_do':
-            newState.toDoTickets.push(ticket);
-            break;
-          case 'in_progress':
-            newState.inProgressTickets.push(ticket);
-            break;
-          case 'in_review':
-            newState.inReviewTickets.push(ticket);
-            break;
-          case 'done':
-            newState.doneTickets.push(ticket);
-            break;
-          default:
-            break;
-        }
-      });
+      newState.allTickets = action.tickets;
+      newState.toDoTickets = action.tickets
+        .filter(x => x.status === 'to_do')
+        .map(x => x.id);
+      newState.inProgressTickets = action.tickets
+        .filter(x => x.status === 'in_progress')
+        .map(x => x.id);
+      newState.inReviewTickets = action.tickets
+        .filter(x => x.status === 'in_review')
+        .map(x => x.id);
+      newState.doneTickets = action.tickets
+        .filter(x => x.status === 'done')
+        .map(x => x.id);
       return newState;
     case ACTIONS.UPDATE_TICKET:
       switch (action.ticket.status) {
@@ -96,6 +92,24 @@ export default function(state = initialState, action) {
           break;
         case 'done':
           newState.doneTickets.filter(ticket => ticket.id !== action.ticket.id);
+          break;
+        default:
+          break;
+      }
+      return newState;
+    case ACTIONS.GET_TICKET_IDS:
+      switch (action.status) {
+        case 'to_do':
+          newState.toDoTickets = action.ids;
+          break;
+        case 'in_progress':
+          newState.inProgressTickets = action.ids;
+          break;
+        case 'in_review':
+          newState.inReviewTickets = action.ids;
+          break;
+        case 'done':
+          newState.doneTickets = action.ids;
           break;
         default:
           break;

@@ -116,18 +116,30 @@ router.get('/:id/users', async (req, res, next) => {
   }
 });
 
+// possibly change this, only require id attributes, to guarantee one source of truth
 router.get('/:id/tickets/:status', async (req, res, next) => {
   try {
     const projectId = req.params.id;
     const status = req.params.status;
-    const singleProject = await Project.findOne({
+    // const singleProject = await Project.findOne({
+    //   where: {
+    //     id: Number(projectId),
+    //     status
+    //   },
+    //   include: Ticket
+    // });
+
+    const ticketIds = await Ticket.findAll({
       where: {
-        id: Number(projectId),
+        projectId,
         status
       },
-      include: Ticket
+      attributes: ['id']
     });
-    res.json(singleProject);
+
+    const idArr = ticketIds.map(x => x.id);
+
+    res.json(idArr);
   } catch (error) {
     next(error);
   }

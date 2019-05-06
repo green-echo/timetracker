@@ -23,7 +23,7 @@ async function seed() {
   projects[1].setUsers([users[0], users[1], users[2]]);
   projects[2].setUsers([users[1]]);
 
-  const tickets = await Promise.all([
+  const netflixTickets = await Promise.all([
     Ticket.create({
       title: 'API',
       description: 'create routes',
@@ -52,13 +52,78 @@ async function seed() {
       status: 'done'
     })
   ]);
+
+  const hersheyFrontEndTickets = await Promise.all([
+    Ticket.create({
+      title: 'API',
+      description: 'create routes',
+      points: 3,
+
+      status: 'in_progress'
+    }),
+    Ticket.create({
+      title: 'REACT component',
+      description: 'create component',
+      points: 5,
+
+      status: 'to_do'
+    }),
+    Ticket.create({
+      title: 'seed file',
+      description: 'create seed file',
+      points: 3,
+
+      status: 'in_review'
+    }),
+    Ticket.create({
+      title: 'bootstrap',
+      description: 'install bootstrap',
+      points: 3,
+      status: 'done'
+    })
+  ]);
+
+  const hersheyBackEndTickets = await Promise.all([
+    Ticket.create({
+      title: 'API',
+      description: 'create routes',
+      points: 3,
+
+      status: 'in_progress'
+    }),
+    Ticket.create({
+      title: 'REACT component',
+      description: 'create component',
+      points: 5,
+
+      status: 'to_do'
+    }),
+    Ticket.create({
+      title: 'seed file',
+      description: 'create seed file',
+      points: 3,
+
+      status: 'in_review'
+    }),
+    Ticket.create({
+      title: 'bootstrap',
+      description: 'install bootstrap',
+      points: 3,
+      status: 'done'
+    })
+  ]);
+
   //putting all tickets under first Project
-  for (let i = 0; i < tickets.length; i++) {
-    await tickets[i].setProject(projects[0]);
+  for (let i = 0; i < netflixTickets.length; i++) {
+    await netflixTickets[i].setProject(projects[0]);
   }
 
-  for (let i = 0; i < tickets.length; i++) {
-    await tickets[i].setProject(projects[1]);
+  for (let i = 0; i < hersheyFrontEndTickets.length; i++) {
+    await hersheyFrontEndTickets[i].setProject(projects[1]);
+  }
+
+  for (let i = 0; i < hersheyBackEndTickets.length; i++) {
+    await hersheyBackEndTickets[i].setProject(projects[2]);
   }
 
   console.log(`seeded ${users.length} users`);

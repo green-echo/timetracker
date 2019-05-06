@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as ACTIONS from './action-types';
-import history from '../history'
+import history from '../history';
 
 export const getProjects = projects => ({
   type: ACTIONS.GET_PROJECTS,
@@ -13,7 +13,7 @@ export const getProject = project => ({
 
 export const createProject = singleProject => ({
   type: ACTIONS.CREATE_PROJECT,
-  project: singleProject 
+  project: singleProject
 });
 
 export const getUsers = users => ({
@@ -90,6 +90,7 @@ export const addUserThunk = (projectId, userId) => async dispatch => {
       userId
     );
     dispatch(addUser(data));
+    history.push(`/projects/${projectId}`);
   } catch (error) {
     console.error(error);
   }

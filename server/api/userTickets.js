@@ -5,7 +5,7 @@ module.exports = router;
 // returns all usertickets for a specific userId
 router.get('/:userId', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
       const user = await User.findByPk(Number(req.params.userId));
@@ -24,7 +24,7 @@ router.get('/:userId', async (req, res, next) => {
 // returns all usertickets for a specific ticketId
 router.get('/:ticketId', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
       const ticket = await Ticket.findByPk(Number(req.params.ticketId));
@@ -43,7 +43,7 @@ router.get('/:ticketId', async (req, res, next) => {
 // for adding an end to a userTicket
 router.put('/:id', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
       const { end } = req.body;
@@ -65,7 +65,7 @@ router.put('/:id', async (req, res, next) => {
 // for creating a userTicket with a given start
 router.post('/:ticketId', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
       const { start } = req.body;

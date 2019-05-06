@@ -8,11 +8,14 @@ const initialState = {
 export default function(state = initialState, action) {
   const newState = { ...state };
   switch (action.type) {
+    // case ACTIONS.CREATE_PROJECT:
+    //   return {
+    //     ...state,
+    //     projects: [...this.state.projects, action.singleProject]
+    //   };
     case ACTIONS.CREATE_PROJECT:
-      return {
-        ...state,
-        projects: [...this.state.projects, action.singleProject]
-      };
+    newState.projects.push(action.project);
+    return newState;
     case ACTIONS.GET_PROJECTS:
       return { ...state, projects: action.projects };
     case ACTIONS.GET_PROJECT:

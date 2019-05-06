@@ -48,7 +48,6 @@ export const createTicketThunk = (ticket, id) => {
     try {
       const { data } = await axios.post(`/api/projects/${id}`, ticket);
       dispatch(createTicket(data));
-      console.log('ID:', id);
       history.push(`/projects/${id}`);
     } catch (err) {
       console.log(err);

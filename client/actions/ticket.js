@@ -1,7 +1,6 @@
 import axios from 'axios';
 import * as ACTIONS from '../actions/action-types';
-import history from '../history'
-
+import history from '../history';
 
 export const removeTicket = ticket => ({
   type: ACTIONS.REMOVE_TICKET,

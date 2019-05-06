@@ -10,3 +10,6 @@ export const GET_TICKET_IDS = 'GET_TICKET_IDS';
 export const CREATE_PROJECT = 'CREATE_PROJECT';
 export const GET_PROJECTS = 'GET_PROJECTS';
 export const GET_PROJECT = 'GET_PROJECT';
+export const GET_USERS = 'GET_USERS';
+export const GET_PROJECT_USERS = 'GET_PROJECT_USERS';
+export const ADD_USER = 'ADD_USER';

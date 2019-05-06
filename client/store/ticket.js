@@ -16,7 +16,8 @@ export default function(state = initialState, action) {
   const newState = { ...state };
   switch (action.type) {
     case ACTIONS.CREATE_TICKET:
-      newState.toDoTickets.push(action.ticket);
+      newState.allTickets.push(action.ticket);
+      newState.toDoTickets.push(action.ticket.id);
       return newState;
     case ACTIONS.GET_TICKETS:
       newState.allTickets = action.tickets;
@@ -34,64 +35,30 @@ export default function(state = initialState, action) {
         .map(x => x.id);
       return newState;
     case ACTIONS.UPDATE_TICKET:
-      switch (action.ticket.status) {
-        case 'to_do':
-          newState.toDoTickets.map(ticket => {
-            if (ticket.id === action.ticket.id) {
-              return action.ticket;
-            } else {
-              return ticket;
-            }
-          });
-          break;
-        case 'in_progress':
-          newState.inProgressTickets.map(ticket => {
-            if (ticket.id === action.ticket.id) {
-              return action.ticket;
-            } else {
-              return ticket;
-            }
-          });
-          break;
-        case 'in_review':
-          newState.inReviewTickets.map(ticket => {
-            if (ticket.id === action.ticket.id) {
-              return action.ticket;
-            } else {
-              return ticket;
-            }
-          });
-          break;
-        case 'done':
-          newState.doneTickets.map(ticket => {
-            if (ticket.id === action.ticket.id) {
-              return action.ticket;
-            } else {
-              return ticket;
-            }
-          });
-          break;
-        default:
-          break;
-      }
+      newState.allTickets = newState.allTickets.map(ticket => {
+        if (ticket.id === action.ticket.id) {
+          return action.ticket;
+        } else {
+          return ticket;
+        }
+      });
       return newState;
     case ACTIONS.REMOVE_TICKET:
+      newState.allTickets = newState.allTickets.filter(
+        ticket => ticket.id !== action.ticket.id
+      );
       switch (action.ticket.status) {
         case 'to_do':
-          newState.toDoTickets.filter(ticket => ticket.id !== action.ticket.id);
+          newState.toDoTickets.filter(id => id !== action.ticket.id);
           break;
         case 'in_progress':
-          newState.inProgressTickets.filter(
-            ticket => ticket.id !== action.ticket.id
-          );
+          newState.inProgressTickets.filter(id => id !== action.ticket.id);
           break;
         case 'in_review':
-          newState.inReviewTickets.filter(
-            ticket => ticket.id !== action.ticket.id
-          );
+          newState.inReviewTickets.filter(id => id !== action.ticket.id);
           break;
         case 'done':
-          newState.doneTickets.filter(ticket => ticket.id !== action.ticket.id);
+          newState.doneTickets.filter(id => id !== action.ticket.id);
           break;
         default:
           break;

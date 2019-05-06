@@ -19,8 +19,15 @@ import { Link } from 'react-router-dom';
 import DroppableContainer from './DroppableContainer';
 import CreateTicket from './CreateTicket';
 import { connect } from 'react-redux';
+
+import {
+  getProjectThunk,
+  getProjectsThunk,
+  getUsersThunk,
+  getProjectUsersThunk,
+  addUserThunk
+} from '../actions/project';
 import { createTicketsObject } from '../utils';
-import { getProjectThunk, getProjectsThunk } from '../actions/project';
 import { getTicketsThunk, getTicketIdsThunk } from '../actions/ticket';
 import Column from './Column';
 
@@ -33,7 +40,31 @@ class ProjectBoard extends React.Component {
     const id = this.props.match.params.id;
     this.props.getProject(id);
     this.props.loadProjects();
+    this.props.loadUsers();
+    this.props.loadProjectUser();
     this.props.loadTickets(id);
+    this.setState({
+      columns: {
+        '1': {
+          id: 1,
+          taskIds: this.props.toDoTickets
+        },
+        '2': {
+          id: 2,
+          taskIds: this.props.inProgressTickets
+        },
+        '3': {
+          id: 3,
+          taskIds: this.props.inReviewTickets
+        },
+        '4': {
+          id: 4,
+          taskIds: this.props.doneTickets
+        }
+      },
+      numTickets: this.props.allTickets.length,
+      tickets: createTicketsObject(this.props.allTickets)
+    });
     // await Promise.all(
     //   this.props.loadTicketIds(id, 'to_do'),
     //   this.props.loadTicketIds(id, 'in_progress'),
@@ -43,7 +74,8 @@ class ProjectBoard extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // console.log(prevProps, this.props);
+    console.log(prevProps, this.props);
+    console.log('UPDATING');
     if (prevProps.allTickets.length !== this.props.allTickets.length) {
       this.setState({
         columns: {
@@ -97,11 +129,17 @@ class ProjectBoard extends React.Component {
       tickets: {}
     };
     this.toggle = this.toggle.bind(this);
+    this.userToggle = this.userToggle.bind(this);
   }
 
   toggle() {
     this.setState({
       dropdownOpen: !this.state.dropdownOpen
+    });
+  }
+  userToggle() {
+    this.setState({
+      userDropdownOpen: !this.state.userDropdownOpen
     });
   }
   onDragEnd = result => {
@@ -167,8 +205,8 @@ class ProjectBoard extends React.Component {
     this.setState(newState);
   };
   render() {
-    // console.log('props:', this.props);
-    // console.log('state:', this.state);
+    console.log('props:', this.props);
+    console.log('state:', this.state);
     return (
       <div>
         <Container className="project-board">
@@ -188,8 +226,32 @@ class ProjectBoard extends React.Component {
               })}
             </DropdownMenu>
           </ButtonDropdown>
+          {/* User Dropdown for addding users to a project */}
+          <ButtonDropdown
+            isOpen={this.state.userDropdownOpen}
+            toggle={this.userToggle}
+          >
+            <DropdownToggle caret>Users On Project</DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem header>Users On Project</DropdownItem>
+              <DropdownItem divider />
+              {this.props.allUsers.map(user => {
+                return (
+                  <DropdownItem
+                    key={user.id}
+                    // onClick={() => this.props.addUser(user.id)}
+                  >
+                    {user.email}
+                  </DropdownItem>
+                );
+              })}
+            </DropdownMenu>
+          </ButtonDropdown>
           <Link to={`/projects/${this.props.project.id}/newticket`}>
             <Button color="danger">New Ticket</Button>
+          </Link>
+          <Link to={`/projects/${this.props.project.id}/adduser`}>
+            <Button color="primary">Add User</Button>
           </Link>
 
           <DragDropContext onDragEnd={this.onDragEnd}>
@@ -246,23 +308,31 @@ const mapStateToProps = state => {
     inProgressTickets: state.ticket.inProgressTickets,
     inReviewTickets: state.ticket.inReviewTickets,
     doneTickets: state.ticket.doneTickets,
-    allTickets: state.ticket.allTickets
+    allTickets: state.ticket.allTickets,
+    allUsers: state.project.users
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch, ownProps) => {
+  const projectId = ownProps.match.params.id;
   return {
-    getProject: projectId => {
+    getProject: () => {
       dispatch(getProjectThunk(projectId));
     },
     loadProjects: () => {
       dispatch(getProjectsThunk());
     },
-    loadTickets: projectId => {
-      dispatch(getTicketsThunk(projectId));
+    loadUsers: () => {
+      dispatch(getUsersThunk(projectId));
     },
-    loadTicketIds: (projectId, status) => {
-      dispatch(getTicketIdsThunk(projectId, status));
+    loadProjectUser: () => {
+      dispatch(getProjectUsersThunk(projectId));
+    },
+    addUser: userId => {
+      dispatch(addUserThunk(projectId, userId));
+    },
+    loadTickets: () => {
+      dispatch(getTicketsThunk(projectId));
     }
   };
 };

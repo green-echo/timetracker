@@ -20,6 +20,7 @@ export default function(state = initialState, action) {
       return newState;
     case ACTIONS.GET_TICKETS:
       newState.allTickets = action.tickets;
+      console.log('!!!!!!!!', action.tickets)
       newState.toDoTickets = action.tickets
         .filter(x => x.status === 'to_do')
         .map(x => x.id);

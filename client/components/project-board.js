@@ -30,10 +30,10 @@ const div = {
 
 class ProjectBoard extends React.Component {
   componentDidMount() {
-    const id = this.props.match.params.id;
-    this.props.getProject(id);
+    const projectId = this.props.match.params.id;
+    this.props.getProject(projectId);
     this.props.loadProjects();
-    this.props.loadTickets(id);
+    this.props.loadTickets(projectId);
     // await Promise.all(
     //   this.props.loadTicketIds(id, 'to_do'),
     //   this.props.loadTicketIds(id, 'in_progress'),
@@ -43,7 +43,7 @@ class ProjectBoard extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // console.log(prevProps, this.props);
+  
     if (prevProps.allTickets.length !== this.props.allTickets.length) {
       this.setState({
         columns: {
@@ -174,7 +174,7 @@ class ProjectBoard extends React.Component {
         <Container className="project-board">
           <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
             <DropdownToggle caret>
-              {this.props.currentProject.name}
+              {this.props.project.name}
             </DropdownToggle>
             <DropdownMenu>
               <DropdownItem header>Projects</DropdownItem>
@@ -234,7 +234,7 @@ class ProjectBoard extends React.Component {
 const mapStateToProps = state => {
   // console.log('mapping state to store', state.selectedCampus)
   return {
-    currentProject: { id: 1, name: 'Hersheys' },
+    //currentProject: { id: 1, name: 'Hersheys' },
     users: [
       { id: 1, name: 'Ariel' },
       { id: 2, name: 'Christina' },
@@ -258,7 +258,7 @@ const mapDispatchToProps = dispatch => {
     loadProjects: () => {
       dispatch(getProjectsThunk());
     },
-    loadTickets: projectId => {
+    loadTickets: (projectId) => {
       dispatch(getTicketsThunk(projectId));
     },
     loadTicketIds: (projectId, status) => {

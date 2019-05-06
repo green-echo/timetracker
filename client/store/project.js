@@ -2,7 +2,9 @@ import * as ACTIONS from '../actions/action-types';
 
 const initialState = {
   projects: [],
-  project: {}
+  project: {},
+  users: [],
+  projectUsers: []
 };
 
 export default function(state = initialState, action) {
@@ -15,6 +17,8 @@ export default function(state = initialState, action) {
       return { ...state, projects: action.projects };
     case ACTIONS.GET_PROJECT:
       return { ...state, project: action.project };
+    case ACTIONS.GET_USERS:
+      return { ...state, users: action.users };
     default:
       return state;
   }

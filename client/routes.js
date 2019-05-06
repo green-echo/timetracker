@@ -8,6 +8,7 @@ import CreateTicket from './components/CreateTicket';
 import CreateProject from './components/CreateProject';
 
 import Projects from './components/Projects';
+import AddUserToProject from './components/AddUserToProject';
 
 /**
  * COMPONENT
@@ -32,6 +33,7 @@ class Routes extends Component {
             <Route path="/home" component={UserHome} />
             <Route exact path="/projects" component={Projects} />
             <Route path="/projects/:id/newticket" component={CreateTicket} />
+            <Route path="/projects/:id/adduser" component={AddUserToProject} />
             <Route path="/projects/:id" component={ProjectBoard} />
             <Route component={Projects} />
           </Switch>

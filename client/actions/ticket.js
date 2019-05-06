@@ -1,12 +1,13 @@
 import axios from 'axios';
 import * as ACTIONS from '../actions/action-types';
-import history from '../history'
+import history from '../history';
 
+const deleteTicket = (ticket) => (
+  { 
+    type: ACTIONS.REMOVE_TICKET, 
+    ticket  
+  }); 
 
-export const removeTicket = ticket => ({
-  type: ACTIONS.REMOVE_TICKET,
-  ticket
-});
 export const createTicket = singleTicket => ({
   type: ACTIONS.CREATE_TICKET,
   ticket: singleTicket
@@ -89,11 +90,13 @@ export const updateTicketThunk = (id, ticket) => {
     }
   };
 };
+
+
 export const removeTicketThunk = ticket => {
-  return async dispatch => {
+  return async dispatch => { 
     try {
-      const { data } = await axios.delete(`/api/tickets/${ticket.id}`);
-      dispatch(removeTicket(ticket.id));
+      await axios.delete(`/api/tickets/${ticket.id}`);
+      dispatch(deleteTicket(ticket));
     } catch (err) {
       console.log(err);
     }

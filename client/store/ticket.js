@@ -16,11 +16,12 @@ export default function(state = initialState, action) {
   const newState = { ...state };
   switch (action.type) {
     case ACTIONS.CREATE_TICKET:
-      newState.toDoTickets.push(action.ticket);
+      newState.allTickets.push(action.ticket);
+      newState.toDoTickets.push(action.ticket.id);
       return newState;
     case ACTIONS.GET_TICKETS:
       newState.allTickets = action.tickets;
-      console.log('!!!!!!!!', action.tickets)
+      console.log('!!!!!!!!', action.tickets);
       newState.toDoTickets = action.tickets
         .filter(x => x.status === 'to_do')
         .map(x => x.id);
@@ -35,69 +36,77 @@ export default function(state = initialState, action) {
         .map(x => x.id);
       return newState;
     case ACTIONS.UPDATE_TICKET:
-      switch (action.ticket.status) {
-        case 'to_do':
-          newState.toDoTickets.map(ticket => {
-            if (ticket.id === action.ticket.id) {
-              return action.ticket;
-            } else {
-              return ticket;
-            }
-          });
-          break;
-        case 'in_progress':
-          newState.inProgressTickets.map(ticket => {
-            if (ticket.id === action.ticket.id) {
-              return action.ticket;
-            } else {
-              return ticket;
-            }
-          });
-          break;
-        case 'in_review':
-          newState.inReviewTickets.map(ticket => {
-            if (ticket.id === action.ticket.id) {
-              return action.ticket;
-            } else {
-              return ticket;
-            }
-          });
-          break;
-        case 'done':
-          newState.doneTickets.map(ticket => {
-            if (ticket.id === action.ticket.id) {
-              return action.ticket;
-            } else {
-              return ticket;
-            }
-          });
-          break;
-        default:
-          break;
-      }
+      newState.allTickets = newState.allTickets.map(ticket => {
+        if (ticket.id === action.ticket.id) {
+          return action.ticket;
+        } else {
+          return ticket;
+        }
+      });
       return newState;
     case ACTIONS.REMOVE_TICKET:
+      newState.allTickets = newState.allTickets.filter(
+        ticket => ticket.id !== action.ticket.id
+      );
+
       switch (action.ticket.status) {
         case 'to_do':
-          newState.toDoTickets.filter(ticket => ticket.id !== action.ticket.id);
+          newState.toDoTickets = newState.toDoTickets.filter(
+            id => id !== action.ticket.id
+          );
           break;
         case 'in_progress':
-          newState.inProgressTickets.filter(
-            ticket => ticket.id !== action.ticket.id
+          newState.inProgressTickets = newState.inProgressTickets.filter(
+            id => id !== action.ticket.id
           );
           break;
         case 'in_review':
-          newState.inReviewTickets.filter(
-            ticket => ticket.id !== action.ticket.id
+          newState.inReviewTickets = newState.inReviewTickets.filter(
+            id => id !== action.ticket.id
           );
           break;
         case 'done':
-          newState.doneTickets.filter(ticket => ticket.id !== action.ticket.id);
+          newState.doneTickets = newState.doneTickets.filter(
+            id => id !== action.ticket.id
+          );
           break;
         default:
           break;
       }
       return newState;
+    // newState.allTickets = newState.tickets.filter(elem => elem.id !==action.ticket.id)
+    // case ACTIONS.REMOVE_TICKET:
+
+    //   if (action.ticket.status === 'to_do') {
+    //    // console.log('!!!!!', action.ticket.status)
+    //     return {
+    //       ...state,
+    //       toDoTickets: state.toDoTickets.filter(
+    //         ticket => ticket.id !== action.ticket.id
+    //       )
+    //     };
+    //   } else if (action.ticket.status === 'in_progress') {
+    //     return {
+    //       ...state,
+    //       inProgressTickets: state.inProgressTickets.filter(
+    //         ticket => ticket.id !== action.ticket.id
+    //       )
+    //     };
+    //   } else if (action.ticket.status === 'in_review') {
+    //     return {
+    //       ...state,
+    //       inReviewTickets: state.inReviewTickets.filter(
+    //         ticket => ticket.id !== action.ticket.id
+    //       )
+    //     };
+    //   } else if (action.ticket.status === 'done') {
+    //     return {
+    //       ...state,
+    //       doneTickets: state.doneTickets.filter(
+    //         ticket => ticket.id !== action.ticket.id
+    //       )
+    //     };
+    //   }
     case ACTIONS.GET_TICKET_IDS:
       switch (action.status) {
         case 'to_do':

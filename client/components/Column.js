@@ -25,14 +25,6 @@ const Column = ({ columns, tickets, id }) => {
     minHeight: '50px'
   };
 
-  console.log('TICKETS', tickets);
-  // console.log('COLUMNS', columns);
-  // console.log(id);
-
-  // if (!tickets['1']) {
-  //   return null;
-  // }
-
   return (
     <Droppable droppableId={id} style={div}>
       {provided => (

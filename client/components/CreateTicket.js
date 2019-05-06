@@ -50,7 +50,6 @@ class CreateTicket extends Component {
   }
 
   render() {
-    // console.log('PROJECTID', this.state.projectId);
     return (
       <form onSubmit={this.handleSubmit}>
         <label className="formLabel" htmlFor="title">
@@ -98,7 +97,6 @@ class CreateTicket extends Component {
 }
 
 const mapStateToProps = state => {
-  // console.log('mapping state to store', state.selectedCampus)
   return { data: state.ticket };
 };
 

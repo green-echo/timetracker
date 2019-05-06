@@ -23,7 +23,6 @@ router.get('/:id', async (req, res, next) => {
     } else {
       const project = await Project.findByPk(Number(req.params.id));
       if (!project) {
-        console.log('NOT FOUND');
         next();
       } else {
         const authorized = await project.hasUser(req.user);
@@ -170,10 +169,8 @@ router.post('/', async (req, res, next) => {
       const newProject = await Project.create({ name, totalTime });
       await newProject.addUser(req.user);
       res.json(newProject);
-    //console.log('PROJECTID', newProject.id)
-   //   res.redirect(`/${newProject.id}`)
     }
-  } catch (error) { 
+  } catch (error) {
     next(error);
   }
 });
@@ -229,7 +226,6 @@ router.put('/:id/adduser', async (req, res, next) => {
             }
           }
         }
-        console.log(project);
         res.json(project);
       }
     }
@@ -249,7 +245,6 @@ router.put('/:id', async (req, res, next) => {
         next();
       } else {
         const project = await Project.findByPk(req.params.id);
-        console.log('PROJECT:', project);
         if (!project) {
           next();
         } else {

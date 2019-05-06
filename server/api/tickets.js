@@ -5,7 +5,7 @@ module.exports = router;
 
 router.get('/', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
       const allTickets = await Ticket.findAll();
@@ -18,7 +18,7 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:id', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
       const ticket = await Ticket.findByPk(Number(req.params.id));
@@ -42,7 +42,7 @@ router.get('/:id', async (req, res, next) => {
 
 router.get('/:id/user', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
       const ticket = await Ticket.findByPk(Number(req.params.id));
@@ -70,7 +70,7 @@ router.get('/:id/user', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
       const { title, description, points, status } = req.body;
@@ -89,7 +89,7 @@ router.post('/', async (req, res, next) => {
 
 router.put('/:id', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
       const { title, description, points, status, userId } = req.body;
@@ -127,7 +127,7 @@ router.put('/:id', async (req, res, next) => {
 
 router.delete('/:id', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
       const ticket = await Ticket.findByPk(Number(req.params.id));

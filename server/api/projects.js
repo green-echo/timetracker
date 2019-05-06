@@ -5,7 +5,7 @@ module.exports = router;
 
 router.get('/all', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
       const allProjects = await Project.findAll();
@@ -18,7 +18,7 @@ router.get('/all', async (req, res, next) => {
 
 router.get('/:id', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
       const project = await Project.findByPk(Number(req.params.id));
@@ -41,7 +41,7 @@ router.get('/:id', async (req, res, next) => {
 // add a ticket to a specific project
 router.post('/:id', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
       const { title, description, points } = req.body;
@@ -72,7 +72,7 @@ router.post('/:id', async (req, res, next) => {
 
 router.get('/:id/tickets', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
       const project = await Project.findByPk(Number(req.params.id));
@@ -96,7 +96,7 @@ router.get('/:id/tickets', async (req, res, next) => {
 /* This route gets all the users for a specifc project  */
 router.get('/:id/users', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
       const project = await Project.findByPk(Number(req.params.id));
@@ -148,7 +148,7 @@ router.get('/:id/tickets/:status', async (req, res, next) => {
 /* This gets all the projects that belongs to a user */
 router.get('/', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
       const user = await User.findByPk(req.user.id);
@@ -162,7 +162,7 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
       const { name, totalTime } = req.body;
@@ -177,7 +177,7 @@ router.post('/', async (req, res, next) => {
 
 router.delete('/:id', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
       const project = await Project.findByPk(Number(req.params.id));

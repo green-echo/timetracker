@@ -98,6 +98,10 @@ class ProjectBoard extends React.Component {
         tickets: createTicketsObject(this.props.allTickets)
       });
     }
+    if (prevProps.match.params.id !== this.props.match.params.id) {
+      this.props.getProject();
+      this.props.loadTickets();
+    }
   }
 
   constructor() {
@@ -207,9 +211,7 @@ class ProjectBoard extends React.Component {
       <div>
         <Container className="project-board">
           <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-            <DropdownToggle caret>
-              {this.props.currentProject.name}
-            </DropdownToggle>
+            <DropdownToggle caret>{this.props.project.name}</DropdownToggle>
             <DropdownMenu>
               <DropdownItem header>Projects</DropdownItem>
               <DropdownItem divider />
@@ -252,7 +254,7 @@ class ProjectBoard extends React.Component {
 
           <DragDropContext onDragEnd={this.onDragEnd}>
             <Row>
-              <Col>Project Name</Col>
+              <Col>{this.props.project.name}</Col>
             </Row>
             <Row className="board-header">
               <Col>To Do</Col>
@@ -291,7 +293,6 @@ class ProjectBoard extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    currentProject: { id: 1, name: 'Hersheys' },
     users: [
       { id: 1, name: 'Ariel' },
       { id: 2, name: 'Christina' },

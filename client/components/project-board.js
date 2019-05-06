@@ -266,7 +266,7 @@ class ProjectBoard extends React.Component {
                       ref={provided.innerRef}
                       className="tix-container"
                     >
-                      <h3>To Do</h3>
+                      {/* <h3>To Do</h3> */}
                       {this.props.tixToDo.map((elem, index) => {
                         return (
                           <StatusColumn
@@ -277,6 +277,7 @@ class ProjectBoard extends React.Component {
                         );
                       })}
                       {provided.placeholder}
+                      <div style={div} />
                     </div>
                   )}
                 </Droppable>
@@ -289,7 +290,7 @@ class ProjectBoard extends React.Component {
                       ref={provided.innerRef}
                       className="tix-container"
                     >
-                      <h3>In Progress</h3>
+                      {/* <h3>In Progress</h3> */}
                       {this.props.tixInPro.map((elem, index) => {
                         return (
                           <StatusColumn
@@ -299,7 +300,7 @@ class ProjectBoard extends React.Component {
                           />
                         );
                       })}
-
+                      <div style={div} />
                       {provided.placeholder}
                     </div>
                   )}
@@ -313,7 +314,7 @@ class ProjectBoard extends React.Component {
                       ref={provided.innerRef}
                       className="tix-container"
                     >
-                      <h3>In Review</h3>
+                      {/* <h3>In Review</h3> */}
                       {this.props.tixInRe.map((elem, index) => {
                         return (
                           <StatusColumn
@@ -323,6 +324,7 @@ class ProjectBoard extends React.Component {
                           />
                         );
                       })}
+                      <div style={div} />
                       {provided.placeholder}
                     </div>
                   )}
@@ -336,7 +338,7 @@ class ProjectBoard extends React.Component {
                       ref={provided.innerRef}
                       className="tix-container"
                     >
-                      <h3>Done</h3>
+                      {/* <h3>Done</h3> */}
                       {this.props.tixDone.map((elem, index) => {
                         return (
                           <StatusColumn
@@ -346,6 +348,7 @@ class ProjectBoard extends React.Component {
                           />
                         );
                       })}
+                      <div style={div} />
                       {provided.placeholder}
                     </div>
                   )}
@@ -360,7 +363,6 @@ class ProjectBoard extends React.Component {
 }
 
 const mapStateToProps = state => {
-  //console.log('mapping state to store', state);
   return {
     currentProject: { id: 1, name: 'Hersheys' },
     users: [

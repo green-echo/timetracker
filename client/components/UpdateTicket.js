@@ -82,7 +82,6 @@ class UpdateTicket extends Component {
 }
 
 const mapStateToProps = state => {
-  // console.log('mapping state to store', state.selectedCampus)
   return { data: state.ticket };
 };
 
@@ -91,8 +90,8 @@ const mapDispatchToProps = function(dispatch) {
   return {
     update: (ticketId, ticket) => {
       dispatch(updateTicket(ticketId, ticket));
-    },
-  }
+    }
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UpdateTicket);

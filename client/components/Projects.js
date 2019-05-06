@@ -17,8 +17,6 @@ class Project extends React.Component {
     this.props.getProjects();
   }
   render() {
-    console.log('rendering');
-    console.log(this.props.data);
     return (
       <div>
         <Link to="/newproject">
@@ -40,9 +38,6 @@ class Project extends React.Component {
 }
 
 const mapStateToProps = state => {
-  // console.log('!!!!', state.ticket.projects);
-  // console.log('!!!!', state);
-
   return { projects: state.project.projects };
 };
 

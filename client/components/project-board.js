@@ -23,7 +23,9 @@ import { connect } from 'react-redux';
 import {
   getProjectThunk,
   getProjectsThunk,
-  getUsersThunk
+  getUsersThunk,
+  getProjectUsersThunk,
+  addUserThunk
 } from '../actions/project';
 import Column from './Column';
 
@@ -94,6 +96,7 @@ class ProjectBoard extends React.Component {
     this.props.getProject();
     this.props.loadProjects();
     this.props.loadUsers();
+    this.props.loadProjectUser();
   }
 
   constructor() {
@@ -228,7 +231,14 @@ class ProjectBoard extends React.Component {
               <DropdownItem header>All Users</DropdownItem>
               <DropdownItem divider />
               {this.props.allUsers.map(user => {
-                return <DropdownItem key={user.id}>{user.email}</DropdownItem>;
+                return (
+                  <DropdownItem
+                    key={user.id}
+                    onClick={() => this.props.addUser(user)}
+                  >
+                    {user.email}
+                  </DropdownItem>
+                );
               })}
             </DropdownMenu>
           </ButtonDropdown>
@@ -285,6 +295,14 @@ const mapDispatchToProps = (dispatch, id) => {
     },
     loadUsers: () => {
       dispatch(getUsersThunk());
+    },
+    loadProjectUser: () => {
+      const projectId = id.match.params.id;
+      dispatch(getProjectUsersThunk(projectId));
+    },
+    addUser: user => {
+      const projectId = id.match.params.id;
+      dispatch(addUserThunk(projectId, user));
     }
   };
 };

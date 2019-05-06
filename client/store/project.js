@@ -4,7 +4,8 @@ import * as ACTIONS from '../actions/action-types';
 const initialState = {
   projects: [],
   project: {},
-  users: []
+  users: [],
+  projectUsers: []
 };
 
 export default function(state = initialState, action) {

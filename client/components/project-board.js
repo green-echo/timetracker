@@ -74,8 +74,6 @@ class ProjectBoard extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log(prevProps, this.props);
-    console.log('UPDATING');
     if (prevProps.allTickets.length !== this.props.allTickets.length) {
       this.setState({
         columns: {
@@ -205,8 +203,6 @@ class ProjectBoard extends React.Component {
     this.setState(newState);
   };
   render() {
-    console.log('props:', this.props);
-    console.log('state:', this.state);
     return (
       <div>
         <Container className="project-board">
@@ -294,7 +290,6 @@ class ProjectBoard extends React.Component {
 }
 
 const mapStateToProps = state => {
-  // console.log('mapping state to store', state.selectedCampus)
   return {
     currentProject: { id: 1, name: 'Hersheys' },
     users: [

@@ -84,7 +84,7 @@ export const getProjectUsersThunk = projectId => async dispatch => {
 
 export const addUserThunk = (projectId, user) => async dispatch => {
   try {
-    const { data } = await axios.post(`/api/projects/${projectId}`, user);
+    const { data } = await axios.put(`/api/projects/${projectId}`, user);
     dispatch(addUser(data));
   } catch (error) {
     console.error(error);

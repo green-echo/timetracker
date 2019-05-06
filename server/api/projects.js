@@ -187,3 +187,40 @@ router.delete('/:id', async (req, res, next) => {
 });
 
 // add a user to a specific project
+router.put('/:id', async (req, res, next) => {
+  try {
+    if (!req.user) {
+      res.sendStatus(403);
+    } else {
+      const { title, description, points, status, userId } = req.body;
+      const ticket = await Ticket.findByPk(req.params.id);
+      const project = await Project.findByPk(ticket.projectId);
+      if (!ticket || !project) {
+        next();
+      } else {
+        const authorized = await project.hasUser(req.user);
+        if (!authorized) {
+          res.sendStatus(403);
+        } else {
+          await ticket.update({
+            title,
+            description,
+            points,
+            status
+          });
+        }
+        if (userId) {
+          const user = await User.findByPk(userId);
+          if (user) {
+            await ticket.setUser(user);
+            ticket.currentUserEmail = user.email;
+          }
+        }
+
+        res.json(ticket);
+      }
+    }
+  } catch (error) {
+    next(error);
+  }
+});

@@ -42,7 +42,7 @@ class CreateProject extends Component {
     });
     this.setState({ name: '', totalTime: '' });
     // console.log('!!!!', this.props.currentProject);
-    this.props.history.push(`/projects/${this.props.currentProject.id}`);
+    
   }
 
   render() {
@@ -83,10 +83,10 @@ class CreateProject extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log('????', state.ticket.currentProject);
+ // console.log('????', state.ticket.currentProject);
   return {
     data: state.ticket.projects,
-    currentProject: state.ticket.currentProject
+   // currentProject: state.ticket.currentProject
   };
 };
 

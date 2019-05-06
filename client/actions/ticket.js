@@ -1,5 +1,7 @@
 import axios from 'axios';
 import * as ACTIONS from '../actions/action-types';
+import history from '../history'
+
 
 export const removeTicket = ticket => ({
   type: ACTIONS.REMOVE_TICKET,
@@ -47,6 +49,7 @@ export const createTicketThunk = (ticket, id) => {
     try {
       const { data } = await axios.post(`/api/projects/${id}`, ticket);
       dispatch(createTicket(data));
+      history.push(`/projects/${id}`);
     } catch (err) {
       console.log(err);
     }

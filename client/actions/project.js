@@ -1,5 +1,6 @@
 import axios from 'axios';
 import * as ACTIONS from './action-types';
+import history from '../history'
 
 export const getProjects = projects => ({
   type: ACTIONS.GET_PROJECTS,
@@ -12,7 +13,7 @@ export const getProject = project => ({
 
 export const createProject = singleProject => ({
   type: ACTIONS.CREATE_PROJECT,
-  project: singleProject
+  project: singleProject 
 });
 
 export const getUsers = users => ({
@@ -35,7 +36,7 @@ export const createProjectThunk = project => {
     try {
       const { data } = await axios.post('/api/projects', project);
       dispatch(createProject(data));
-      dispatch(getProject(data));
+      history.push(`/projects/${data.id}`);
     } catch (err) {
       console.log(err);
     }

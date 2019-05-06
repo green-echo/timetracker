@@ -64,9 +64,9 @@ export const getProjectThunk = projectId => {
   };
 };
 
-export const getUsersThunk = () => async dispatch => {
+export const getUsersThunk = id => async dispatch => {
   try {
-    const { data } = await axios.get('/api/users');
+    const { data } = await axios.get(`/api/projects/${id}/users`);
     dispatch(getUsers(data));
   } catch (error) {
     console.error(error);
@@ -84,7 +84,10 @@ export const getProjectUsersThunk = projectId => async dispatch => {
 
 export const addUserThunk = (projectId, userId) => async dispatch => {
   try {
-    const { data } = await axios.put(`/api/projects/${projectId}`, userId);
+    const { data } = await axios.put(
+      `/api/projects/${projectId}/adduser`,
+      userId
+    );
     dispatch(addUser(data));
   } catch (error) {
     console.error(error);

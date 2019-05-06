@@ -23,6 +23,7 @@ router.get('/:id', async (req, res, next) => {
     } else {
       const project = await Project.findByPk(Number(req.params.id));
       if (!project) {
+        console.log('NOT FOUND');
         next();
       } else {
         const authorized = await project.hasUser(req.user);
@@ -186,44 +187,20 @@ router.delete('/:id', async (req, res, next) => {
   }
 });
 
-// changing a project (not including adding users)
-router.put('/:id', async (req, res, next) => {
-  try {
-    if (!req.isAuthenticated()) {
-      res.sendStatus(403);
-    } else {
-      const { name, totalTime } = req.body;
-      const project = await Project.findByPk(req.params.id);
-      if (!project) {
-        next();
-      } else {
-        const authorized = await project.hasUser(req.user);
-        if (!authorized) {
-          res.sendStatus(403);
-        } else {
-          await project.update({
-            name,
-            totalTime
-          });
-        }
-        res.json(project);
-      }
-    }
-  } catch (error) {
-    next(error);
-  }
-});
-
 // add a user to a specific project
 router.put('/:id/adduser', async (req, res, next) => {
   try {
     if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
-      const { userId } = req.body;
+      const { email } = req.body;
       const project = await Project.findByPk(req.params.id);
-      const user = await User.findByPk(userId);
-      if (!project) {
+      const user = await User.findOne({
+        where: {
+          email
+        }
+      });
+      if (!project || !user) {
         next();
       } else {
         const authorized = await project.hasUser(req.user);
@@ -239,7 +216,41 @@ router.put('/:id/adduser', async (req, res, next) => {
             }
           }
         }
+        console.log(project);
         res.json(project);
+      }
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+// changing a project (not including adding users)
+router.put('/:id', async (req, res, next) => {
+  try {
+    if (!req.isAuthenticated()) {
+      res.sendStatus(403);
+    } else {
+      const { name, totalTime } = req.body;
+      if (typeof req.params.id !== 'number') {
+        next();
+      } else {
+        const project = await Project.findByPk(req.params.id);
+        console.log('PROJECT:', project);
+        if (!project) {
+          next();
+        } else {
+          const authorized = await project.hasUser(req.user);
+          if (!authorized) {
+            res.sendStatus(403);
+          } else {
+            await project.update({
+              name,
+              totalTime
+            });
+          }
+          res.json(project);
+        }
       }
     }
   } catch (error) {

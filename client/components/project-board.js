@@ -226,9 +226,9 @@ class ProjectBoard extends React.Component {
             isOpen={this.state.userDropdownOpen}
             toggle={this.userToggle}
           >
-            <DropdownToggle caret>All Users</DropdownToggle>
+            <DropdownToggle caret>Users On Project</DropdownToggle>
             <DropdownMenu>
-              <DropdownItem header>All Users</DropdownItem>
+              <DropdownItem header>Users On Project</DropdownItem>
               <DropdownItem divider />
               {this.props.allUsers.map(user => {
                 return (
@@ -244,6 +244,9 @@ class ProjectBoard extends React.Component {
           </ButtonDropdown>
           <Link to={`/projects/${this.props.project.id}/newticket`}>
             <Button color="danger">New Ticket</Button>
+          </Link>
+          <Link to={`/projects/${this.props.project.id}/adduser`}>
+            <Button color="primary">Add User</Button>
           </Link>
 
           <DragDropContext onDragEnd={this.onDragEnd}>

@@ -108,7 +108,6 @@ router.get('/:id/users', async (req, res, next) => {
         if (!authorized) {
           res.sendStatus(403);
         } else {
-          console.log('project', project);
           const users = await project.getUsers();
           res.json(users);
         }

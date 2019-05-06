@@ -29,9 +29,9 @@ const Column = ({ columns, tickets, id }) => {
   console.log('COLUMNS', columns);
   console.log(id);
 
-  if (!tickets['1']) {
-    return null;
-  }
+  // if (!tickets['1']) {
+  //   return null;
+  // }
 
   return (
     <Droppable droppableId={id} style={div}>

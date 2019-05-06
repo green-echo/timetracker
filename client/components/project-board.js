@@ -43,6 +43,28 @@ class ProjectBoard extends React.Component {
     this.props.loadUsers();
     this.props.loadProjectUser();
     this.props.loadTickets(id);
+    this.setState({
+      columns: {
+        '1': {
+          id: 1,
+          taskIds: this.props.toDoTickets
+        },
+        '2': {
+          id: 2,
+          taskIds: this.props.inProgressTickets
+        },
+        '3': {
+          id: 3,
+          taskIds: this.props.inReviewTickets
+        },
+        '4': {
+          id: 4,
+          taskIds: this.props.doneTickets
+        }
+      },
+      numTickets: this.props.allTickets.length,
+      tickets: createTicketsObject(this.props.allTickets)
+    });
     // await Promise.all(
     //   this.props.loadTicketIds(id, 'to_do'),
     //   this.props.loadTicketIds(id, 'in_progress'),
@@ -52,7 +74,7 @@ class ProjectBoard extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // console.log(prevProps, this.props);
+    console.log(prevProps, this.props);
     if (prevProps.allTickets.length !== this.props.allTickets.length) {
       this.setState({
         columns: {

@@ -20,19 +20,11 @@ export default function(state = initialState, action) {
       newState.toDoTickets.push(action.ticket.id);
       return newState;
     case ACTIONS.GET_TICKETS:
-      newState.allTickets = action.tickets;
-      newState.toDoTickets = action.tickets
-        .filter(x => x.status === 'to_do')
-        .map(x => x.id);
-      newState.inProgressTickets = action.tickets
-        .filter(x => x.status === 'in_progress')
-        .map(x => x.id);
-      newState.inReviewTickets = action.tickets
-        .filter(x => x.status === 'in_review')
-        .map(x => x.id);
-      newState.doneTickets = action.tickets
-        .filter(x => x.status === 'done')
-        .map(x => x.id);
+      newState.allTickets = action.payload.tickets;
+      newState.toDoTickets = action.payload.toDo || [];
+      newState.inProgressTickets = action.payload.inProgress || [];
+      newState.inReviewTickets = action.payload.inReview || [];
+      newState.doneTickets = action.payload.done || [];
       return newState;
     case ACTIONS.UPDATE_TICKET:
       newState.allTickets = newState.allTickets.map(ticket => {

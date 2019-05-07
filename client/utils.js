@@ -6,6 +6,21 @@ export function createTicketsObject(tickets) {
   return obj;
 }
 
+export function columnName(column) {
+  switch (column.id) {
+    case 1:
+      return ['toDo', column.taskIds];
+    case 2:
+      return ['inProgress', column.taskIds];
+    case 3:
+      return ['inReview', column.taskIds];
+    case 4:
+      return ['done', column.taskIds];
+    default:
+      return null;
+  }
+}
+
 const tickets = {
   '1': {
     id: 1,

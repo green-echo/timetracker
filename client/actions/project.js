@@ -31,6 +31,21 @@ export const addUser = userId => ({
   userId
 });
 
+export const updateColumnsThunk = (col1, col2, projectId) => {
+  return async dispatch => {
+    try {
+      const toDo = ['3', '4', '5'];
+      const project = await axios.put(`/api/projects/${projectId}`, {
+        col1,
+        col2
+      });
+      // console.log(project.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
 export const createProjectThunk = project => {
   return async dispatch => {
     try {

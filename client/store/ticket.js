@@ -35,15 +35,17 @@ export default function(state = initialState, action) {
         .filter(x => x.status === 'done')
         .map(x => x.id);
       return newState;
+
     case ACTIONS.UPDATE_TICKET:
-      newState.allTickets = newState.allTickets.map(ticket => {
+    newState.allTickets = newState.allTickets.map(ticket => {
         if (ticket.id === action.ticket.id) {
-          return action.ticket;
-        } else {
-          return ticket;
-        }
+         console.log('!!!!!actionTICKET', action.ticket,  '!!!ticket', ticket)
+          return   action.ticket
+        } 
       });
+      console.log('NEWSTATE', newState)
       return newState;
+
     case ACTIONS.REMOVE_TICKET:
       newState.allTickets = newState.allTickets.filter(
         ticket => ticket.id !== action.ticket.id
@@ -74,39 +76,6 @@ export default function(state = initialState, action) {
           break;
       }
       return newState;
-    // newState.allTickets = newState.tickets.filter(elem => elem.id !==action.ticket.id)
-    // case ACTIONS.REMOVE_TICKET:
-
-    //   if (action.ticket.status === 'to_do') {
-    //    // console.log('!!!!!', action.ticket.status)
-    //     return {
-    //       ...state,
-    //       toDoTickets: state.toDoTickets.filter(
-    //         ticket => ticket.id !== action.ticket.id
-    //       )
-    //     };
-    //   } else if (action.ticket.status === 'in_progress') {
-    //     return {
-    //       ...state,
-    //       inProgressTickets: state.inProgressTickets.filter(
-    //         ticket => ticket.id !== action.ticket.id
-    //       )
-    //     };
-    //   } else if (action.ticket.status === 'in_review') {
-    //     return {
-    //       ...state,
-    //       inReviewTickets: state.inReviewTickets.filter(
-    //         ticket => ticket.id !== action.ticket.id
-    //       )
-    //     };
-    //   } else if (action.ticket.status === 'done') {
-    //     return {
-    //       ...state,
-    //       doneTickets: state.doneTickets.filter(
-    //         ticket => ticket.id !== action.ticket.id
-    //       )
-    //     };
-    //   }
     case ACTIONS.GET_TICKET_IDS:
       switch (action.status) {
         case 'to_do':

@@ -23,9 +23,9 @@ export const getTicket = singleTicket => ({
   ticket: singleTicket
 });
 
-export const updateTicket = singleTicket => ({
+export const updateTicket = ticket => ({
   type: ACTIONS.UPDATE_TICKET,
-  ticket: singleTicket
+  ticket
 });
 
 export const getTicketIds = (ids, status) => ({

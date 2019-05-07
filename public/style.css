@@ -36,3 +36,7 @@ form div {
 .data-react-beautiful-dnd-droppable {
   height: 100% !important;
 }
+
+#submit {
+  margin-top:5px;
+}

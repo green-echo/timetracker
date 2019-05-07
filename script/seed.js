@@ -16,9 +16,30 @@ async function seed() {
   ]);
 
   const projects = await Promise.all([
-    Project.create({ name: 'Netflix', totalTime: 20 }),
-    Project.create({ name: 'Hersheys Frontend', totalTime: 30 }),
-    Project.create({ name: 'Hersheys Backend', totalTime: 60 })
+    Project.create({
+      name: 'Netflix',
+      totalTime: 20,
+      toDo: [1],
+      inProgress: [2],
+      inReview: [3],
+      done: [4]
+    }),
+    Project.create({
+      name: 'Hersheys Frontend',
+      totalTime: 30,
+      toDo: [5],
+      inProgress: [6],
+      inReview: [7],
+      done: [8]
+    }),
+    Project.create({
+      name: 'Hersheys Backend',
+      totalTime: 60,
+      toDo: [9],
+      inProgress: [10],
+      inReview: [11],
+      done: [12]
+    })
   ]);
 
   projects[0].setUsers([users[0], users[1], users[2]]);

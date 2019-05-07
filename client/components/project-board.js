@@ -26,9 +26,10 @@ import {
   getProjectsThunk,
   getUsersThunk,
   getProjectUsersThunk,
-  addUserThunk
+  addUserThunk,
+  updateColumnsThunk
 } from '../actions/project';
-import { createTicketsObject } from '../utils';
+import { createTicketsObject, columnName } from '../utils';
 import { getTicketsThunk, getTicketIdsThunk } from '../actions/ticket';
 import Column from './Column';
 
@@ -66,6 +67,7 @@ class ProjectBoard extends React.Component {
       numTickets: this.props.allTickets.length,
       tickets: createTicketsObject(this.props.allTickets)
     });
+    // this.props.update();
     // await Promise.all(
     //   this.props.loadTicketIds(id, 'to_do'),
     //   this.props.loadTicketIds(id, 'in_progress'),
@@ -187,6 +189,11 @@ class ProjectBoard extends React.Component {
           [newColumn.id]: newColumn
         }
       };
+
+      console.log(newColumn);
+
+      this.props.update(newColumn, null);
+
       this.setState(newState);
       return;
     }
@@ -214,6 +221,11 @@ class ProjectBoard extends React.Component {
         [newFinish.id]: newFinish
       }
     };
+
+    console.log(newStart, newFinish);
+
+    this.props.update(newStart, newFinish);
+
     this.setState(newState);
   };
   render() {
@@ -380,6 +392,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     loadTickets: () => {
       dispatch(getTicketsThunk(projectId));
+    },
+    update: (col1, col2) => {
+      dispatch(updateColumnsThunk(col1, col2, projectId));
     }
   };
 };

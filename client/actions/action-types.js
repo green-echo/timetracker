@@ -13,3 +13,7 @@ export const GET_PROJECT = 'GET_PROJECT';
 export const GET_USERS = 'GET_USERS';
 export const GET_PROJECT_USERS = 'GET_PROJECT_USERS';
 export const ADD_USER = 'ADD_USER';
+
+// UserTicket Constas
+export const START_TICKET = 'START_TICKET';
+export const STOP_TICKET = 'STOP_TICKET';

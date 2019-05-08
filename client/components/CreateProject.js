@@ -41,8 +41,6 @@ class CreateProject extends Component {
       totalTime: this.state.totalTime
     });
     this.setState({ name: '', totalTime: '' });
-    // console.log('!!!!', this.props.currentProject);
-    
   }
 
   render() {
@@ -83,10 +81,9 @@ class CreateProject extends Component {
 }
 
 const mapStateToProps = state => {
- // console.log('????', state.ticket.currentProject);
   return {
-    data: state.ticket.projects,
-   // currentProject: state.ticket.currentProject
+    data: state.ticket.projects
+    // currentProject: state.ticket.currentProject
   };
 };
 

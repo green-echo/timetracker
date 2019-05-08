@@ -19,15 +19,17 @@ import { Link } from 'react-router-dom';
 import DroppableContainer from './DroppableContainer';
 import CreateTicket from './CreateTicket';
 import { connect } from 'react-redux';
+import classnames from 'classnames';
 
 import {
   getProjectThunk,
   getProjectsThunk,
   getUsersThunk,
   getProjectUsersThunk,
-  addUserThunk
+  addUserThunk,
+  updateColumnsThunk
 } from '../actions/project';
-import { createTicketsObject } from '../utils';
+import { createTicketsObject, columnName } from '../utils';
 import { getTicketsThunk, getTicketIdsThunk } from '../actions/ticket';
 import Column from './Column';
 
@@ -65,6 +67,7 @@ class ProjectBoard extends React.Component {
       numTickets: this.props.allTickets.length,
       tickets: createTicketsObject(this.props.allTickets)
     });
+    // this.props.update();
     // await Promise.all(
     //   this.props.loadTicketIds(id, 'to_do'),
     //   this.props.loadTicketIds(id, 'in_progress'),
@@ -74,7 +77,6 @@ class ProjectBoard extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-  
     if (prevProps.allTickets.length !== this.props.allTickets.length) {
       this.setState({
         columns: {
@@ -99,7 +101,10 @@ class ProjectBoard extends React.Component {
         tickets: createTicketsObject(this.props.allTickets)
       });
     }
-  //  console.log ('!!!!', prevProps)
+    if (prevProps.match.params.id !== this.props.match.params.id) {
+      this.props.getProject();
+      this.props.loadTickets();
+    }
   }
 
   constructor() {
@@ -126,10 +131,12 @@ class ProjectBoard extends React.Component {
       dropdownOpen: false,
       btnDropright: false,
       numTickets: 0,
-      tickets: {}
+      tickets: {},
+      activeTab: '1'
     };
     this.toggle = this.toggle.bind(this);
     this.userToggle = this.userToggle.bind(this);
+    this.toggleTab = this.toggleTab.bind(this);
   }
 
   toggle() {
@@ -141,6 +148,13 @@ class ProjectBoard extends React.Component {
     this.setState({
       userDropdownOpen: !this.state.userDropdownOpen
     });
+  }
+  toggleTab(tab) {
+    if (this.state.activeTab !== tab) {
+      this.setState({
+        activeTab: tab
+      });
+    }
   }
   onDragEnd = result => {
     const { destination, source, draggableId } = result;
@@ -175,6 +189,11 @@ class ProjectBoard extends React.Component {
           [newColumn.id]: newColumn
         }
       };
+
+      console.log(newColumn);
+
+      this.props.update(newColumn, null);
+
       this.setState(newState);
       return;
     }
@@ -202,18 +221,19 @@ class ProjectBoard extends React.Component {
         [newFinish.id]: newFinish
       }
     };
+
+    console.log(newStart, newFinish);
+
+    this.props.update(newStart, newFinish);
+
     this.setState(newState);
   };
   render() {
-    console.log('props:', this.props);
-    console.log('state:', this.state);
     return (
       <div>
         <Container className="project-board">
           <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-            <DropdownToggle caret>
-              {this.props.project.name}
-            </DropdownToggle>
+            <DropdownToggle caret>{this.props.project.name}</DropdownToggle>
             <DropdownMenu>
               <DropdownItem header>Projects</DropdownItem>
               <DropdownItem divider />
@@ -256,34 +276,75 @@ class ProjectBoard extends React.Component {
 
           <DragDropContext onDragEnd={this.onDragEnd}>
             <Row>
-              <Col>Project Name</Col>
+              <Col className="projectName">{this.props.project.name}</Col>
             </Row>
             <Row className="board-header">
-              <Col>To Do</Col>
-              <Col>In Progress</Col>
-              <Col>In Review</Col>
-              <Col>Done</Col>
+              <Col
+                className={classnames({ active: this.state.activeTab === '1' })}
+                onClick={() => {
+                  this.toggleTab('1');
+                }}
+              >
+                To Do <span> ({this.props.toDoTickets.length})</span>
+              </Col>
+              <Col
+                className={classnames({ active: this.state.activeTab === '2' })}
+                onClick={() => {
+                  this.toggleTab('2');
+                }}
+              >
+                In Progress
+                <span> ({this.props.inProgressTickets.length})</span>
+              </Col>
+              <Col
+                className={classnames({ active: this.state.activeTab === '3' })}
+                onClick={() => {
+                  this.toggleTab('3');
+                }}
+              >
+                In Review <span> ({this.props.inReviewTickets.length})</span>
+              </Col>
+              <Col
+                className={classnames({ active: this.state.activeTab === '4' })}
+                onClick={() => {
+                  this.toggleTab('4');
+                }}
+              >
+                Done <span> ({this.props.doneTickets.length})</span>
+              </Col>
             </Row>
-            <Row className="board-container">
+
+            <Row className="board-container" activetab={this.state.activeTab}>
               <Column
                 columns={this.state.columns}
                 id="1"
                 tickets={this.state.tickets}
+                tabId="1"
+                activetab={this.state.activeTab}
               />
+
               <Column
                 columns={this.state.columns}
                 id="2"
                 tickets={this.state.tickets}
+                tabId="2"
+                activetab={this.state.activeTab}
               />
+
               <Column
                 columns={this.state.columns}
                 id="3"
                 tickets={this.state.tickets}
+                tabId="3"
+                activetab={this.state.activeTab}
               />
+
               <Column
                 columns={this.state.columns}
                 id="4"
                 tickets={this.state.tickets}
+                tabId="4"
+                activetab={this.state.activeTab}
               />
             </Row>
           </DragDropContext>
@@ -294,9 +355,7 @@ class ProjectBoard extends React.Component {
 }
 
 const mapStateToProps = state => {
-  // console.log('mapping state to store', state.selectedCampus)
   return {
-    //currentProject: { id: 1, name: 'Hersheys' },
     users: [
       { id: 1, name: 'Ariel' },
       { id: 2, name: 'Christina' },
@@ -333,6 +392,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     loadTickets: () => {
       dispatch(getTicketsThunk(projectId));
+    },
+    update: (col1, col2) => {
+      dispatch(updateColumnsThunk(col1, col2, projectId));
     }
   };
 };

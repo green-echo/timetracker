@@ -12,7 +12,6 @@ class UserHome extends Component {
   }
 
   render() {
-    console.log('projects', this.props.projects);
     const userProjects = this.props.projects;
     if (userProjects) {
       return (

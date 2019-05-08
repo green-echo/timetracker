@@ -20,23 +20,15 @@ import DroppableContainer from './DroppableContainer';
 import CreateTicket from './CreateTicket';
 import { connect } from 'react-redux';
 
-const Column = ({ columns, tickets, id }) => {
+const Column = ({ columns, tickets, id, activetab }) => {
   const div = {
     minHeight: '50px'
   };
 
-  console.log('TICKETS', tickets);
-  // console.log('COLUMNS', columns);
-  // console.log(id);
-
-  // if (!tickets['1']) {
-  //   return null;
-  // }
-
   return (
     <Droppable droppableId={id} style={div}>
       {provided => (
-        <Col>
+        <Col className={activetab === id ? 'show' : 'hide'}>
           <DroppableContainer provided={provided} innerRef={provided.innerRef}>
             {columns[id].taskIds.map((ticketId, index) => {
               const ticket = tickets[ticketId];

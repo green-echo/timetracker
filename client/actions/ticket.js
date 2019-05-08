@@ -13,9 +13,9 @@ export const createTicket = singleTicket => ({
   ticket: singleTicket
 });
 
-export const getTickets = tickets => ({
+export const getTickets = payload => ({
   type: ACTIONS.GET_TICKETS,
-  tickets
+  payload
 });
 
 export const getTicket = singleTicket => ({

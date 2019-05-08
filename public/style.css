@@ -1,4 +1,28 @@
-body {
+@media (max-width: 480px) {
+}
+@media screen and (max-width: 767px) {
+}
+
+.projectName {
+  text-align: center;
+}
+
+.board-header.row .col {
+  border: none;
+  font-size: 14px;
+  display: flex;
+}
+
+.board-header.row .col span {
+  display: block;
+}
+.board-container.row .col {
+  display: none;
+}
+.board-container.row .show.col {
+  display: block;
+}
+.board-container.row body {
   font-family: sans-serif;
 }
 
@@ -20,21 +44,30 @@ form div {
   display: inline-block;
 }
 
-/* project board styles */
-.board-container {
-  min-height: 300px;
-}
-.board-header.row .col {
-  border: 2px solid #c9c7c7;
-  padding: 8px 5px;
-  margin: 2px;
-}
-.board-container.row .col {
-  border: 2px solid white;
-  background-color: #c9c7c7;
-}
-.data-react-beautiful-dnd-droppable {
-  height: 100% !important;
+/* project board desktop styles */
+@media screen and (min-width: 768px) {
+  .board-container {
+    min-height: 300px;
+  }
+  .board-header.row .col {
+    border: 2px solid #c9c7c7;
+    padding: 8px 5px;
+    margin: 2px;
+  }
+  .board-container.row .col {
+    border: 2px solid white;
+    background-color: #c9c7c7;
+    display: block;
+  }
+  .data-react-beautiful-dnd-droppable {
+    height: 100% !important;
+  }
+  .board-header.row .col span {
+    display: none;
+  }
+  .mobile-only {
+    display: none;
+  }
 }
 
 #submit {

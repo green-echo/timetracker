@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 /* eslint-disable no-lonely-if */
 const router = require('express').Router();
 const { Project, Ticket, User } = require('../db/models');
@@ -5,7 +6,7 @@ module.exports = router;
 
 router.get('/all', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
       const allProjects = await Project.findAll();
@@ -18,12 +19,11 @@ router.get('/all', async (req, res, next) => {
 
 router.get('/:id', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
       const project = await Project.findByPk(Number(req.params.id));
       if (!project) {
-        console.log('NOT FOUND');
         next();
       } else {
         const authorized = await project.hasUser(req.user);
@@ -42,7 +42,7 @@ router.get('/:id', async (req, res, next) => {
 // add a ticket to a specific project
 router.post('/:id', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
       const { title, description, points } = req.body;
@@ -62,6 +62,8 @@ router.post('/:id', async (req, res, next) => {
 
           await newTicket.setProject(project);
 
+          await project.appendTicketId(newTicket.id);
+
           res.json(newTicket);
         }
       }
@@ -73,7 +75,7 @@ router.post('/:id', async (req, res, next) => {
 
 router.get('/:id/tickets', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
       const project = await Project.findByPk(Number(req.params.id));
@@ -84,8 +86,13 @@ router.get('/:id/tickets', async (req, res, next) => {
         if (!authorized) {
           res.sendStatus(403);
         } else {
-          const tickets = await project.getTickets();
-          res.json(tickets);
+          const result = {};
+          result.tickets = await project.getTickets();
+          result.toDo = await project.toDo;
+          result.inProgress = await project.inProgress;
+          result.inReview = await project.inReview;
+          result.done = await project.done;
+          res.json(result);
         }
       }
     }
@@ -97,7 +104,7 @@ router.get('/:id/tickets', async (req, res, next) => {
 /* This route gets all the users for a specifc project  */
 router.get('/:id/users', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
       const project = await Project.findByPk(Number(req.params.id));
@@ -123,13 +130,6 @@ router.get('/:id/tickets/:status', async (req, res, next) => {
   try {
     const projectId = req.params.id;
     const status = req.params.status;
-    // const singleProject = await Project.findOne({
-    //   where: {
-    //     id: Number(projectId),
-    //     status
-    //   },
-    //   include: Ticket
-    // });
 
     const ticketIds = await Ticket.findAll({
       where: {
@@ -149,7 +149,7 @@ router.get('/:id/tickets/:status', async (req, res, next) => {
 /* This gets all the projects that belongs to a user */
 router.get('/', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
       const user = await User.findByPk(req.user.id);
@@ -163,24 +163,22 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
       const { name, totalTime } = req.body;
       const newProject = await Project.create({ name, totalTime });
       await newProject.addUser(req.user);
       res.json(newProject);
-    //console.log('PROJECTID', newProject.id)
-   //   res.redirect(`/${newProject.id}`)
     }
-  } catch (error) { 
+  } catch (error) {
     next(error);
   }
 });
 
 router.delete('/:id', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
       const project = await Project.findByPk(Number(req.params.id));
@@ -229,7 +227,6 @@ router.put('/:id/adduser', async (req, res, next) => {
             }
           }
         }
-        console.log(project);
         res.json(project);
       }
     }
@@ -239,18 +236,61 @@ router.put('/:id/adduser', async (req, res, next) => {
 });
 
 // changing a project (not including adding users)
+// eslint-disable-next-line complexity
 router.put('/:id', async (req, res, next) => {
+  let toDo, inProgress, inReview, done;
   try {
     if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
-      const { name, totalTime } = req.body;
-      if (typeof req.params.id !== 'number') {
+      console.log(req.body);
+      const { name, totalTime, col1, col2 } = req.body;
+
+      switch (col1.id) {
+        case 1:
+          toDo = col1.taskIds;
+          break;
+        case 2:
+          inProgress = col1.taskIds;
+          break;
+        case 3:
+          inReview = col1.taskIds;
+          break;
+        case 4:
+          done = col1.taskIds;
+          break;
+        default:
+          break;
+      }
+
+      if (col2) {
+        switch (col2.id) {
+          case 1:
+            toDo = col2.taskIds;
+            break;
+          case 2:
+            inProgress = col2.taskIds;
+            break;
+          case 3:
+            inReview = col2.taskIds;
+            break;
+          case 4:
+            done = col2.taskIds;
+            break;
+          default:
+            break;
+        }
+      }
+
+      console.log('COLUMNS:', toDo, inProgress, inReview, done);
+
+      if (typeof Number(req.params.id) !== 'number') {
+        console.log('not id');
         next();
       } else {
         const project = await Project.findByPk(req.params.id);
-        console.log('PROJECT:', project);
         if (!project) {
+          console.log('not project');
           next();
         } else {
           const authorized = await project.hasUser(req.user);
@@ -259,7 +299,11 @@ router.put('/:id', async (req, res, next) => {
           } else {
             await project.update({
               name,
-              totalTime
+              totalTime,
+              toDo,
+              inProgress,
+              inReview,
+              done
             });
           }
           res.json(project);

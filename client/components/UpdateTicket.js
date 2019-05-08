@@ -152,4 +152,23 @@ export default class UpdateTicket extends React.Component {
       </div>
     );
   }
+<<<<<<< HEAD
 }
+=======
+}
+
+const mapStateToProps = state => {
+  return { data: state.ticket };
+};
+
+const mapDispatchToProps = function(dispatch) {
+  const ticketId = this.props.match.params.id;
+  return {
+    update: (ticketId, ticket) => {
+      dispatch(updateTicket(ticketId, ticket));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateTicket);
+>>>>>>> master

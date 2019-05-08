@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as ACTIONS from './action-types';
-import history from '../history'
+import history from '../history';
 
 export const getProjects = projects => ({
   type: ACTIONS.GET_PROJECTS,
@@ -13,7 +13,7 @@ export const getProject = project => ({
 
 export const createProject = singleProject => ({
   type: ACTIONS.CREATE_PROJECT,
-  project: singleProject 
+  project: singleProject
 });
 
 export const getUsers = users => ({
@@ -30,6 +30,21 @@ export const addUser = userId => ({
   type: ACTIONS.ADD_USER,
   userId
 });
+
+export const updateColumnsThunk = (col1, col2, projectId) => {
+  return async dispatch => {
+    try {
+      const toDo = ['3', '4', '5'];
+      const project = await axios.put(`/api/projects/${projectId}`, {
+        col1,
+        col2
+      });
+      // console.log(project.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
 
 export const createProjectThunk = project => {
   return async dispatch => {
@@ -90,6 +105,7 @@ export const addUserThunk = (projectId, userId) => async dispatch => {
       userId
     );
     dispatch(addUser(data));
+    history.push(`/projects/${projectId}`);
   } catch (error) {
     console.error(error);
   }

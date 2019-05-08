@@ -1,5 +1,7 @@
 const React = require('react');
 import axios from 'axios';
+import { Button } from 'reactstrap';
+
 
 class Timer extends React.Component {
   constructor(props) {
@@ -49,13 +51,15 @@ class Timer extends React.Component {
   render() {
     // console.log('ticket', this.props.ticket)
     return (
-      <div>
+      <div id="timer">
         <div>{this.millisToMinutesAndSeconds(this.state.time)}</div>
+        <div>
         {this.state.status === true ? (
-          <button onClick={this.stopTimer}>stop</button>
+          <Button onClick={this.stopTimer}>stop</Button>
         ) : (
-          <button onClick={this.startTimer}>start</button>
+          <Button onClick={this.startTimer}>start</Button>
         )}
+        </div>
       </div>
     );
   }

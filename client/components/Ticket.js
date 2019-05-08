@@ -1,18 +1,13 @@
 import React, { Component } from 'react';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux';
-import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { removeTicketThunk, updateTicketThunk } from '../actions/ticket';
-import Timer from './Timer'
+import Timer from './Timer';
+import { Card, CardText, CardBody, CardTitle, CardSubtitle } from 'reactstrap';
 
 class Ticket extends Component {
   constructor(props) {
@@ -31,7 +26,7 @@ class Ticket extends Component {
       [event.target.name]: event.target.value
     });
   }
- 
+
   async handleSubmit(event) {
     event.preventDefault();
     // console.log('THIS PROPS!!!!!', this.props)
@@ -58,96 +53,69 @@ class Ticket extends Component {
         ref={innerRef}
       >
         <Card style={styles.cardContainer}>
-          <CardContent>
-            <form>
-              <Typography
-                color="textSecondary"
-                gutterBottom
-                fontSize="14"
-                style={{ fontWeight: 'bold' }}
-              >
-                {ticket.title} <br />
-                {ticket.description}
-              </Typography>
-              <Typography color="textSecondary" gutterBottom>
-                Points left: {ticket.points}
-                {ticket.userId && (
-                  <div>Assigned To: {ticket.currentUserEmail}</div>
-                )}
+          <CardBody style={styles.cardContainer}>
+            <CardText  > {ticket.title}</CardText>
+            <CardText > {ticket.description} </CardText>
 
+            <CardText> Points left: {ticket.points} </CardText>
+            <CardText>
+              {/* {' '}
+              {ticket.userId && (
+                <div>Assigned To: {ticket.currentUserEmail}</div>
+              )}{' '} */}
+            </CardText>
 
+            <Button size="small" onClick={this.handleClickOpen}>
+              Modify
+            </Button>
 
-            
-
-
-
-              </Typography>
-
-              <CardActions>
-                <Button size="small" onClick={this.handleClickOpen}>
-                  Modify
+            <Dialog
+              open={this.state.open}
+              onClose={this.handleClose}
+              aria-labelledby="form-dialog-title"
+            >
+              <DialogTitle id="form-dialog-title">Update Ticket</DialogTitle>
+              <DialogContent>
+                <form onSubmit={this.handleSubmit}>
+                  <label className="formLabel" htmlFor="title">
+                    Title:{' '}
+                  </label>
+                  <input
+                    type="text"
+                    name="title"
+                    value={this.state.title}
+                    onChange={this.handleChange}
+                  />
+                  <br />
+                  <label className="formLabel" htmlFor="description">
+                    Description:{' '}
+                  </label>
+                  <input
+                    type="text"
+                    name="description"
+                    value={this.state.description}
+                    onChange={this.handleChange}
+                  />
+                  <br />
+                  <button id="submit" type="submit">
+                    Submit
+                  </button>
+                </form>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.handleClose} color="primary">
+                  Cancel
                 </Button>
+              </DialogActions>
+            </Dialog>
 
-                <Dialog
-                  open={this.state.open}
-                  onClose={this.handleClose}
-                  aria-labelledby="form-dialog-title"
-                >
-                  <DialogTitle id="form-dialog-title">
-                    Update Ticket
-                  </DialogTitle>
-                  <DialogContent>
-                    <form onSubmit={this.handleSubmit}>
-                      <label className="formLabel" htmlFor="title">
-                        Title:{' '}
-                      </label>
-                      <input
-                        type="text"
-                        name="title"
-                        value={this.state.title}
-                        onChange={this.handleChange}
-                      />
-                      <br />
-                      <label className="formLabel" htmlFor="description">
-                        Description:{' '}
-                      </label>
-                      <input
-                        type="text"
-                        name="description"
-                        value={this.state.description}
-                        onChange={this.handleChange}
-                      />
-                      <br />
-                      <button id="submit" type="submit">
-                        Submit
-                      </button>
-                    </form>
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={this.handleClose} color="primary">
-                      Cancel
-                    </Button>
-                  </DialogActions>
-                </Dialog>
+            <Button onClick={() => {
+                if (window.confirm('Are you sure you want to delete this ticket?') )
+                  this.props.remove(ticket); }}  > Remove </Button>
 
-                <Button
-                  onClick={() => {
-                    if (
-                      window.confirm(
-                        'Are you sure you want to delete this ticket?'
-                      )
-                    )
-                      this.props.remove(ticket);
-                  }}
-                >
-                  Remove
-                </Button>
-              </CardActions>
-            </form>
-          </CardContent>
+            <Timer ticket={ticket} />
+          </CardBody>
         </Card>
-
-        <Timer  ticket={ticket}     />
       </div>
     );
   }
@@ -169,7 +137,11 @@ const mapDispatchToProps = dispatch => {
 };
 const styles = {
   cardContainer: {
-    marginBottom: 8
+    marginBottom: 8,
+    padding:3
+  },
+  title: {
+    margin:0
   }
 };
 

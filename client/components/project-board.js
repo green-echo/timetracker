@@ -39,12 +39,12 @@ const div = {
 
 class ProjectBoard extends React.Component {
   componentDidMount() {
-    const id = this.props.match.params.id;
-    this.props.getProject(id);
+    const projectId = this.props.match.params.id;
+    this.props.getProject(projectId);
     this.props.loadProjects();
     this.props.loadUsers();
     this.props.loadProjectUser();
-    this.props.loadTickets(id);
+    this.props.loadTickets(projectId);
     this.setState({
       columns: {
         '1': {
@@ -77,7 +77,16 @@ class ProjectBoard extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    console.log(prevProps.allTickets.length, this.props.allTickets.length);
+
     if (prevProps.allTickets.length !== this.props.allTickets.length) {
+      console.log(
+        this.props.project.id,
+        this.props.toDoTickets,
+        this.props.inProgressTickets,
+        this.props.inReviewTickets,
+        this.props.doneTickets
+      );
       this.setState({
         columns: {
           '1': {

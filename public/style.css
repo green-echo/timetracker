@@ -69,3 +69,7 @@ form div {
     display: none;
   }
 }
+
+#submit {
+  margin-top:5px;
+}

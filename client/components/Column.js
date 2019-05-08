@@ -32,6 +32,7 @@ const Column = ({ columns, tickets, id, activetab }) => {
           <DroppableContainer provided={provided} innerRef={provided.innerRef}>
             {columns[id].taskIds.map((ticketId, index) => {
               const ticket = tickets[ticketId];
+              // console.log(ticket, ticketId);
               return (
                 <Draggable
                   draggableId={ticket.id}

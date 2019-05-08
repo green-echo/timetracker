@@ -26,6 +26,7 @@ export default function(state = initialState, action) {
       newState.inReviewTickets = action.payload.inReview || [];
       newState.doneTickets = action.payload.done || [];
       return newState;
+
     case ACTIONS.UPDATE_TICKET:
       newState.allTickets = newState.allTickets.map(ticket => {
         if (ticket.id === action.ticket.id) {
@@ -35,26 +36,38 @@ export default function(state = initialState, action) {
         }
       });
       return newState;
+
     case ACTIONS.REMOVE_TICKET:
+      console.log('TICKET:', action.ticket);
       newState.allTickets = newState.allTickets.filter(
         ticket => ticket.id !== action.ticket.id
       );
+
       switch (action.ticket.status) {
         case 'to_do':
-          newState.toDoTickets.filter(id => id !== action.ticket.id);
+          newState.toDoTickets = newState.toDoTickets.filter(
+            id => id !== action.ticket.id
+          );
           break;
         case 'in_progress':
-          newState.inProgressTickets.filter(id => id !== action.ticket.id);
+          newState.inProgressTickets = newState.inProgressTickets.filter(
+            id => id !== action.ticket.id
+          );
           break;
         case 'in_review':
-          newState.inReviewTickets.filter(id => id !== action.ticket.id);
+          newState.inReviewTickets = newState.inReviewTickets.filter(
+            id => id !== action.ticket.id
+          );
           break;
         case 'done':
-          newState.doneTickets.filter(id => id !== action.ticket.id);
+          newState.doneTickets = newState.doneTickets.filter(
+            id => id !== action.ticket.id
+          );
           break;
         default:
           break;
       }
+      console.log('newState:', newState);
       return newState;
     case ACTIONS.GET_TICKET_IDS:
       switch (action.status) {

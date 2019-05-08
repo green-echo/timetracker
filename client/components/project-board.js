@@ -99,6 +99,7 @@ class ProjectBoard extends React.Component {
         tickets: createTicketsObject(this.props.allTickets)
       });
     }
+  //  console.log ('!!!!', prevProps)
   }
 
   constructor() {

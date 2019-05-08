@@ -39,10 +39,10 @@ export default function(state = initialState, action) {
     case ACTIONS.UPDATE_TICKET:
       newState.allTickets = newState.allTickets.map(ticket => {
         if (ticket.id === action.ticket.id) {
-          return ticket = action.ticket;
+          return action.ticket;
         } else {return ticket}
       });
-     // console.log('NEWSTATE', newState)
+      console.log('NEWSTATE', newState)
       return newState;
 
     case ACTIONS.REMOVE_TICKET:

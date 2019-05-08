@@ -30,7 +30,7 @@ class Ticket extends Component {
       [event.target.name]: event.target.value
     });
   }
-
+ 
   async handleSubmit(event) {
     event.preventDefault();
     // console.log('THIS PROPS!!!!!', this.props)

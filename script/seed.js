@@ -52,14 +52,14 @@ async function seed() {
       description: 'create routes',
       points: 3,
 
-      status: 'in_progress'
+      status: 'to_do'
     }),
     Ticket.create({
       title: 'REACT component',
       description: 'create component',
       points: 5,
 
-      status: 'to_do'
+      status: 'in_progress'
     }),
     Ticket.create({
       title: 'seed file',
@@ -82,14 +82,14 @@ async function seed() {
       description: 'create routes',
       points: 3,
 
-      status: 'in_progress'
+      status: 'to_do'
     }),
     Ticket.create({
       title: 'REACT component',
       description: 'create component',
       points: 5,
 
-      status: 'to_do'
+      status: 'in_progress'
     }),
     Ticket.create({
       title: 'seed file',
@@ -112,14 +112,14 @@ async function seed() {
       description: 'create routes',
       points: 3,
 
-      status: 'in_progress'
+      status: 'to_do'
     }),
     Ticket.create({
       title: 'REACT component',
       description: 'create component',
       points: 5,
 
-      status: 'to_do'
+      status: 'in_progress'
     }),
     Ticket.create({
       title: 'seed file',

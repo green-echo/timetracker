@@ -30,6 +30,7 @@ router.get('/:id', async (req, res, next) => {
         if (!authorized) {
           res.sendStatus(403);
         } else {
+          // console.log(project);
           res.json(project);
         }
       }

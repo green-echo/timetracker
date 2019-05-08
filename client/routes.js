@@ -9,6 +9,7 @@ import CreateProject from './components/CreateProject';
 
 import Projects from './components/Projects';
 import AddUserToProject from './components/AddUserToProject';
+import Timer from './components/Timer'
 
 /**
  * COMPONENT
@@ -35,6 +36,7 @@ class Routes extends Component {
             <Route path="/projects/:id/newticket" component={CreateTicket} />
             <Route path="/projects/:id/adduser" component={AddUserToProject} />
             <Route path="/projects/:id" component={ProjectBoard} />
+            <Route parh="/timer" component={Timer}    />
             <Route component={Projects} />
           </Switch>
         )}

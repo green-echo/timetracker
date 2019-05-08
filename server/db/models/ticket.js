@@ -10,7 +10,7 @@ const Ticket = db.define('ticket', {
     }
   },
   description: {
-    type: Sequelize.STRING,
+    type: Sequelize.TEXT,
     allowNull: false,
     validate: {
       notEmpty: true

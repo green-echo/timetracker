@@ -2,6 +2,8 @@
 /* eslint-disable no-lonely-if */
 const router = require('express').Router();
 const { Ticket, User, Project } = require('../db/models');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 module.exports = router;
 
 router.get('/', async (req, res, next) => {
@@ -140,6 +142,22 @@ router.delete('/:id', async (req, res, next) => {
         if (!authorized) {
           res.sendStatus(403);
         } else {
+          const gtickets = await Ticket.decrement('order', {
+            where: {
+              status: ticket.status,
+              projectId: ticket.projectId,
+              order: { [Op.gt]: ticket.order }
+            },
+            raw: true
+          });
+
+          // .then(t => {
+          //   return t.decrement(['order'], { by: 1 });
+          // })
+          // .catch(error => console.error(error.message));
+
+          // gtickets.forEach()
+
           switch (ticket.status) {
             case 'to_do':
               const toDoArr = [];

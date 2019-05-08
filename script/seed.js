@@ -51,7 +51,6 @@ async function seed() {
       title: 'API',
       description: 'create routes',
       points: 3,
-
       status: 'to_do'
     }),
     Ticket.create({

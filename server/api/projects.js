@@ -55,6 +55,10 @@ router.post('/:id', async (req, res, next) => {
         if (!authorized) {
           res.sendStatus(403);
         } else {
+          const maxOrder = await Ticket.maxOrder('to_do');
+
+          console.log('MAXORDER:', maxOrder);
+
           const newTicket = await Ticket.create({
             title,
             description,

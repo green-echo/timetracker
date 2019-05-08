@@ -37,4 +37,15 @@ const Ticket = db.define('ticket', {
   }
 });
 
+Ticket.maxOrder = async function(status) {
+  const max = await Ticket.findAll({
+    where: {
+      status
+    },
+    attributes: [Sequelize.fn('MAX', Sequelize.col('order'))],
+    raw: true
+  });
+  return max;
+};
+
 module.exports = Ticket;

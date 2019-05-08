@@ -92,6 +92,44 @@ router.get('/:id/tickets', async (req, res, next) => {
         if (!authorized) {
           res.sendStatus(403);
         } else {
+          const toDoTickets = await Ticket.findAll({
+            where: {
+              projectId: req.params.id,
+              status: 'to_do'
+            },
+            order: [['order', 'ASC']],
+            raw: true
+          });
+
+          const inProgressTickets = await Ticket.findAll({
+            where: {
+              projectId: req.params.id,
+              status: 'in_progress'
+            },
+            order: [['order', 'ASC']],
+            raw: true
+          });
+
+          const inReviewTickets = await Ticket.findAll({
+            where: {
+              projectId: req.params.id,
+              status: 'in_review'
+            },
+            order: [['order', 'ASC']],
+            raw: true
+          });
+
+          const doneTickets = await Ticket.findAll({
+            where: {
+              projectId: req.params.id,
+              status: 'done'
+            },
+            order: [['order', 'ASC']],
+            raw: true
+          });
+
+          console.log(toDoTickets);
+
           const result = {};
           result.tickets = await project.getTickets();
           result.toDo = await project.toDo;

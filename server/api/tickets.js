@@ -142,7 +142,7 @@ router.delete('/:id', async (req, res, next) => {
         if (!authorized) {
           res.sendStatus(403);
         } else {
-          const gtickets = await Ticket.decrement('order', {
+          await Ticket.decrement('order', {
             where: {
               status: ticket.status,
               projectId: ticket.projectId,
@@ -150,13 +150,6 @@ router.delete('/:id', async (req, res, next) => {
             },
             raw: true
           });
-
-          // .then(t => {
-          //   return t.decrement(['order'], { by: 1 });
-          // })
-          // .catch(error => console.error(error.message));
-
-          // gtickets.forEach()
 
           switch (ticket.status) {
             case 'to_do':

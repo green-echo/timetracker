@@ -1,4 +1,5 @@
 const React = require('react');
+import axios from 'axios';
 
 class Timer extends React.Component {
   constructor(props) {
@@ -6,7 +7,8 @@ class Timer extends React.Component {
     this.state = {
       time: 0,
       start: 0,
-      isOn: false
+      isOn: false,
+      status: false
     };
     this.startTimer = this.startTimer.bind(this);
     this.stopTimer = this.stopTimer.bind(this);
@@ -19,7 +21,7 @@ class Timer extends React.Component {
     return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
   }
 
-  startTimer() {
+  async startTimer() {
     this.setState({
       time: this.state.time,
       start: Date.now() - this.state.time
@@ -31,21 +33,31 @@ class Timer extends React.Component {
         }),
       1
     );
+    this.setState ({status: true});
+    const id = this.props.ticket.id;
+    //console.log(this.state.time)
+    await axios.post(`/api/userTickets/${id}`);
   }
-  stopTimer() {
+  async stopTimer() {
     this.setState({ isOn: false });
     clearInterval(this.timer);
+    const id = this.props.ticket.id;
+    this.setState ({status: false});
+    await axios.put(`/api/userTickets/${id}`);
   }
 
   render() {
+    // console.log('ticket', this.props.ticket)
     return (
       <div>
-        <h3>{this.millisToMinutesAndSeconds(this.state.time)}</h3>
-        <button onClick={this.startTimer}>start</button>
-        <button onClick={this.stopTimer}>stop</button>
-    
+        <div>{this.millisToMinutesAndSeconds(this.state.time)}</div>
+        {this.state.status === true ? (
+          <button onClick={this.stopTimer}>stop</button>
+        ) : (
+          <button onClick={this.startTimer}>start</button>
+        )}
       </div>
     );
   }
 }
-module.exports = Timer;
+export default Timer;

@@ -12,6 +12,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { removeTicketThunk, updateTicketThunk } from '../actions/ticket';
+import Timer from './Timer'
 
 class Ticket extends Component {
   constructor(props) {
@@ -73,6 +74,13 @@ class Ticket extends Component {
                 {ticket.userId && (
                   <div>Assigned To: {ticket.currentUserEmail}</div>
                 )}
+
+
+
+            
+
+
+
               </Typography>
 
               <CardActions>
@@ -138,6 +146,8 @@ class Ticket extends Component {
             </form>
           </CardContent>
         </Card>
+
+        <Timer  ticket={ticket}     />
       </div>
     );
   }

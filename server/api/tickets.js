@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 /* eslint-disable no-lonely-if */
 const router = require('express').Router();
 const { Ticket, User, Project } = require('../db/models');
@@ -139,6 +140,55 @@ router.delete('/:id', async (req, res, next) => {
         if (!authorized) {
           res.sendStatus(403);
         } else {
+          switch (ticket.status) {
+            case 'to_do':
+              const toDoArr = [];
+              project.toDo.forEach(x => {
+                if (x !== ticket.id) {
+                  toDoArr.push(x);
+                }
+              });
+              await project.update({
+                toDo: toDoArr
+              });
+              break;
+            case 'in_progress':
+              const inProgressArr = [];
+              project.inProgress.forEach(x => {
+                if (x !== ticket.id) {
+                  inProgressArr.push(x);
+                }
+              });
+              console.log('inProgressArr:', inProgressArr);
+              await project.update({
+                inProgress: inProgressArr
+              });
+              break;
+            case 'in_review':
+              const inReviewArr = [];
+              project.inReview.forEach(x => {
+                if (x !== ticket.id) {
+                  inReviewArr.push(x);
+                }
+              });
+              await project.update({
+                inReview: inReviewArr
+              });
+              break;
+            case 'done':
+              const doneArr = [];
+              project.done.forEach(x => {
+                if (x !== ticket.id) {
+                  doneArr.push(x);
+                }
+              });
+              await project.update({
+                done: doneArr
+              });
+              break;
+            default:
+              break;
+          }
           await ticket.destroy();
           res.sendStatus(200);
         }

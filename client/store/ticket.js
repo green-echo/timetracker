@@ -31,12 +31,14 @@ export default function(state = initialState, action) {
       newState.allTickets = newState.allTickets.map(ticket => {
         if (ticket.id === action.ticket.id) {
           return action.ticket;
-        } else {return ticket}
+        } else {
+          return ticket;
+        }
       });
-      console.log('NEWSTATE', newState)
       return newState;
 
     case ACTIONS.REMOVE_TICKET:
+      console.log('TICKET:', action.ticket);
       newState.allTickets = newState.allTickets.filter(
         ticket => ticket.id !== action.ticket.id
       );
@@ -65,6 +67,7 @@ export default function(state = initialState, action) {
         default:
           break;
       }
+      console.log('newState:', newState);
       return newState;
     case ACTIONS.GET_TICKET_IDS:
       switch (action.status) {

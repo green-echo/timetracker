@@ -77,7 +77,16 @@ class ProjectBoard extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    console.log(prevProps.allTickets.length, this.props.allTickets.length);
+
     if (prevProps.allTickets.length !== this.props.allTickets.length) {
+      console.log(
+        this.props.project.id,
+        this.props.toDoTickets,
+        this.props.inProgressTickets,
+        this.props.inReviewTickets,
+        this.props.doneTickets
+      );
       this.setState({
         columns: {
           '1': {

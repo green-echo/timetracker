@@ -241,47 +241,65 @@ class ProjectBoard extends React.Component {
     return (
       <div>
         <Container className="project-board">
-          <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-            <DropdownToggle caret>{this.props.project.name}</DropdownToggle>
-            <DropdownMenu>
-              <DropdownItem header>Projects</DropdownItem>
-              <DropdownItem divider />
-              {this.props.projects.map(project => {
-                return (
-                  <Link key={project.id} to={`/projects/${project.id}`}>
-                    <DropdownItem>{project.name}</DropdownItem>
-                  </Link>
-                );
-              })}
-            </DropdownMenu>
-          </ButtonDropdown>
-          {/* User Dropdown for addding users to a project */}
-          <ButtonDropdown
-            isOpen={this.state.userDropdownOpen}
-            toggle={this.userToggle}
-          >
-            <DropdownToggle caret>Users On Project</DropdownToggle>
-            <DropdownMenu>
-              <DropdownItem header>Users On Project</DropdownItem>
-              <DropdownItem divider />
-              {this.props.allUsers.map(user => {
-                return (
-                  <DropdownItem
-                    key={user.id}
-                    // onClick={() => this.props.addUser(user.id)}
-                  >
-                    {user.email}
-                  </DropdownItem>
-                );
-              })}
-            </DropdownMenu>
-          </ButtonDropdown>
-          <Link to={`/projects/${this.props.project.id}/newticket`}>
-            <Button color="danger">New Ticket</Button>
-          </Link>
-          <Link to={`/projects/${this.props.project.id}/adduser`}>
-            <Button color="primary">Add User</Button>
-          </Link>
+          <Row>
+            <Col xs={6}>
+              <ButtonDropdown
+                isOpen={this.state.dropdownOpen}
+                toggle={this.toggle}
+              >
+                <DropdownToggle caret size="sm">
+                  {this.props.project.name}
+                </DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem header>Projects</DropdownItem>
+                  <DropdownItem divider />
+                  {this.props.projects.map(project => {
+                    return (
+                      <Link key={project.id} to={`/projects/${project.id}`}>
+                        <DropdownItem>{project.name}</DropdownItem>
+                      </Link>
+                    );
+                  })}
+                </DropdownMenu>
+              </ButtonDropdown>
+
+              <ButtonDropdown
+                isOpen={this.state.userDropdownOpen}
+                toggle={this.userToggle}
+              >
+                <DropdownToggle caret size="sm">
+                  {' '}
+                  Users On Project
+                </DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem header>Users On Project</DropdownItem>
+                  <DropdownItem divider />
+                  {this.props.allUsers.map(user => {
+                    return (
+                      <DropdownItem
+                        key={user.id}
+                        // onClick={() => this.props.addUser(user.id)}
+                      >
+                        {user.email}
+                      </DropdownItem>
+                    );
+                  })}
+                </DropdownMenu>
+              </ButtonDropdown>
+            </Col>
+            <Col xs={6} className="right-nav">
+              <Link to={`/projects/${this.props.project.id}/newticket`}>
+                <Button outline color="info" size="sm">
+                  New Ticket
+                </Button>
+              </Link>
+              <Link to={`/projects/${this.props.project.id}/adduser`}>
+                <Button outline color="info" size="sm">
+                  Add User
+                </Button>
+              </Link>
+            </Col>
+          </Row>
 
           <DragDropContext onDragEnd={this.onDragEnd}>
             <Row>

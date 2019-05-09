@@ -33,6 +33,11 @@ export const getTicketIds = (ids, status) => ({
   status
 });
 
+export const reorderTicket = payload => ({
+  type: ACTIONS.REORDER_TICKET,
+  payload
+});
+
 export const getTicketIdsThunk = (id, status) => {
   return async dispatch => {
     try {
@@ -110,7 +115,8 @@ export const reorderTicketThunk = result => {
         `/api/tickets/${result.draggableId}/reorder`,
         { result }
       );
-      // console.log('reorder ticket data', data);
+      console.log('reorder ticket data', data);
+      dispatch(reorderTicket(data));
     } catch (err) {
       console.log(err);
     }

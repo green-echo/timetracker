@@ -170,7 +170,6 @@ class ProjectBoard extends React.Component {
     }
   }
   onDragEnd = result => {
-    this.props.reorderTicket(result);
     const { destination, source, draggableId } = result;
 
     if (!destination) {
@@ -183,6 +182,8 @@ class ProjectBoard extends React.Component {
     ) {
       return;
     }
+
+    this.props.reorderTicket(result);
 
     const start = this.state.columns[source.droppableId];
     const finish = this.state.columns[destination.droppableId];

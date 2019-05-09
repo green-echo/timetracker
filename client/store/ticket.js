@@ -4,6 +4,10 @@
 import * as ACTIONS from '../actions/action-types';
 
 const initialState = {
+  to_do: [],
+  in_progress: [],
+  in_review: [],
+  done: [],
   toDoTickets: [],
   inProgressTickets: [],
   inReviewTickets: [],
@@ -86,6 +90,14 @@ export default function(state = initialState, action) {
         default:
           break;
       }
+      return newState;
+    case ACTIONS.REORDER_TICKET:
+      console.log(action.payload);
+      const keys = Object.keys(action.payload);
+      keys.forEach(key => {
+        newState[key] = action.payload[key];
+      });
+      console.log(newState);
       return newState;
     default:
       return state;

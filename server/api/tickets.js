@@ -134,15 +134,6 @@ router.put('/:id/reorder', async (req, res, next) => {
 
     const ticket = await Ticket.findByPk(req.params.id);
     const { destination, source, draggableId } = result;
-    if (!destination) {
-      return;
-    }
-    if (
-      destination.droppableId === source.droppableId &&
-      destination.index === source.index
-    ) {
-      return;
-    }
 
     console.log(source.droppableId, destination.droppableId);
 
@@ -151,12 +142,16 @@ router.put('/:id/reorder', async (req, res, next) => {
       await ticket.update({
         order: destination.index
       });
-      let tickets = await Ticket.findAll({
+
+      let tickets = {
+        [source.droppableId]: []
+      };
+
+      tickets[source.droppableId] = await Ticket.findAll({
         where: {
           projectId: ticket.projectId,
           status: ticket.status
         },
-        raw: true,
         order: [['order', 'ASC']]
       });
       res.send(tickets);
@@ -172,17 +167,23 @@ router.put('/:id/reorder', async (req, res, next) => {
         order: destination.index
       });
 
-      let tickets = await Ticket.findAll({
-        where: {
-          projectId: ticket.projectId,
-          [Op.or]: [
-            { status: source.droppableId },
-            { status: destination.droppableId }
-          ]
-        },
-        raw: true,
-        order: [['order', 'ASC']]
-      });
+      let statuses = [source.droppableId, destination.droppableId];
+
+      let tickets = {
+        [source.droppableId]: [],
+        [destination.droppableId]: []
+      };
+
+      for (let i = 0; i < statuses.length; i++) {
+        tickets[statuses[i]] = await Ticket.findAll({
+          where: {
+            projectId: ticket.projectId,
+            status: statuses[i]
+          },
+          order: [['order', 'ASC']]
+        });
+      }
+
       console.log(tickets);
       res.send(tickets);
     }

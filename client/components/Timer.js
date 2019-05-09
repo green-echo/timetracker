@@ -22,6 +22,8 @@ class Timer extends React.Component {
     return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
   }
 
+  componentDidMount() {}
+
   async startTimer() {
     this.setState({
       time: this.state.time,

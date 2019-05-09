@@ -124,3 +124,16 @@ export const addUserToTicketThunk = (ticketId, userId) => async dispatch => {
     console.error(error);
   }
 };
+
+//get user email for specific ticket
+export const getUserEmailForTicketThunk = id => {
+  return async dispatch => {
+    try {
+    await axios.get(`/api/tickets/${id}/user`);
+    
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+

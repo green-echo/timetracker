@@ -1,8 +1,7 @@
 const React = require('react');
 import axios from 'axios';
-import { Button } from 'reactstrap';
-
-
+//import { Button } from 'reactstrap';
+import Button from '@material-ui/core/Button';
 class Timer extends React.Component {
   constructor(props) {
     super(props);
@@ -35,7 +34,7 @@ class Timer extends React.Component {
         }),
       1
     );
-    this.setState ({status: true});
+    this.setState({ status: true });
     const id = this.props.ticket.id;
     //console.log(this.state.time)
     await axios.post(`/api/userTickets/${id}`);
@@ -44,7 +43,7 @@ class Timer extends React.Component {
     this.setState({ isOn: false });
     clearInterval(this.timer);
     const id = this.props.ticket.id;
-    this.setState ({status: false});
+    this.setState({ status: false });
     await axios.put(`/api/userTickets/${id}`);
   }
 
@@ -54,11 +53,25 @@ class Timer extends React.Component {
       <div id="timer">
         <div>{this.millisToMinutesAndSeconds(this.state.time)}</div>
         <div>
-        {this.state.status === true ? (
-          <Button onClick={this.stopTimer}>stop</Button>
-        ) : (
-          <Button onClick={this.startTimer}>start</Button>
-        )}
+          {this.state.status === true ? (
+            <Button
+              variant="contained"
+              color="secondary"
+              size="small"
+              onClick={this.stopTimer}
+            >
+              stop
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              color="secondary"
+              size="small"
+              onClick={this.startTimer}
+            >
+              start
+            </Button>
+          )}
         </div>
       </div>
     );

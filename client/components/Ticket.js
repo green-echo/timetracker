@@ -5,13 +5,14 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { removeTicketThunk, updateTicketThunk , addUserToTicketThunk} from '../actions/ticket';
+import { removeTicketThunk, updateTicketThunk , addUserToTicketThunk, getUserEmailForTicketThunk} from '../actions/ticket';
 import Timer from './Timer';
 import { Card, CardText, CardBody, CardTitle, CardSubtitle , ButtonDropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem} from 'reactstrap';
 import {getUsersThunk} from '../actions/project';
+import { runInThisContext } from 'vm';
 
 class Ticket extends Component {
   constructor(props) {
@@ -22,6 +23,7 @@ class Ticket extends Component {
       open: false,
       dropdownOpen: false,
       btnDropright: false,
+      userDropdownOpen: false
     //  projectId: this.props.project.id
     };
     this.handleChange = this.handleChange.bind(this);
@@ -75,8 +77,9 @@ class Ticket extends Component {
   };
 
   render() {
-console.log(this.props.project.id)
+ 
     const { provided, innerRef, ticket } = this.props;
+  console.log('!!!!', this.props)
     return (
       <div
         {...provided.draggableProps}
@@ -85,69 +88,95 @@ console.log(this.props.project.id)
       >
         <Card style={styles.cardContainer}>
           <CardBody style={styles.cardContainer}>
-            <CardText  > {ticket.title}</CardText>
-            <CardText > {ticket.description} </CardText>
-
-            <CardText> Points left: {ticket.points} </CardText>
-     
-
-            <Button size="small" onClick={this.handleClickOpen}>
-              Modify
-            </Button>
-
-            <Dialog
-              open={this.state.open}
-              onClose={this.handleClose}
-              aria-labelledby="form-dialog-title"
-            >
-              <DialogTitle id="form-dialog-title">Update Ticket</DialogTitle>
-              <DialogContent>
-                <form onSubmit={this.handleSubmit}>
-                  <label className="formLabel" htmlFor="title">
-                    Title:{' '}
-                  </label>
-                  <input
-                    type="text"
-                    name="title"
-                    value={this.state.title}
-                    onChange={this.handleChange}
-                  />
-                  <br />
-                  <label className="formLabel" htmlFor="description">
-                    Description:{' '}
-                  </label>
-                  <input
-                    type="text"
-                    name="description"
-                    value={this.state.description}
-                    onChange={this.handleChange}
-                  />
-                  <br />
-                  <button id="submit" type="submit">
-                    Submit
-                  </button>
-                </form>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={this.handleClose} color="primary">
-                  Cancel
-                </Button>
-              </DialogActions>
-            </Dialog>
-
-            <Button onClick={() => {
-                if (window.confirm('Are you sure you want to delete this ticket?') )
-                  this.props.remove(ticket); }}  > Remove </Button>
-
-            <Timer ticket={ticket} />
             <CardText>
-           
-              {/* {ticket.userId && (
-                <div>Assigned To: {ticket.currentUserEmail}</div>
-              )} */}
-              
+              {' '}
+              <b>Title: </b>
+              {ticket.title}
+            </CardText>
+            <CardText>
+              {' '}
+              <b>Description: </b>
+              {ticket.description}{' '}
             </CardText>
 
+            <CardText>
+              {' '}
+              <b>Points: </b>
+              {ticket.points}{' '}
+            </CardText>
+            <CardText>
+              {/* {' '}
+              {ticket.userId && (
+                <div>Assigned To: {ticket.currentUserEmail}</div>
+              )}{' '} */}
+            </CardText>
+
+            <div className="button-wrapper">
+              <Button
+                variant="contained"
+                size="small"
+                onClick={this.handleClickOpen}
+              >
+                Modify
+              </Button>
+
+              <Dialog
+                open={this.state.open}
+                onClose={this.handleClose}
+                aria-labelledby="form-dialog-title"
+              >
+                <DialogTitle id="form-dialog-title">Update Ticket</DialogTitle>
+                <DialogContent>
+                  <form onSubmit={this.handleSubmit}>
+                    <label className="formLabel" htmlFor="title">
+                      Title:{' '}
+                    </label>
+                    <input
+                      type="text"
+                      name="title"
+                      value={this.state.title}
+                      onChange={this.handleChange}
+                    />
+                    <br />
+                    <label className="formLabel" htmlFor="description">
+                      Description:{' '}
+                    </label>
+                    <input
+                      type="text"
+                      name="description"
+                      value={this.state.description}
+                      onChange={this.handleChange}
+                    />
+                    <br />
+                    <button id="submit" type="submit">
+                      Submit
+                    </button>
+                  </form>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={this.handleClose} color="primary">
+                    Cancel
+                  </Button>
+                </DialogActions>
+              </Dialog>
+
+              <Button
+                variant="contained"
+                size="small"
+                onClick={() => {
+                  if (
+                    window.confirm(
+                      'Are you sure you want to delete this ticket?'
+                    )
+                  )
+                    this.props.remove(ticket);
+                }}
+              >
+                {' '}
+                Remove{' '}
+              </Button>
+              <Timer ticket={ticket} />
+            </div>
           </CardBody>
         </Card>
 
@@ -157,9 +186,9 @@ console.log(this.props.project.id)
                 toggle={this.userToggle}
               >
                 <DropdownToggle caret size="sm">
-                  select user
+               select user
                 </DropdownToggle>
-                <DropdownMenu>
+                <DropdownMenu persist>
                   <DropdownItem header>Select User</DropdownItem>
                   <DropdownItem divider />
                   {this.props.allUsers.map(user => {
@@ -201,16 +230,19 @@ const mapDispatchToProps = (dispatch, ownProps)=> {
     },
     addUserToTix: (id, userId) => {
       dispatch(addUserToTicketThunk(id, userId))
+    },
+    getUserEmail: (id) => {
+      dispatch(getUserEmailForTicketThunk(id))
     }
   };
 };
 const styles = {
   cardContainer: {
-    marginBottom: 8,
-    padding:3
+    margin: '3px 0',
+    padding: 3
   },
   title: {
-    margin:0
+    margin: 0
   }
 };
 

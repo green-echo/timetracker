@@ -93,28 +93,25 @@ router.get('/:id/tickets', async (req, res, next) => {
           res.sendStatus(403);
         } else {
           const statuses = ['to_do', 'in_progress', 'in_review', 'done'];
-          const tickets = [];
+
+          let tickets = {
+            to_do: [],
+            in_progress: [],
+            in_review: [],
+            done: []
+          };
 
           for (let i = 0; i < statuses.length; i++) {
-            tickets[i] = await Ticket.findAll({
+            tickets[statuses[i]] = await Ticket.findAll({
               where: {
                 projectId: req.params.id,
                 status: statuses[i]
               },
-              order: [['order', 'ASC']],
-              raw: true
+              order: [['order', 'ASC']]
             });
           }
 
-          // console.log(tickets);
-
-          const result = {};
-          result.tickets = await project.getTickets();
-          result.toDo = await project.toDo;
-          result.inProgress = await project.inProgress;
-          result.inReview = await project.inReview;
-          result.done = await project.done;
-          res.json(result);
+          res.json(tickets);
         }
       }
     }

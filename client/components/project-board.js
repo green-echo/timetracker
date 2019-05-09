@@ -67,9 +67,7 @@ class ProjectBoard extends React.Component {
           id: 4,
           taskIds: this.props.doneTickets
         }
-      },
-      numTickets: this.props.allTickets.length,
-      tickets: createTicketsObject(this.props.allTickets)
+      }
     });
     // this.props.update();
     // await Promise.all(
@@ -81,70 +79,22 @@ class ProjectBoard extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log(prevProps.allTickets.length, this.props.allTickets.length);
-
-    if (prevProps.allTickets.length !== this.props.allTickets.length) {
-      console.log(
-        this.props.project.id,
-        this.props.toDoTickets,
-        this.props.inProgressTickets,
-        this.props.inReviewTickets,
-        this.props.doneTickets
-      );
-      this.setState({
-        columns: {
-          to_do: {
-            id: 1,
-            taskIds: this.props.toDoTickets
-          },
-          in_progress: {
-            id: 2,
-            taskIds: this.props.inProgressTickets
-          },
-          in_review: {
-            id: 3,
-            taskIds: this.props.inReviewTickets
-          },
-          done: {
-            id: 4,
-            taskIds: this.props.doneTickets
-          }
-        },
-        numTickets: this.props.allTickets.length,
-        tickets: createTicketsObject(this.props.allTickets)
-      });
-    }
     if (prevProps.match.params.id !== this.props.match.params.id) {
       this.props.getProject();
       this.props.loadTickets();
     }
   }
 
+  shouldComponentUpdate() {
+    console.log(this.props.move);
+    return true;
+  }
+
   constructor() {
     super();
     this.state = {
-      columns: {
-        to_do: {
-          id: 1,
-          taskIds: []
-        },
-        in_progress: {
-          id: 2,
-          taskIds: []
-        },
-        in_review: {
-          id: 3,
-          taskIds: []
-        },
-        done: {
-          id: 4,
-          taskIds: []
-        }
-      },
       dropdownOpen: false,
       btnDropright: false,
-      numTickets: 0,
-      tickets: {},
       activeTab: '1'
     };
     this.toggle = this.toggle.bind(this);
@@ -182,68 +132,69 @@ class ProjectBoard extends React.Component {
     ) {
       return;
     }
-
     this.props.reorderTicket(result);
 
-    const start = this.state.columns[source.droppableId];
-    const finish = this.state.columns[destination.droppableId];
+    //   const start = this.state.columns[source.droppableId];
+    //   const finish = this.state.columns[destination.droppableId];
 
-    if (source.droppableId === destination.droppableId) {
-      const newTaskIds = Array.from(start.taskIds);
-      newTaskIds.splice(source.index, 1);
-      newTaskIds.splice(destination.index, 0, draggableId);
+    //   if (source.droppableId === destination.droppableId) {
+    //     const newTaskIds = Array.from(start.taskIds);
+    //     newTaskIds.splice(source.index, 1);
+    //     newTaskIds.splice(destination.index, 0, draggableId);
 
-      const newColumn = {
-        ...start,
-        taskIds: newTaskIds
-      };
-      const newState = {
-        ...this.state,
-        columns: {
-          ...this.state.columns,
-          [newColumn.id]: newColumn
-        }
-      };
+    //     const newColumn = {
+    //       ...start,
+    //       taskIds: newTaskIds
+    //     };
+    //     const newState = {
+    //       ...this.state,
+    //       columns: {
+    //         ...this.state.columns,
+    //         [newColumn.id]: newColumn
+    //       }
+    //     };
 
-      console.log(newColumn);
+    //     console.log(newColumn);
 
-      this.props.update(newColumn, null);
+    //     this.props.update(newColumn, null);
 
-      this.setState(newState);
-      return;
-    }
+    //     this.setState(newState);
+    //     return;
+    //   }
 
-    const startTaskIds = Array.from(start.taskIds);
+    //   const startTaskIds = Array.from(start.taskIds);
 
-    startTaskIds.splice(source.index, 1);
-    const newStart = {
-      ...start,
-      taskIds: startTaskIds
-    };
+    //   startTaskIds.splice(source.index, 1);
+    //   const newStart = {
+    //     ...start,
+    //     taskIds: startTaskIds
+    //   };
 
-    const finishTaskIds = Array.from(finish.taskIds);
-    finishTaskIds.splice(destination.index, 0, draggableId);
-    const newFinish = {
-      ...finish,
-      taskIds: finishTaskIds
-    };
+    //   const finishTaskIds = Array.from(finish.taskIds);
+    //   finishTaskIds.splice(destination.index, 0, draggableId);
+    //   const newFinish = {
+    //     ...finish,
+    //     taskIds: finishTaskIds
+    //   };
 
-    const newState = {
-      ...this.state,
-      columns: {
-        ...this.state.columns,
-        [newStart.id]: newStart,
-        [newFinish.id]: newFinish
-      }
-    };
+    //   const newState = {
+    //     ...this.state,
+    //     columns: {
+    //       ...this.state.columns,
+    //       [newStart.id]: newStart,
+    //       [newFinish.id]: newFinish
+    //     }
+    //   };
 
-    console.log(newStart, newFinish);
+    //   console.log(newStart, newFinish);
 
-    this.props.update(newStart, newFinish);
+    //   this.props.update(newStart, newFinish);
 
-    this.setState(newState);
+    //   this.setState(newState);
   };
   render() {
+    console.log(this.props);
+
     return (
       <div>
         <Container className="project-board">
@@ -318,7 +269,7 @@ class ProjectBoard extends React.Component {
                   this.toggleTab('1');
                 }}
               >
-                To Do <span> ({this.props.toDoTickets.length})</span>
+                To Do <span> ({this.props.to_do.length})</span>
               </Col>
               <Col
                 className={classnames({ active: this.state.activeTab === '2' })}
@@ -327,7 +278,7 @@ class ProjectBoard extends React.Component {
                 }}
               >
                 In Progress
-                <span> ({this.props.inProgressTickets.length})</span>
+                <span> ({this.props.in_progress.length})</span>
               </Col>
               <Col
                 className={classnames({ active: this.state.activeTab === '3' })}
@@ -335,7 +286,7 @@ class ProjectBoard extends React.Component {
                   this.toggleTab('3');
                 }}
               >
-                In Review <span> ({this.props.inReviewTickets.length})</span>
+                In Review <span> ({this.props.in_review.length})</span>
               </Col>
               <Col
                 className={classnames({ active: this.state.activeTab === '4' })}
@@ -343,7 +294,7 @@ class ProjectBoard extends React.Component {
                   this.toggleTab('4');
                 }}
               >
-                Done <span> ({this.props.doneTickets.length})</span>
+                Done <span> ({this.props.done.length})</span>
               </Col>
             </Row>
 
@@ -351,7 +302,7 @@ class ProjectBoard extends React.Component {
               <Column
                 columns={this.state.columns}
                 id="to_do"
-                tickets={this.state.tickets}
+                tickets={this.props.to_do}
                 tabId="1"
                 activetab={this.state.activeTab}
               />
@@ -359,7 +310,7 @@ class ProjectBoard extends React.Component {
               <Column
                 columns={this.state.columns}
                 id="in_progress"
-                tickets={this.state.tickets}
+                tickets={this.props.in_progress}
                 tabId="2"
                 activetab={this.state.activeTab}
               />
@@ -367,7 +318,7 @@ class ProjectBoard extends React.Component {
               <Column
                 columns={this.state.columns}
                 id="in_review"
-                tickets={this.state.tickets}
+                tickets={this.props.in_review}
                 tabId="3"
                 activetab={this.state.activeTab}
               />
@@ -375,7 +326,7 @@ class ProjectBoard extends React.Component {
               <Column
                 columns={this.state.columns}
                 id="done"
-                tickets={this.state.tickets}
+                tickets={this.props.done}
                 tabId="4"
                 activetab={this.state.activeTab}
               />
@@ -389,17 +340,12 @@ class ProjectBoard extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    users: [
-      { id: 1, name: 'Ariel' },
-      { id: 2, name: 'Christina' },
-      { id: 3, name: 'Katarina' }
-    ],
     project: state.project.project,
     projects: state.project.projects,
-    toDoTickets: state.ticket.toDoTickets,
-    inProgressTickets: state.ticket.inProgressTickets,
-    inReviewTickets: state.ticket.inReviewTickets,
-    doneTickets: state.ticket.doneTickets,
+    to_do: state.ticket.to_do,
+    in_progress: state.ticket.in_progress,
+    in_review: state.ticket.in_review,
+    done: state.ticket.done,
     allTickets: state.ticket.allTickets,
     allUsers: state.project.users
   };

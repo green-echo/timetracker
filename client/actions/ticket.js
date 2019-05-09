@@ -38,17 +38,6 @@ export const reorderTicket = payload => ({
   payload
 });
 
-export const getTicketIdsThunk = (id, status) => {
-  return async dispatch => {
-    try {
-      const { data } = await axios.get(`/api/projects/${id}/tickets/${status}`);
-      dispatch(getTicketIds(data, status));
-    } catch (err) {
-      console.log(err);
-    }
-  };
-};
-
 export const createTicketThunk = (ticket, id) => {
   return async dispatch => {
     try {

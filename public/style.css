@@ -79,3 +79,23 @@ form div {
 #submit {
   margin-top:5px;
 }
+
+p.card-text {
+  margin:5px;
+  font-family: Helvetica;
+  font-size: 14px
+}
+
+
+div.card-title {
+  font-family: Helvetica;
+  font-size: 14px
+ 
+}
+
+#timer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center
+}

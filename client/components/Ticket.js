@@ -5,9 +5,13 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { removeTicketThunk, updateTicketThunk } from '../actions/ticket';
+import { removeTicketThunk, updateTicketThunk , addUserToTicketThunk} from '../actions/ticket';
 import Timer from './Timer';
-import { Card, CardText, CardBody, CardTitle, CardSubtitle } from 'reactstrap';
+import { Card, CardText, CardBody, CardTitle, CardSubtitle , ButtonDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem} from 'reactstrap';
+import {getUsersThunk} from '../actions/project';
 
 class Ticket extends Component {
   constructor(props) {
@@ -15,16 +19,42 @@ class Ticket extends Component {
     this.state = {
       title: this.props.ticket.title,
       description: this.props.ticket.description,
-      open: false
+      open: false,
+      dropdownOpen: false,
+      btnDropright: false,
+    //  projectId: this.props.project.id
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.toggle = this.toggle.bind(this);
+    this.userToggle = this.userToggle.bind(this);
+    this.toggleTab = this.toggleTab.bind(this);
   }
 
   handleChange(event) {
     this.setState({
       [event.target.name]: event.target.value
     });
+  }
+  toggle() {
+    this.setState({
+      dropdownOpen: !this.state.dropdownOpen
+    });
+  }
+  userToggle() {
+    this.setState({
+      userDropdownOpen: !this.state.userDropdownOpen
+    });
+  }
+  toggleTab(tab) {
+    if (this.state.activeTab !== tab) {
+      this.setState({
+        activeTab: tab
+      });
+    }
+  }
+  componentDidMount () {
+    this.props.loadUsers( this.props.project.id);
   }
 
   async handleSubmit(event) {
@@ -45,6 +75,7 @@ class Ticket extends Component {
   };
 
   render() {
+console.log(this.props.project.id)
     const { provided, innerRef, ticket } = this.props;
     return (
       <div
@@ -58,12 +89,7 @@ class Ticket extends Component {
             <CardText > {ticket.description} </CardText>
 
             <CardText> Points left: {ticket.points} </CardText>
-            <CardText>
-              {/* {' '}
-              {ticket.userId && (
-                <div>Assigned To: {ticket.currentUserEmail}</div>
-              )}{' '} */}
-            </CardText>
+     
 
             <Button size="small" onClick={this.handleClickOpen}>
               Modify
@@ -114,24 +140,67 @@ class Ticket extends Component {
                   this.props.remove(ticket); }}  > Remove </Button>
 
             <Timer ticket={ticket} />
+            <CardText>
+           
+              {/* {ticket.userId && (
+                <div>Assigned To: {ticket.currentUserEmail}</div>
+              )} */}
+              
+            </CardText>
+
           </CardBody>
         </Card>
+
+        <div>Assigned To:      
+               <ButtonDropdown
+                isOpen={this.state.userDropdownOpen}
+                toggle={this.userToggle}
+              >
+                <DropdownToggle caret size="sm">
+                  select user
+                </DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem header>Select User</DropdownItem>
+                  <DropdownItem divider />
+                  {this.props.allUsers.map(user => {
+                    return (
+                     
+                      <DropdownItem    onClick={() => this.props.addUserToTix(ticket.id, user.id)} 
+                        key={user.id}>
+                        {user.email}
+                      </DropdownItem>
+                    );
+                  })}
+                </DropdownMenu>
+              </ButtonDropdown>
+                 
+                 
+                  </div>
       </div>
     );
   }
 }
 const mapStateToProps = state => {
   // console.log('mapping state to store', state.ticket)
-  return { data: state.ticket };
+  return { data: state.ticket ,
+    allUsers: state.project.users,
+    project: state.project.project,};
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch, ownProps)=> {
+
   return {
     remove: ticket => {
       dispatch(removeTicketThunk(ticket));
     },
     update: (id, ticket) => {
       dispatch(updateTicketThunk(id, ticket));
+    },
+    loadUsers: (projectId) => {
+      dispatch(getUsersThunk(projectId));
+    },
+    addUserToTix: (id, userId) => {
+      dispatch(addUserToTicketThunk(id, userId))
     }
   };
 };

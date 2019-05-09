@@ -34,6 +34,14 @@ export const getTicketIds = (ids, status) => ({
   status
 });
 
+
+export const addUserToTicket = userId => ({
+  type: ACTIONS.ADD_USER_TO_TICKET,
+  userId
+});
+
+
+
 export const getTicketIdsThunk = (id, status) => {
   return async dispatch => {
     try {
@@ -100,7 +108,19 @@ export const removeTicketThunk = ticket => {
       await axios.delete(`/api/tickets/${ticket.id}`);
       dispatch(deleteTicket(ticket));
     } catch (err) {
-      console.log(err);
+      console.log(err); 
     }
   };
+};
+
+
+
+
+export const addUserToTicketThunk = (ticketId, userId) => async dispatch => {
+  try {
+     await axios.put(`/api/tickets/${ticketId}/adduser`, {userId: userId});
+
+  } catch (error) {
+    console.error(error);
+  }
 };

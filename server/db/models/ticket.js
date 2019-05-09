@@ -37,10 +37,11 @@ const Ticket = db.define('ticket', {
   }
 });
 
-Ticket.maxOrder = async function(status) {
+Ticket.maxOrder = async function(status, projectId) {
   const max = await Ticket.findAll({
     where: {
-      status
+      status,
+      projectId
     },
     attributes: [Sequelize.fn('MAX', Sequelize.col('order'))],
     raw: true

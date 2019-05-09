@@ -128,6 +128,42 @@ router.put('/:id', async (req, res, next) => {
   }
 });
 
+router.put('/:id/reorder', async (req, res, next) => {
+  try {
+    const { result } = req.body;
+
+    const ticket = await Ticket.findByPk(req.params.id);
+    const { destination, source, draggableId } = result;
+    if (!destination) {
+      return;
+    }
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+
+    if (source.droppableId === destination.droppableId) {
+      await ticket.insertSameColumn(source.index, destination.index);
+      await ticket.update({
+        order: destination.index
+      });
+      let tickets = await Ticket.findAll({
+        where: {
+          projectId: ticket.projectId,
+          status: ticket.status
+        },
+        raw: true,
+        order: [['order', 'ASC']]
+      });
+      res.send(tickets);
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.delete('/:id', async (req, res, next) => {
   try {
     if (!req.isAuthenticated()) {

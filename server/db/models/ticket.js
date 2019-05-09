@@ -50,12 +50,12 @@ Ticket.maxOrder = async function(status, projectId) {
   return max;
 };
 
-Ticket.insertSameColumn = async function(src, dest, status, projectId) {
+Ticket.prototype.insertSameColumn = async function(src, dest) {
   if (src > dest) {
     await Ticket.increment('order', {
       where: {
-        status,
-        projectId,
+        status: this.status,
+        projectId: this.projectId,
         order: { [Op.lt]: src, [Op.gte]: dest }
       },
       raw: true
@@ -65,9 +65,9 @@ Ticket.insertSameColumn = async function(src, dest, status, projectId) {
   if (src < dest) {
     await Ticket.decrement('order', {
       where: {
-        status,
-        projectId,
-        order: { [Op.gte]: src, [Op.lt]: dest }
+        status: this.status,
+        projectId: this.projectId,
+        order: { [Op.gt]: src, [Op.lte]: dest }
       },
       raw: true
     });

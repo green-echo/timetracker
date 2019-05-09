@@ -106,7 +106,7 @@ router.get('/:id/tickets', async (req, res, next) => {
             });
           }
 
-          console.log(tickets);
+          // console.log(tickets);
 
           const result = {};
           result.tickets = await project.getTickets();

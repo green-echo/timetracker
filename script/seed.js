@@ -19,7 +19,7 @@ async function seed() {
     Project.create({
       name: 'Netflix',
       totalTime: 20,
-      toDo: [1],
+      toDo: [1, 13],
       inProgress: [2],
       inReview: [3],
       done: [4]
@@ -134,6 +134,16 @@ async function seed() {
       status: 'done'
     })
   ]);
+
+  const extraTicket = await Ticket.create({
+    title: 'extra',
+    description: 'testing movement',
+    points: 3,
+    status: 'to_do',
+    order: 1
+  });
+
+  extraTicket.setProject(projects[0]);
 
   //putting all tickets under first Project
   for (let i = 0; i < netflixTickets.length; i++) {

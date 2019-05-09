@@ -30,7 +30,11 @@ import {
   updateColumnsThunk
 } from '../actions/project';
 import { createTicketsObject, columnName } from '../utils';
-import { getTicketsThunk, getTicketIdsThunk } from '../actions/ticket';
+import {
+  getTicketsThunk,
+  getTicketIdsThunk,
+  reorderTicketThunk
+} from '../actions/ticket';
 import Column from './Column';
 
 const div = {
@@ -166,6 +170,7 @@ class ProjectBoard extends React.Component {
     }
   }
   onDragEnd = result => {
+    this.props.reorderTicket(result);
     const { destination, source, draggableId } = result;
 
     if (!destination) {
@@ -182,7 +187,7 @@ class ProjectBoard extends React.Component {
     const start = this.state.columns[source.droppableId];
     const finish = this.state.columns[destination.droppableId];
 
-    if (start === finish) {
+    if (source.droppableId === destination.droppableId) {
       const newTaskIds = Array.from(start.taskIds);
       newTaskIds.splice(source.index, 1);
       newTaskIds.splice(destination.index, 0, draggableId);
@@ -422,6 +427,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     update: (col1, col2) => {
       dispatch(updateColumnsThunk(col1, col2, projectId));
+    },
+    reorderTicket: result => {
+      dispatch(reorderTicketThunk(result));
     }
   };
 };

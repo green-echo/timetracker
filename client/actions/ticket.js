@@ -2,11 +2,10 @@ import axios from 'axios';
 import * as ACTIONS from '../actions/action-types';
 import history from '../history';
 
-const deleteTicket = (ticket) => (
-  { 
-    type: ACTIONS.REMOVE_TICKET, 
-    ticket  
-  }); 
+const deleteTicket = ticket => ({
+  type: ACTIONS.REMOVE_TICKET,
+  ticket
+});
 
 export const createTicket = singleTicket => ({
   type: ACTIONS.CREATE_TICKET,
@@ -93,12 +92,25 @@ export const updateTicketThunk = (id, ticket) => {
   };
 };
 
-
 export const removeTicketThunk = ticket => {
-  return async dispatch => { 
+  return async dispatch => {
     try {
       await axios.delete(`/api/tickets/${ticket.id}`);
       dispatch(deleteTicket(ticket));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+export const reorderTicketThunk = result => {
+  return async dispatch => {
+    try {
+      const { data } = await axios.put(
+        `/api/tickets/${result.draggableId}/reorder`,
+        { result }
+      );
+      // console.log('reorder ticket data', data);
     } catch (err) {
       console.log(err);
     }

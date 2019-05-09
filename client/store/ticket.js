@@ -54,11 +54,6 @@ export default function(state = initialState, action) {
       return newState;
 
     case ACTIONS.REMOVE_TICKET:
-      console.log('TICKET:', action.ticket);
-      newState.allTickets = newState.allTickets.filter(
-        ticket => ticket.id !== action.ticket.id
-      );
-
       newState[action.ticket.status] = newState[action.ticket.status].filter(
         ticket => ticket.id !== action.ticket.id
       );

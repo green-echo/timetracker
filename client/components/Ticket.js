@@ -54,10 +54,22 @@ class Ticket extends Component {
       >
         <Card style={styles.cardContainer}>
           <CardBody style={styles.cardContainer}>
-            <CardText  > {ticket.title}</CardText>
-            <CardText > {ticket.description} </CardText>
+            <CardText>
+              {' '}
+              <b>Title: </b>
+              {ticket.title}
+            </CardText>
+            <CardText>
+              {' '}
+              <b>Description: </b>
+              {ticket.description}{' '}
+            </CardText>
 
-            <CardText> Points left: {ticket.points} </CardText>
+            <CardText>
+              {' '}
+              <b>Points: </b>
+              {ticket.points}{' '}
+            </CardText>
             <CardText>
               {/* {' '}
               {ticket.userId && (
@@ -65,55 +77,72 @@ class Ticket extends Component {
               )}{' '} */}
             </CardText>
 
-            <Button size="small" onClick={this.handleClickOpen}>
-              Modify
-            </Button>
+            <div className="button-wrapper">
+              <Button
+                variant="contained"
+                size="small"
+                onClick={this.handleClickOpen}
+              >
+                Modify
+              </Button>
 
-            <Dialog
-              open={this.state.open}
-              onClose={this.handleClose}
-              aria-labelledby="form-dialog-title"
-            >
-              <DialogTitle id="form-dialog-title">Update Ticket</DialogTitle>
-              <DialogContent>
-                <form onSubmit={this.handleSubmit}>
-                  <label className="formLabel" htmlFor="title">
-                    Title:{' '}
-                  </label>
-                  <input
-                    type="text"
-                    name="title"
-                    value={this.state.title}
-                    onChange={this.handleChange}
-                  />
-                  <br />
-                  <label className="formLabel" htmlFor="description">
-                    Description:{' '}
-                  </label>
-                  <input
-                    type="text"
-                    name="description"
-                    value={this.state.description}
-                    onChange={this.handleChange}
-                  />
-                  <br />
-                  <button id="submit" type="submit">
-                    Submit
-                  </button>
-                </form>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={this.handleClose} color="primary">
-                  Cancel
-                </Button>
-              </DialogActions>
-            </Dialog>
+              <Dialog
+                open={this.state.open}
+                onClose={this.handleClose}
+                aria-labelledby="form-dialog-title"
+              >
+                <DialogTitle id="form-dialog-title">Update Ticket</DialogTitle>
+                <DialogContent>
+                  <form onSubmit={this.handleSubmit}>
+                    <label className="formLabel" htmlFor="title">
+                      Title:{' '}
+                    </label>
+                    <input
+                      type="text"
+                      name="title"
+                      value={this.state.title}
+                      onChange={this.handleChange}
+                    />
+                    <br />
+                    <label className="formLabel" htmlFor="description">
+                      Description:{' '}
+                    </label>
+                    <input
+                      type="text"
+                      name="description"
+                      value={this.state.description}
+                      onChange={this.handleChange}
+                    />
+                    <br />
+                    <button id="submit" type="submit">
+                      Submit
+                    </button>
+                  </form>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={this.handleClose} color="primary">
+                    Cancel
+                  </Button>
+                </DialogActions>
+              </Dialog>
 
-            <Button onClick={() => {
-                if (window.confirm('Are you sure you want to delete this ticket?') )
-                  this.props.remove(ticket); }}  > Remove </Button>
-
-            <Timer ticket={ticket} />
+              <Button
+                variant="contained"
+                size="small"
+                onClick={() => {
+                  if (
+                    window.confirm(
+                      'Are you sure you want to delete this ticket?'
+                    )
+                  )
+                    this.props.remove(ticket);
+                }}
+              >
+                {' '}
+                Remove{' '}
+              </Button>
+              <Timer ticket={ticket} />
+            </div>
           </CardBody>
         </Card>
       </div>
@@ -137,11 +166,11 @@ const mapDispatchToProps = dispatch => {
 };
 const styles = {
   cardContainer: {
-    marginBottom: 8,
-    padding:3
+    margin: '3px 0',
+    padding: 3
   },
   title: {
-    margin:0
+    margin: 0
   }
 };
 

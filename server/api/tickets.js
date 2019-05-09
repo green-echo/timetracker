@@ -144,6 +144,8 @@ router.put('/:id/reorder', async (req, res, next) => {
       return;
     }
 
+    console.log(source.droppableId, destination.droppableId);
+
     if (source.droppableId === destination.droppableId) {
       await ticket.insertSameColumn(source.index, destination.index);
       await ticket.update({
@@ -157,6 +159,31 @@ router.put('/:id/reorder', async (req, res, next) => {
         raw: true,
         order: [['order', 'ASC']]
       });
+      res.send(tickets);
+    } else {
+      await ticket.removeFromColumn();
+      await Ticket.insertDiffColumn(
+        destination.droppableId,
+        ticket.projectId,
+        destination.index
+      );
+      await ticket.update({
+        status: destination.droppableId,
+        order: destination.index
+      });
+
+      let tickets = await Ticket.findAll({
+        where: {
+          projectId: ticket.projectId,
+          [Op.or]: [
+            { status: source.droppableId },
+            { status: destination.droppableId }
+          ]
+        },
+        raw: true,
+        order: [['order', 'ASC']]
+      });
+      console.log(tickets);
       res.send(tickets);
     }
   } catch (error) {

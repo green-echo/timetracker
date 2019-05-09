@@ -51,19 +51,19 @@ class ProjectBoard extends React.Component {
     this.props.loadTickets(projectId);
     this.setState({
       columns: {
-        '1': {
+        to_do: {
           id: 1,
           taskIds: this.props.toDoTickets
         },
-        '2': {
+        in_progress: {
           id: 2,
           taskIds: this.props.inProgressTickets
         },
-        '3': {
+        in_review: {
           id: 3,
           taskIds: this.props.inReviewTickets
         },
-        '4': {
+        done: {
           id: 4,
           taskIds: this.props.doneTickets
         }
@@ -93,19 +93,19 @@ class ProjectBoard extends React.Component {
       );
       this.setState({
         columns: {
-          '1': {
+          to_do: {
             id: 1,
             taskIds: this.props.toDoTickets
           },
-          '2': {
+          in_progress: {
             id: 2,
             taskIds: this.props.inProgressTickets
           },
-          '3': {
+          in_review: {
             id: 3,
             taskIds: this.props.inReviewTickets
           },
-          '4': {
+          done: {
             id: 4,
             taskIds: this.props.doneTickets
           }
@@ -124,19 +124,19 @@ class ProjectBoard extends React.Component {
     super();
     this.state = {
       columns: {
-        '1': {
+        to_do: {
           id: 1,
           taskIds: []
         },
-        '2': {
+        in_progress: {
           id: 2,
           taskIds: []
         },
-        '3': {
+        in_review: {
           id: 3,
           taskIds: []
         },
-        '4': {
+        done: {
           id: 4,
           taskIds: []
         }
@@ -349,7 +349,7 @@ class ProjectBoard extends React.Component {
             <Row className="board-container" activetab={this.state.activeTab}>
               <Column
                 columns={this.state.columns}
-                id="1"
+                id="to_do"
                 tickets={this.state.tickets}
                 tabId="1"
                 activetab={this.state.activeTab}
@@ -357,7 +357,7 @@ class ProjectBoard extends React.Component {
 
               <Column
                 columns={this.state.columns}
-                id="2"
+                id="in_progress"
                 tickets={this.state.tickets}
                 tabId="2"
                 activetab={this.state.activeTab}
@@ -365,7 +365,7 @@ class ProjectBoard extends React.Component {
 
               <Column
                 columns={this.state.columns}
-                id="3"
+                id="in_review"
                 tickets={this.state.tickets}
                 tabId="3"
                 activetab={this.state.activeTab}
@@ -373,7 +373,7 @@ class ProjectBoard extends React.Component {
 
               <Column
                 columns={this.state.columns}
-                id="4"
+                id="done"
                 tickets={this.state.tickets}
                 tabId="4"
                 activetab={this.state.activeTab}

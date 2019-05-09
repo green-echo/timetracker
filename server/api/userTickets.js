@@ -48,15 +48,16 @@ router.get('/:ticketId/open', async (req, res, next) => {
     if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
-      const userTicket = UserTicket.findOne({
+      const userTicket = await UserTicket.findOne({
         where: {
           ticketId: req.params.ticketId,
-          user: req.user.id,
+          userId: req.user.id,
           end: null
         }
       });
+      console.log('USERTICKET', userTicket, req.user.id, req.params.ticketId);
       if (!userTicket) {
-        next();
+        res.json('no open tickets');
       } else {
         res.json(userTicket);
       }

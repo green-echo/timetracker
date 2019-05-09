@@ -92,9 +92,9 @@ export const updateTicketThunk = (id, ticket) => {
   return async dispatch => {
     try {
       const { data } = await axios.put(`/api/tickets/${id}`, ticket);
-      console.log('updated ticket', data);
+      console.log('updated ticket', data);  
       dispatch(updateTicket(data));
-      history.push(`/projects/${3}`);
+    //  history.push(`/projects/${3}`);
     } catch (err) {
       console.log(err);
     }

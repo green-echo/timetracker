@@ -5,13 +5,25 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { removeTicketThunk, updateTicketThunk , addUserToTicketThunk, getUserEmailForTicketThunk} from '../actions/ticket';
+import {
+  removeTicketThunk,
+  updateTicketThunk,
+  addUserToTicketThunk,
+  getUserEmailForTicketThunk
+} from '../actions/ticket';
 import Timer from './Timer';
-import { Card, CardText, CardBody, CardTitle, CardSubtitle , ButtonDropdown,
+import {
+  Card,
+  CardText,
+  CardBody,
+  CardTitle,
+  CardSubtitle,
+  ButtonDropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem} from 'reactstrap';
-import {getUsersThunk} from '../actions/project';
+  DropdownItem
+} from 'reactstrap';
+import { getUsersThunk } from '../actions/project';
 import { runInThisContext } from 'vm';
 
 class Ticket extends Component {
@@ -23,16 +35,22 @@ class Ticket extends Component {
       open: false,
       dropdownOpen: false,
       btnDropright: false,
-      userDropdownOpen: false
-    //  projectId: this.props.project.id
+      userDropdownOpen: false,
+      userEmail: 'select user' //this.props.ticket.user.email 
+      //  projectId: this.props.project.id
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.toggle = this.toggle.bind(this);
     this.userToggle = this.userToggle.bind(this);
     this.toggleTab = this.toggleTab.bind(this);
+    this.select = this.select.bind(this)
   }
 
+  select (event) {
+    this.setState({userEmail: event.target.innerText})
+
+  }
   handleChange(event) {
     this.setState({
       [event.target.name]: event.target.value
@@ -55,9 +73,13 @@ class Ticket extends Component {
       });
     }
   }
-  componentDidMount () {
-    this.props.loadUsers( this.props.project.id);
+  componentDidMount() {
+    this.props.loadUsers(this.props.project.id);
+    if (this.props.ticket.user ) {
+      this.setState({userEmail: this.props.ticket.user.email})
+    }
   }
+
 
   async handleSubmit(event) {
     event.preventDefault();
@@ -77,9 +99,8 @@ class Ticket extends Component {
   };
 
   render() {
- 
     const { provided, innerRef, ticket } = this.props;
-  console.log('!!!!', this.props)
+console.log(this.state.userEmail)
     return (
       <div
         {...provided.draggableProps}
@@ -180,44 +201,48 @@ class Ticket extends Component {
           </CardBody>
         </Card>
 
-        <div>Assigned To:      
-               <ButtonDropdown
-                isOpen={this.state.userDropdownOpen}
-                toggle={this.userToggle}
-              >
-                <DropdownToggle caret size="sm">
-               select user
-                </DropdownToggle>
-                <DropdownMenu persist>
-                  <DropdownItem header>Select User</DropdownItem>
-                  <DropdownItem divider />
-                  {this.props.allUsers.map(user => {
-                    return (
-                     
-                      <DropdownItem    onClick={() => this.props.addUserToTix(ticket.id, user.id)} 
-                        key={user.id}>
-                        {user.email}
-                      </DropdownItem>
-                    );
-                  })}
-                </DropdownMenu>
-              </ButtonDropdown>
-                 
-                 
-                  </div>
+        <div>
+          Assigned To:
+          <ButtonDropdown
+            isOpen={this.state.userDropdownOpen}
+            toggle={this.userToggle}
+          >
+            <DropdownToggle caret size="sm">
+              {this.state.userEmail}
+            </DropdownToggle>
+            <DropdownMenu persist>
+              <DropdownItem header>Select User</DropdownItem>
+              <DropdownItem divider />
+              {this.props.allUsers.map(user => {
+                return (
+                  <DropdownItem
+                    onClick={() => {
+                      this.props.addUserToTix(ticket.id, user.id);
+                      this.select(event)
+                    }}
+                    key={user.id}
+                  >
+                    {user.email}
+                  </DropdownItem>
+                );
+              })}
+            </DropdownMenu>
+          </ButtonDropdown>
+        </div>
       </div>
     );
   }
 }
 const mapStateToProps = state => {
   // console.log('mapping state to store', state.ticket)
-  return { data: state.ticket ,
+  return {
+    data: state.ticket,
     allUsers: state.project.users,
-    project: state.project.project,};
+    project: state.project.project
+  };
 };
 
-const mapDispatchToProps = (dispatch, ownProps)=> {
-
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     remove: ticket => {
       dispatch(removeTicketThunk(ticket));
@@ -225,14 +250,14 @@ const mapDispatchToProps = (dispatch, ownProps)=> {
     update: (id, ticket) => {
       dispatch(updateTicketThunk(id, ticket));
     },
-    loadUsers: (projectId) => {
+    loadUsers: projectId => {
       dispatch(getUsersThunk(projectId));
     },
     addUserToTix: (id, userId) => {
-      dispatch(addUserToTicketThunk(id, userId))
+      dispatch(addUserToTicketThunk(id, userId));
     },
-    getUserEmail: (id) => {
-      dispatch(getUserEmailForTicketThunk(id))
+    getUserEmail: id => {
+      dispatch(getUserEmailForTicketThunk(id));
     }
   };
 };

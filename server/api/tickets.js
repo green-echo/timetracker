@@ -9,7 +9,7 @@ router.get('/', async (req, res, next) => {
     if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
-      const allTickets = await Ticket.findAll( { include: User});
+      const allTickets = await Ticket.findAll( );
       res.json(allTickets);
     }
   } catch (error) {
@@ -22,7 +22,7 @@ router.get('/:id', async (req, res, next) => {
     if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
-      const ticket = await Ticket.findByPk(Number(req.params.id), { include: User});
+      const ticket = await Ticket.findByPk(Number(req.params.id),);
       const project = await Project.findByPk(ticket.projectId);
 
       if (!ticket || !project) {
@@ -83,7 +83,7 @@ router.get('/:id/user', async (req, res, next) => {
         if (!authorized) {
           res.sendStatus(403);
         } else {
-          const user =  ticket.findByPk((Number(req.params.id), { include: User}))
+          const user =  ticket.findByPk((Number(req.params.id)))
             res.json(user);
           
         }

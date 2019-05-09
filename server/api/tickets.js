@@ -142,14 +142,7 @@ router.delete('/:id', async (req, res, next) => {
         if (!authorized) {
           res.sendStatus(403);
         } else {
-          await Ticket.decrement('order', {
-            where: {
-              status: ticket.status,
-              projectId: ticket.projectId,
-              order: { [Op.gt]: ticket.order }
-            },
-            raw: true
-          });
+          await ticket.removeFromColumn();
 
           switch (ticket.status) {
             case 'to_do':

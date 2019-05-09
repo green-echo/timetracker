@@ -9,7 +9,8 @@ import {
   removeTicketThunk,
   updateTicketThunk,
   addUserToTicketThunk,
-  getUserEmailForTicketThunk
+  getUserEmailForTicketThunk,
+  removeUserFromTicketThunk
 } from '../actions/ticket';
 import Timer from './Timer';
 import {
@@ -36,7 +37,7 @@ class Ticket extends Component {
       dropdownOpen: false,
       btnDropright: false,
       userDropdownOpen: false,
-      userEmail: 'select user' //this.props.ticket.user.email 
+      userEmail: 'select user' //this.props.ticket.user.email
       //  projectId: this.props.project.id
     };
     this.handleChange = this.handleChange.bind(this);
@@ -44,12 +45,11 @@ class Ticket extends Component {
     this.toggle = this.toggle.bind(this);
     this.userToggle = this.userToggle.bind(this);
     this.toggleTab = this.toggleTab.bind(this);
-    this.select = this.select.bind(this)
+    this.select = this.select.bind(this);
   }
 
-  select (event) {
-    this.setState({userEmail: event.target.innerText})
-
+  select(event) {
+    this.setState({ userEmail: event.target.innerText });
   }
   handleChange(event) {
     this.setState({
@@ -75,11 +75,10 @@ class Ticket extends Component {
   }
   componentDidMount() {
     this.props.loadUsers(this.props.project.id);
-    if (this.props.ticket.user ) {
-      this.setState({userEmail: this.props.ticket.user.email})
+    if (this.props.ticket.user) {
+      this.setState({ userEmail: this.props.ticket.user.email });
     }
   }
-
 
   async handleSubmit(event) {
     event.preventDefault();
@@ -88,6 +87,7 @@ class Ticket extends Component {
       title: this.state.title,
       description: this.state.description
     });
+    this.handleClose();
   }
 
   handleClickOpen = () => {
@@ -100,7 +100,7 @@ class Ticket extends Component {
 
   render() {
     const { provided, innerRef, ticket } = this.props;
-console.log(this.state.userEmail)
+    console.log(this.state.userEmail);
     return (
       <div
         {...provided.draggableProps}
@@ -196,7 +196,7 @@ console.log(this.state.userEmail)
                 {' '}
                 Remove{' '}
               </Button>
-              <Timer ticket={ticket} />
+              <Timer ticket={ticket} currentUser={this.props.user.id} />
             </div>
           </CardBody>
         </Card>
@@ -218,7 +218,7 @@ console.log(this.state.userEmail)
                   <DropdownItem
                     onClick={() => {
                       this.props.addUserToTix(ticket.id, user.id);
-                      this.select(event)
+                      this.select(event);
                     }}
                     key={user.id}
                   >
@@ -226,6 +226,15 @@ console.log(this.state.userEmail)
                   </DropdownItem>
                 );
               })}
+              <DropdownItem
+                onClick={() => {
+                  this.props.removeUserfromTix(ticket.id);
+                  this.setState({ userEmail: 'select user' });
+                }}
+              >
+                {' '}
+                Unassign
+              </DropdownItem>
             </DropdownMenu>
           </ButtonDropdown>
         </div>
@@ -238,7 +247,8 @@ const mapStateToProps = state => {
   return {
     data: state.ticket,
     allUsers: state.project.users,
-    project: state.project.project
+    project: state.project.project,
+    user: state.user
   };
 };
 
@@ -258,6 +268,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     getUserEmail: id => {
       dispatch(getUserEmailForTicketThunk(id));
+    },
+    removeUserfromTix: id => {
+      dispatch(removeUserFromTicketThunk(id));
     }
   };
 };

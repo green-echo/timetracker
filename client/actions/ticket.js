@@ -125,6 +125,19 @@ export const addUserToTicketThunk = (ticketId, userId) => async dispatch => {
   }
 };
 
+
+export const removeUserFromTicketThunk = (ticketId) => async dispatch => {
+  try {
+     await axios.put(`/api/tickets/${ticketId}/removeuser`);
+
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
+
+
 //get user email for specific ticket
 export const getUserEmailForTicketThunk = id => {
   return async dispatch => {

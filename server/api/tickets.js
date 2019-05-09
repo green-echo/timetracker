@@ -167,6 +167,25 @@ router.put('/:id/adduser', async (req, res, next) => {
   }
 });
 
+
+// remove  user from specific ticket
+router.put('/:id/removeuser', async (req, res, next) => {
+  try {
+    if (!req.isAuthenticated()) {
+      res.sendStatus(403);
+    } else {
+      const ticket = await Ticket.findByPk(req.params.id);
+      let result = await ticket.update({ userId: null});
+      res.json(result);
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+
+
+
 router.delete('/:id', async (req, res, next) => {
   try {
     if (!req.isAuthenticated()) {

@@ -2,6 +2,9 @@
 }
 @media screen and (max-width: 767px) {
 }
+button:focus {
+  outline: 0;
+}
 
 .projectName {
   text-align: center;
@@ -46,7 +49,11 @@ form div {
   margin: 1em;
   display: inline-block;
 }
-
+.button-wrapper {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
 /* project board desktop styles */
 @media screen and (min-width: 768px) {
   .board-container {
@@ -77,25 +84,24 @@ form div {
 }
 
 #submit {
-  margin-top:5px;
+  margin-top: 5px;
 }
 
 p.card-text {
-  margin:5px;
+  margin: 0;
   font-family: Helvetica;
-  font-size: 14px
+  font-size: 14px;
+  line-height: 1.5em;
 }
-
 
 div.card-title {
   font-family: Helvetica;
-  font-size: 14px
- 
+  font-size: 14px;
 }
 
 #timer {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center
+  align-items: flex-end;
 }

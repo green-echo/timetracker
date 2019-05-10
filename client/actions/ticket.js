@@ -65,7 +65,6 @@ export const getTicketsThunk = id => {
   return async dispatch => {
     try {
       const { data } = await axios.get(`/api/projects/${id}/tickets/`);
-      console.log(data);
       dispatch(getTickets(data));
     } catch (err) {
       console.log(err);
@@ -88,9 +87,7 @@ export const getTicketThunk = ticketId => {
 export const updateTicketThunk = (id, projectId, ticket) => {
   return async dispatch => {
     try {
-      console.log('AHHHHHHHHHHHH:', ticket);
       const { data } = await axios.put(`/api/tickets/${id}`, ticket);
-      console.log('updated ticket', data);
       dispatch(updateTicket(data));
       // history.push(`/projects/${projectId}`);
     } catch (err) {

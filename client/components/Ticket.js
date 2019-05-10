@@ -86,7 +86,6 @@ class Ticket extends Component {
       prevProps.data.id !== this.props.data.id &&
       this.props.ticket.id === this.props.data.id
     ) {
-      console.log('UPDATED');
       this.setState({
         title: this.props.data.title,
         description: this.props.data.description
@@ -113,10 +112,6 @@ class Ticket extends Component {
 
   render() {
     const { provided, innerRef, ticket, data } = this.props;
-    console.log(ticket, data);
-
-    console.log(this.state.changed);
-    const changedTicket = this.state.changed ? data : ticket;
 
     return (
       <div
@@ -260,7 +255,6 @@ class Ticket extends Component {
   }
 }
 const mapStateToProps = state => {
-  // console.log('mapping state to store', state.ticket)
   return {
     data: state.ticket.ticket,
     allUsers: state.project.users,

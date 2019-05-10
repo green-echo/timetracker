@@ -78,7 +78,6 @@
 // }
 
 // const mapStateToProps = state => {
-//   // console.log('mapping state to store', state.selectedCampus)
 //   return { data: state.ticket };
 // };
 

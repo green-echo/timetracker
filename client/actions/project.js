@@ -31,15 +31,15 @@ export const addUser = userId => ({
   userId
 });
 
-export const updateColumnsThunk = (col1, col2, projectId) => {
+export const updateColumnsThunk = (col1, col2, result, projectId) => {
   return async dispatch => {
     try {
-      const toDo = ['3', '4', '5'];
-      const project = await axios.put(`/api/projects/${projectId}`, {
-        col1,
-        col2
-      });
-      // console.log(project.data);
+      const { data } = await axios.put(
+        `/api/tickets/${result.draggableId}/reorder`,
+        {
+          result
+        }
+      );
     } catch (error) {
       console.log(error);
     }

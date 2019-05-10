@@ -78,14 +78,23 @@ class Timer extends React.Component {
               stop
             </Button>
           ) : (
-            <Button
-              variant="contained"
-              color="secondary"
-              size="small"
-              onClick={this.startTimer}
-            >
-              start
-            </Button>
+
+this.props.currentUser === this.props.ticket.userId ?
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        size="small"
+                        onClick={this.startTimer}
+                      >
+                        start
+                      </Button> : <Button
+                        variant="contained"
+                        disabled="true"
+                        size="small"
+                        onClick={this.startTimer}
+                      >
+                        start
+                      </Button>
           )}
         </div>
       </div>

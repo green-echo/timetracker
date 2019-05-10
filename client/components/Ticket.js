@@ -5,9 +5,6 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import UpdateForm from './UpdateForm';
-import TextField from '@material-ui/core/TextField';
-import { withStyles } from '@material-ui/core/styles';
 import {
   removeTicketThunk,
   updateTicketThunk,
@@ -27,15 +24,7 @@ import {
 } from 'reactstrap';
 import { getUsersThunk } from '../actions/project';
 import { runInThisContext } from 'vm';
-const styles = {
-  cardContainer: {
-    margin: '3px 0',
-    padding: 3
-  },
-  title: {
-    margin: 0
-  }
-};
+
 class Ticket extends Component {
   constructor(props) {
     super(props);
@@ -166,8 +155,7 @@ class Ticket extends Component {
               >
                 <DialogTitle id="form-dialog-title">Update Ticket</DialogTitle>
                 <DialogContent>
-                  <UpdateForm handleSubmit={this.handleSubmit} />
-                  {/* <form onSubmit={this.handleSubmit}>
+                  <form onSubmit={this.handleSubmit}>
                     <label className="formLabel" htmlFor="title">
                       Title:{' '}
                     </label>
@@ -191,7 +179,7 @@ class Ticket extends Component {
                     <button id="submit" type="submit">
                       Submit
                     </button>
-                  </form> */}
+                  </form>
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={this.handleClose} color="primary">
@@ -277,6 +265,15 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(removeUserFromTicketThunk(id));
     }
   };
+};
+const styles = {
+  cardContainer: {
+    margin: '3px 0',
+    padding: 3
+  },
+  title: {
+    margin: 0
+  }
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Ticket);

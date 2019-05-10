@@ -21,7 +21,6 @@ import CreateTicket from './CreateTicket';
 import { connect } from 'react-redux';
 
 const Column = ({ columns, tickets, id, activetab }) => {
-  console.log('COLUMN ID', id);
   const div = {
     minHeight: '50px'
   };

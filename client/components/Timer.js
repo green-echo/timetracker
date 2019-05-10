@@ -97,7 +97,7 @@ class Timer extends React.Component {
           ) : (
             <Button
               variant="contained"
-              disabled="true"
+              disabled
               size="small"
               onClick={this.startTimer}
             >

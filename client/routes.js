@@ -38,7 +38,10 @@ class Routes extends Component {
             <Route path="/projects/:id/adduser" component={AddUserToProject} />
             <Route path="/projects/:id" component={ProjectBoard} />
             <Route exact path="/timer" component={Timer} />
+<<<<<<< HEAD
             <Route exact path="/timesheet" component={TimeSheet} />
+=======
+>>>>>>> master
             <Route component={Projects} />
           </Switch>
         )}

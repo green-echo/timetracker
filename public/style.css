@@ -2,10 +2,20 @@
 }
 @media screen and (max-width: 767px) {
 }
+
+/*
+FONTS
+font-family: 'Barlow Condensed', sans-serif;
+font-family: 'Alegreya Sans', sans-serif;
+font-family: 'Open Sans', sans-serif;
+*/
+
 button:focus {
   outline: 0;
 }
-
+p {
+  font-family: 'Alegreya Sans', sans-serif;
+}
 .projectName {
   text-align: center;
 }
@@ -44,9 +54,10 @@ nav a {
   display: inline-block;
   margin: 1em;
 }
-
+form {
+  align-items: center;
+}
 form div {
-  margin: 1em;
   display: inline-block;
 }
 .button-wrapper {

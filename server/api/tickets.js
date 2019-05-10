@@ -126,6 +126,71 @@ router.put('/:id', async (req, res, next) => {
   }
 });
 
+router.put('/:id/reorder', async (req, res, next) => {
+  try {
+    const { result } = req.body;
+
+    const { destination, source, draggableId } = result;
+
+    console.log(source.droppableId, destination.droppableId, draggableId);
+
+    const ticket = await Ticket.findByPk(req.params.id);
+
+    if (source.droppableId === destination.droppableId) {
+      await ticket.insertSameColumn(source.index, destination.index);
+      await ticket.update({
+        order: destination.index
+      });
+
+      let tickets = {
+        [source.droppableId]: []
+      };
+
+      tickets[source.droppableId] = await Ticket.findAll({
+        where: {
+          projectId: ticket.projectId,
+          status: ticket.status
+        },
+        order: [['order', 'ASC']]
+      });
+      res.send(tickets);
+    } else {
+      await ticket.removeFromColumn();
+      await Ticket.insertDiffColumn(
+        destination.droppableId,
+        ticket.projectId,
+        destination.index
+      );
+      await ticket.update({
+        status: destination.droppableId,
+        order: destination.index
+      });
+
+      let statuses = [source.droppableId, destination.droppableId];
+
+      let tickets = {
+        [source.droppableId]: [],
+        [destination.droppableId]: []
+      };
+
+      for (let i = 0; i < statuses.length; i++) {
+        tickets[statuses[i]] = await Ticket.findAll({
+          where: {
+            projectId: ticket.projectId,
+            status: statuses[i]
+          },
+          order: [['order', 'ASC']]
+        });
+      }
+
+      console.log(tickets);
+      res.send(tickets);
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.delete('/:id', async (req, res, next) => {
   try {
     if (!req.isAuthenticated()) {
@@ -140,6 +205,8 @@ router.delete('/:id', async (req, res, next) => {
         if (!authorized) {
           res.sendStatus(403);
         } else {
+          await ticket.removeFromColumn();
+
           switch (ticket.status) {
             case 'to_do':
               const toDoArr = [];

@@ -4,10 +4,10 @@
 import * as ACTIONS from '../actions/action-types';
 
 const initialState = {
-  toDoTickets: [],
-  inProgressTickets: [],
-  inReviewTickets: [],
-  doneTickets: [],
+  to_do: [],
+  in_progress: [],
+  in_review: [],
+  done: [],
   ticket: {},
   allTickets: []
 };
@@ -17,14 +17,15 @@ export default function(state = initialState, action) {
   switch (action.type) {
     case ACTIONS.CREATE_TICKET:
       newState.allTickets.push(action.ticket);
-      newState.toDoTickets.push(action.ticket.id);
+      newState.to_do.push(action.ticket.id);
       return newState;
     case ACTIONS.GET_TICKETS:
       newState.allTickets = action.payload.tickets;
-      newState.toDoTickets = action.payload.toDo || [];
-      newState.inProgressTickets = action.payload.inProgress || [];
-      newState.inReviewTickets = action.payload.inReview || [];
-      newState.doneTickets = action.payload.done || [];
+      newState.to_do = action.payload.to_do;
+      newState.in_progress = action.payload.in_progress;
+      newState.in_review = action.payload.in_review;
+      newState.done = action.payload.done;
+      console.log(newState);
       return newState;
 
     case ACTIONS.UPDATE_TICKET:
@@ -43,49 +44,11 @@ export default function(state = initialState, action) {
         ticket => ticket.id !== action.ticket.id
       );
 
-      switch (action.ticket.status) {
-        case 'to_do':
-          newState.toDoTickets = newState.toDoTickets.filter(
-            id => id !== action.ticket.id
-          );
-          break;
-        case 'in_progress':
-          newState.inProgressTickets = newState.inProgressTickets.filter(
-            id => id !== action.ticket.id
-          );
-          break;
-        case 'in_review':
-          newState.inReviewTickets = newState.inReviewTickets.filter(
-            id => id !== action.ticket.id
-          );
-          break;
-        case 'done':
-          newState.doneTickets = newState.doneTickets.filter(
-            id => id !== action.ticket.id
-          );
-          break;
-        default:
-          break;
-      }
+      newState[action.ticket.status] = newState[action.ticket.status].filter(
+        ticket => ticket.id !== action.ticket.id
+      );
+
       console.log('newState:', newState);
-      return newState;
-    case ACTIONS.GET_TICKET_IDS:
-      switch (action.status) {
-        case 'to_do':
-          newState.toDoTickets = action.ids;
-          break;
-        case 'in_progress':
-          newState.inProgressTickets = action.ids;
-          break;
-        case 'in_review':
-          newState.inReviewTickets = action.ids;
-          break;
-        case 'done':
-          newState.doneTickets = action.ids;
-          break;
-        default:
-          break;
-      }
       return newState;
     default:
       return state;

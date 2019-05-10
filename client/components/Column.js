@@ -25,14 +25,16 @@ const Column = ({ columns, tickets, id, activetab }) => {
     minHeight: '50px'
   };
 
+  console.log(tickets);
+
   return (
     <Droppable droppableId={id} style={div}>
       {provided => (
         <Col className={activetab === id ? 'show' : 'hide'}>
           <DroppableContainer provided={provided} innerRef={provided.innerRef}>
             {columns[id].taskIds.map((ticketId, index) => {
-              const ticket = tickets[ticketId];
-              // console.log(ticket, ticketId);
+              const ticket = tickets[ticketId.id];
+              console.log(ticket, ticketId);
               return (
                 <Draggable
                   draggableId={ticket.id}

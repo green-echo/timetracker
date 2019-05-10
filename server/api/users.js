@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { User } = require('../db/models');
+const { User, UserTicket } = require('../db/models');
 module.exports = router;
 
 router.get('/', async (req, res, next) => {
@@ -11,6 +11,19 @@ router.get('/', async (req, res, next) => {
       attributes: ['id', 'email']
     });
     res.json(users);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/timesheet', async (req, res, next) => {
+  try {
+    const data = await UserTicket.findAll({
+      where: {
+        userId: req.user.id
+      }
+    });
+    res.json(data);
   } catch (err) {
     next(err);
   }

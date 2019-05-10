@@ -6,10 +6,11 @@ import { Login, Signup, UserHome, ProjectBoard } from './components';
 import { me } from './store';
 import CreateTicket from './components/CreateTicket';
 import CreateProject from './components/CreateProject';
+import TimeSheet from './components/TimeSheet';
 
 import Projects from './components/Projects';
 import AddUserToProject from './components/AddUserToProject';
-import Timer from './components/Timer'
+import Timer from './components/Timer';
 
 /**
  * COMPONENT
@@ -36,7 +37,8 @@ class Routes extends Component {
             <Route path="/projects/:id/newticket" component={CreateTicket} />
             <Route path="/projects/:id/adduser" component={AddUserToProject} />
             <Route path="/projects/:id" component={ProjectBoard} />
-            <Route exact parh="/timer" component={Timer}    />
+            <Route exact path="/timer" component={Timer} />
+            <Route exact path="/timesheet" component={TimeSheet} />
             <Route component={Projects} />
           </Switch>
         )}

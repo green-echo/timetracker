@@ -25,18 +25,11 @@ class Timer extends React.Component {
   async componentDidMount() {
     const id = this.props.ticket.id;
     const { data } = await axios.get(`/api/userTickets/${id}/open`);
-    // console.log('CURENTTICKET', currentTicket);
-    // if (data.start) {
-    // }
     if (data.start) {
       const startTime = new Date(data.start);
       const currTime = new Date();
       const diff = currTime.getTime() - startTime.getTime();
-      // var Seconds_from_T1_to_T2 = diff / 1000;
-      // var Seconds_Between_Dates = Math.abs(Seconds_from_T1_to_T2);
       const newDiff = this.millisToMinutesAndSeconds(diff);
-      console.log('DIFF', diff);
-      console.log('TIME BETWEEN', newDiff);
       this.setState({
         time: diff
       });
@@ -59,11 +52,10 @@ class Timer extends React.Component {
     );
     this.setState({ status: true });
     const id = this.props.ticket.id;
-    //console.log(this.state.time)
     await axios.post(`/api/userTickets/${id}`);
   }
   async stopTimer() {
-    this.setState({ isOn: false });
+    this.setState({ isOn: false, time: 0 });
     clearInterval(this.timer);
     const id = this.props.ticket.id;
     this.setState({ status: false });

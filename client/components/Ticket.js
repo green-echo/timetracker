@@ -33,6 +33,7 @@ class Ticket extends Component {
     this.state = {
       title: this.props.ticket.title,
       description: this.props.ticket.description,
+      changed: false,
       open: false,
       dropdownOpen: false,
       btnDropright: false,
@@ -80,6 +81,18 @@ class Ticket extends Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevProps.data.id !== this.props.data.id &&
+      this.props.ticket.id === this.props.data.id
+    ) {
+      this.setState({
+        title: this.props.data.title,
+        description: this.props.data.description
+      });
+    }
+  }
+
   async handleSubmit(event) {
     event.preventDefault();
     this.props.update(this.props.ticket.id, this.props.ticket.projectId, {
@@ -98,8 +111,8 @@ class Ticket extends Component {
   };
 
   render() {
-    const { provided, innerRef, ticket } = this.props;
-    // console.log(this.state.userEmail);
+    const { provided, innerRef, ticket, data } = this.props;
+
     return (
       <div
         {...provided.draggableProps}
@@ -242,9 +255,8 @@ class Ticket extends Component {
   }
 }
 const mapStateToProps = state => {
-  // console.log('mapping state to store', state.ticket)
   return {
-    data: state.ticket,
+    data: state.ticket.ticket,
     allUsers: state.project.users,
     project: state.project.project,
     user: state.user

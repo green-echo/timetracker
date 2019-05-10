@@ -34,6 +34,14 @@ export const getTicketIds = (ids, status) => ({
   status
 });
 
+
+export const addUserToTicket = userId => ({
+  type: ACTIONS.ADD_USER_TO_TICKET,
+  userId
+});
+
+
+
 export const getTicketIdsThunk = (id, status) => {
   return async dispatch => {
     try {
@@ -84,9 +92,9 @@ export const updateTicketThunk = (id, ticket) => {
   return async dispatch => {
     try {
       const { data } = await axios.put(`/api/tickets/${id}`, ticket);
-      console.log('updated ticket', data);
+      console.log('updated ticket', data);  
       dispatch(updateTicket(data));
-      history.push(`/projects/${3}`);
+    //  history.push(`/projects/${3}`);
     } catch (err) {
       console.log(err);
     }
@@ -100,7 +108,45 @@ export const removeTicketThunk = ticket => {
       await axios.delete(`/api/tickets/${ticket.id}`);
       dispatch(deleteTicket(ticket));
     } catch (err) {
+      console.log(err); 
+    }
+  };
+};
+
+
+
+
+export const addUserToTicketThunk = (ticketId, userId) => async dispatch => {
+  try {
+     await axios.put(`/api/tickets/${ticketId}/adduser`, {userId: userId});
+
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
+export const removeUserFromTicketThunk = (ticketId) => async dispatch => {
+  try {
+     await axios.put(`/api/tickets/${ticketId}/removeuser`);
+
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
+
+
+//get user email for specific ticket
+export const getUserEmailForTicketThunk = id => {
+  return async dispatch => {
+    try {
+    await axios.get(`/api/tickets/${id}/user`);
+    
+    } catch (err) {
       console.log(err);
     }
   };
 };
+

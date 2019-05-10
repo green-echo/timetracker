@@ -88,7 +88,7 @@ router.get('/:id/tickets', async (req, res, next) => {
           res.sendStatus(403);
         } else {
           const result = {};
-          result.tickets = await project.getTickets();
+          result.tickets = await project.getTickets( { include: User});
           result.toDo = await project.toDo;
           result.inProgress = await project.inProgress;
           result.inReview = await project.inReview;

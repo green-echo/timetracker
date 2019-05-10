@@ -25,6 +25,7 @@ export default function(state = initialState, action) {
       newState.in_progress = action.payload.in_progress.map(x => x.id);
       newState.in_review = action.payload.in_review.map(x => x.id);
       newState.done = action.payload.done.map(x => x.id);
+      newState.ticket = {};
       console.log(newState);
       return newState;
 
@@ -49,7 +50,7 @@ export default function(state = initialState, action) {
       newState[action.ticket.status] = newState[action.ticket.status].filter(
         id => id !== action.ticket.id
       );
-
+      newState.ticket = {};
       console.log('newState:', newState);
       return newState;
     default:

@@ -33,6 +33,7 @@ class Ticket extends Component {
     this.state = {
       title: this.props.ticket.title,
       description: this.props.ticket.description,
+      changed: false,
       open: false,
       dropdownOpen: false,
       btnDropright: false,
@@ -81,7 +82,16 @@ class Ticket extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('UPDATED');
+    if (
+      prevProps.data.id !== this.props.data.id &&
+      this.props.ticket.id === this.props.data.id
+    ) {
+      console.log('UPDATED');
+      this.setState({
+        title: this.props.data.title,
+        description: this.props.data.description
+      });
+    }
   }
 
   async handleSubmit(event) {
@@ -104,6 +114,10 @@ class Ticket extends Component {
   render() {
     const { provided, innerRef, ticket, data } = this.props;
     console.log(ticket, data);
+
+    console.log(this.state.changed);
+    const changedTicket = this.state.changed ? data : ticket;
+
     return (
       <div
         {...provided.draggableProps}

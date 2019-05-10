@@ -5,18 +5,40 @@ import ReactTable from 'react-table';
 import { CSVLink } from 'react-csv';
 import Axios from 'axios';
 
+const millisToMinutesAndSeconds = millis => {
+  var minutes = Math.floor(millis / 60000);
+  var seconds = ((millis % 60000) / 1000).toFixed(0);
+  return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+};
+
 const columns = [
   {
+    id: 'name',
+    Header: 'Project',
+    accessor: d => d.ticket.project.name
+  },
+  {
+    id: 'ticket',
     Header: 'Ticket',
-    accessor: 'ticketId' // String-based value accessors!
+    accessor: d => d.ticket.title
   },
   {
+    id: 'start',
     Header: 'Start',
-    accessor: 'start'
+    accessor: d => new Date(d.start).toString().slice(0, 21)
   },
   {
+    id: 'end',
     Header: 'End',
-    accessor: 'end'
+    accessor: d => new Date(d.end).toString().slice(0, 21)
+  },
+  {
+    id: 'duration',
+    Header: 'Duration',
+    accessor: d =>
+      millisToMinutesAndSeconds(
+        new Date(d.end).getTime() - new Date(d.start).getTime()
+      )
   }
 ];
 class TimeSheet extends React.Component {
@@ -33,26 +55,29 @@ class TimeSheet extends React.Component {
 
   async componentDidMount() {
     const { data } = await Axios.get(`/api/users/timesheet`);
-    console.log('DATA', data);
+    // console.log('DATA', data);
 
-    let updateData = { ...this.state.tableproperties };
-    updateData.allData = data;
-    this.setState({ updateData }, () => {
-      debugger;
-    });
+    let tableproperties = { ...this.state.tableproperties };
+    tableproperties.allData = data;
+    this.setState({ tableproperties });
+    // this.setState({ tableproperties }, () => {
+    //   debugger;
+    // });
   }
 
-  download(event) {
-    const currentRecords = this.reactTable.getResolvedState().sortedData;
+  async download(event) {
+    const currentRecords = await this.reactTable.getResolvedState().sortedData;
     var data_to_download = [];
     for (var index = 0; index < currentRecords.length; index++) {
       let record_to_download = {};
       for (var colIndex = 0; colIndex < columns.length; colIndex++) {
         record_to_download[columns[colIndex].Header] =
-          currentRecords[index][columns[colIndex].accessor];
+          currentRecords[index][columns[colIndex].id];
       }
+      console.log('SINGLE RECORD', record_to_download);
       data_to_download.push(record_to_download);
     }
+    console.log('DATATODOWNLOAD', data_to_download);
     this.setState({ dataToDownload: data_to_download }, () => {
       // click the CSVLink component to trigger the CSV download
       this.csvLink.link.click();

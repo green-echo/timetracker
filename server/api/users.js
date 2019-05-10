@@ -1,8 +1,10 @@
 const router = require('express').Router();
-const { User, UserTicket } = require('../db/models');
+const { User, UserTicket, Ticket, Project } = require('../db/models');
+const Sequelize = require('sequelize');
 module.exports = router;
 
 router.get('/', async (req, res, next) => {
+  res.json('403');
   try {
     const users = await User.findAll({
       // explicitly select only the id and email fields - even though
@@ -17,14 +19,22 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/timesheet', async (req, res, next) => {
-  try {
-    const data = await UserTicket.findAll({
-      where: {
-        userId: req.user.id
-      }
-    });
-    res.json(data);
-  } catch (err) {
-    next(err);
+  if (!req.isAuthenticated()) {
+    res.sendStatus(403);
+  } else {
+    try {
+      const data = await UserTicket.findAll({
+        where: {
+          userId: req.user.id,
+          end: {
+            [Sequelize.Op.ne]: null
+          }
+        },
+        include: [{ model: Ticket, include: [{ model: Project }] }]
+      });
+      res.json(data);
+    } catch (err) {
+      next(err);
+    }
   }
 });

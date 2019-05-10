@@ -109,16 +109,16 @@ class ProjectBoard extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log(prevProps.allTickets.length, this.props.allTickets.length);
+    // console.log(prevProps.allTickets.length, this.props.allTickets.length);
 
     if (prevProps.allTickets.length !== this.props.allTickets.length) {
-      console.log(
-        this.props.project.id,
-        this.props.to_do,
-        this.props.in_progress,
-        this.props.in_review,
-        this.props.done
-      );
+      // console.log(
+      //   this.props.project.id,
+      //   this.props.to_do,
+      //   this.props.in_progress,
+      //   this.props.in_review,
+      //   this.props.done
+      // );
       this.setState({
         columns: {
           to_do: {
@@ -141,6 +141,10 @@ class ProjectBoard extends React.Component {
         numTickets: this.props.allTickets.length,
         tickets: createTicketsObject(this.props.allTickets)
       });
+    }
+
+    if (prevProps.ticket.id !== this.props.ticket.id) {
+      console.log('HMMMM');
     }
     if (prevProps.match.params.id !== this.props.match.params.id) {
       this.props.getProject();
@@ -188,7 +192,7 @@ class ProjectBoard extends React.Component {
       newTaskIds.splice(destination.index, 0, draggableId);
 
       const newColumn = {
-        ...start,
+        id: source.droppableId,
         taskIds: newTaskIds
       };
       const newState = {
@@ -201,24 +205,26 @@ class ProjectBoard extends React.Component {
 
       console.log(newColumn);
 
-      this.props.update(newColumn, null);
+      this.props.update(newColumn, null, result);
 
       this.setState(newState);
       return;
     }
 
+    console.log('start', start, 'finish', finish);
+
     const startTaskIds = Array.from(start.taskIds);
 
     startTaskIds.splice(source.index, 1);
     const newStart = {
-      ...start,
+      id: source.droppableId,
       taskIds: startTaskIds
     };
 
     const finishTaskIds = Array.from(finish.taskIds);
     finishTaskIds.splice(destination.index, 0, draggableId);
     const newFinish = {
-      ...finish,
+      id: destination.droppableId,
       taskIds: finishTaskIds
     };
 
@@ -240,7 +246,7 @@ class ProjectBoard extends React.Component {
     this.setState(newState);
   };
   render() {
-    console.log(this.props);
+    console.log(this.props, this.state);
     return (
       <div>
         <Container className="project-board">
@@ -398,7 +404,8 @@ const mapStateToProps = state => {
     in_review: state.ticket.in_review,
     done: state.ticket.done,
     allTickets: state.ticket.allTickets,
-    allUsers: state.project.users
+    allUsers: state.project.users,
+    ticket: state.ticket.ticket
   };
 };
 

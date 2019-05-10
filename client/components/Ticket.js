@@ -29,8 +29,7 @@ class Ticket extends Component {
 
   async handleSubmit(event) {
     event.preventDefault();
-    // console.log('THIS PROPS!!!!!', this.props)
-    this.props.update(this.props.ticket.id, {
+    this.props.update(this.props.ticket.id, this.props.ticket.projectId, {
       title: this.state.title,
       description: this.state.description
     });
@@ -159,8 +158,8 @@ const mapDispatchToProps = dispatch => {
     remove: ticket => {
       dispatch(removeTicketThunk(ticket));
     },
-    update: (id, ticket) => {
-      dispatch(updateTicketThunk(id, ticket));
+    update: (id, projectId, ticket) => {
+      dispatch(updateTicketThunk(id, projectId, ticket));
     }
   };
 };

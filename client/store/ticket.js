@@ -21,10 +21,10 @@ export default function(state = initialState, action) {
       return newState;
     case ACTIONS.GET_TICKETS:
       newState.allTickets = action.payload.tickets;
-      newState.to_do = action.payload.to_do;
-      newState.in_progress = action.payload.in_progress;
-      newState.in_review = action.payload.in_review;
-      newState.done = action.payload.done;
+      newState.to_do = action.payload.to_do.map(x => x.id);
+      newState.in_progress = action.payload.in_progress.map(x => x.id);
+      newState.in_review = action.payload.in_review.map(x => x.id);
+      newState.done = action.payload.done.map(x => x.id);
       console.log(newState);
       return newState;
 
@@ -36,16 +36,18 @@ export default function(state = initialState, action) {
           return ticket;
         }
       });
+      newState.ticket = action.ticket;
       return newState;
 
     case ACTIONS.REMOVE_TICKET:
       console.log('TICKET:', action.ticket);
+      console.log(newState);
       newState.allTickets = newState.allTickets.filter(
         ticket => ticket.id !== action.ticket.id
       );
 
       newState[action.ticket.status] = newState[action.ticket.status].filter(
-        ticket => ticket.id !== action.ticket.id
+        id => id !== action.ticket.id
       );
 
       console.log('newState:', newState);

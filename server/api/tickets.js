@@ -142,18 +142,7 @@ router.put('/:id/reorder', async (req, res, next) => {
         order: destination.index
       });
 
-      let tickets = {
-        [source.droppableId]: []
-      };
-
-      tickets[source.droppableId] = await Ticket.findAll({
-        where: {
-          projectId: ticket.projectId,
-          status: ticket.status
-        },
-        order: [['order', 'ASC']]
-      });
-      res.send(tickets);
+      res.sendStatus(200);
     } else {
       await ticket.removeFromColumn();
       await Ticket.insertDiffColumn(
@@ -166,25 +155,7 @@ router.put('/:id/reorder', async (req, res, next) => {
         order: destination.index
       });
 
-      let statuses = [source.droppableId, destination.droppableId];
-
-      let tickets = {
-        [source.droppableId]: [],
-        [destination.droppableId]: []
-      };
-
-      for (let i = 0; i < statuses.length; i++) {
-        tickets[statuses[i]] = await Ticket.findAll({
-          where: {
-            projectId: ticket.projectId,
-            status: statuses[i]
-          },
-          order: [['order', 'ASC']]
-        });
-      }
-
-      console.log(tickets);
-      res.send(tickets);
+      res.sendStatus(200);
     }
   } catch (error) {
     next(error);

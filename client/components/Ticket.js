@@ -31,6 +31,7 @@ class Ticket extends Component {
     this.state = {
       title: this.props.ticket.title,
       description: this.props.ticket.description,
+      changed: false,
       open: false,
       dropdownOpen: false,
       btnDropright: false,
@@ -74,6 +75,18 @@ class Ticket extends Component {
     this.props.loadUsers(this.props.project.id);
     if (this.props.ticket.user) {
       this.setState({ userEmail: this.props.ticket.user.email });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevProps.data.id !== this.props.data.id &&
+      this.props.ticket.id === this.props.data.id
+    ) {
+      this.setState({
+        title: this.props.data.title,
+        description: this.props.data.description
+      });
     }
   }
 
@@ -233,9 +246,8 @@ class Ticket extends Component {
   }
 }
 const mapStateToProps = state => {
-  // console.log('mapping state to store', state.ticket)
   return {
-    data: state.ticket,
+    data: state.ticket.ticket,
     allUsers: state.project.users,
     project: state.project.project,
     user: state.user

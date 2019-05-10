@@ -6,6 +6,96 @@ export function createTicketsObject(tickets) {
   return obj;
 }
 
+export function handleDrag(result, state) {
+  const { destination, source, draggableId } = result;
+
+  if (!destination) {
+    return;
+  }
+
+  if (
+    destination.droppableId === source.droppableId &&
+    destination.index === source.index
+  ) {
+    return;
+  }
+
+  const start = state.columns[source.droppableId];
+  const finish = state.columns[destination.droppableId];
+
+  if (start === finish) {
+    const newTaskIds = Array.from(start.taskIds);
+    newTaskIds.splice(source.index, 1);
+    newTaskIds.splice(destination.index, 0, draggableId);
+
+    const newColumn = {
+      id: source.droppableId,
+      taskIds: newTaskIds
+    };
+    const newState = {
+      ...state,
+      columns: {
+        ...state.columns,
+        [newColumn.id]: newColumn
+      }
+    };
+
+    return newState;
+  }
+
+  const startTaskIds = Array.from(start.taskIds);
+
+  startTaskIds.splice(source.index, 1);
+  const newStart = {
+    id: source.droppableId,
+    taskIds: startTaskIds
+  };
+
+  const finishTaskIds = Array.from(finish.taskIds);
+  finishTaskIds.splice(destination.index, 0, draggableId);
+  const newFinish = {
+    id: destination.droppableId,
+    taskIds: finishTaskIds
+  };
+
+  const newState = {
+    ...state,
+    columns: {
+      ...state.columns,
+      [newStart.id]: newStart,
+      [newFinish.id]: newFinish
+    }
+  };
+
+  return newState;
+}
+
+export function generateNewState(props) {
+  const newState = {
+    columns: {
+      to_do: {
+        id: 1,
+        taskIds: props.to_do
+      },
+      in_progress: {
+        id: 2,
+        taskIds: props.in_progress
+      },
+      in_review: {
+        id: 3,
+        taskIds: props.in_review
+      },
+      done: {
+        id: 4,
+        taskIds: props.done
+      }
+    },
+    numTickets: props.allTickets.length,
+    tickets: createTicketsObject(props.allTickets)
+  };
+  return newState;
+}
+
 export function columnName(column) {
   switch (column.id) {
     case 1:

@@ -13,11 +13,8 @@ import {
   DropdownMenu,
   DropdownItem
 } from 'reactstrap';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import Ticket from './Ticket';
+import { DragDropContext } from 'react-beautiful-dnd';
 import { Link } from 'react-router-dom';
-import DroppableContainer from './DroppableContainer';
-import CreateTicket from './CreateTicket';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
@@ -29,8 +26,8 @@ import {
   addUserThunk,
   updateColumnsThunk
 } from '../actions/project';
-import { createTicketsObject, columnName } from '../utils';
-import { getTicketsThunk, getTicketIdsThunk } from '../actions/ticket';
+import { createTicketsObject, generateNewState, handleDrag } from '../utils';
+import { getTicketsThunk } from '../actions/ticket';
 import Column from './Column';
 
 const div = {
@@ -77,74 +74,23 @@ class ProjectBoard extends React.Component {
     this.props.loadUsers();
     this.props.loadProjectUser();
     this.props.loadTickets(projectId);
-    this.setState({
-      columns: {
-        to_do: {
-          id: 1,
-          taskIds: this.props.to_do
-        },
-        in_progress: {
-          id: 2,
-          taskIds: this.props.in_progress
-        },
-        in_review: {
-          id: 3,
-          taskIds: this.props.in_review
-        },
-        done: {
-          id: 4,
-          taskIds: this.props.done
-        }
-      },
-      numTickets: this.props.allTickets.length,
-      tickets: createTicketsObject(this.props.allTickets)
-    });
-    // this.props.update();
-    // await Promise.all(
-    //   this.props.loadTicketIds(id, 'to_do'),
-    //   this.props.loadTicketIds(id, 'in_progress'),
-    //   this.props.loadTicketIds(id, 'in_review'),
-    //   this.props.loadTicketIds(id, 'done')
-    // );
+    this.setState(generateNewState(this.props));
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // console.log(prevProps.allTickets.length, this.props.allTickets.length);
-
     if (prevProps.allTickets.length !== this.props.allTickets.length) {
-      // console.log(
-      //   this.props.project.id,
-      //   this.props.to_do,
-      //   this.props.in_progress,
-      //   this.props.in_review,
-      //   this.props.done
-      // );
-      this.setState({
-        columns: {
-          to_do: {
-            id: 1,
-            taskIds: this.props.to_do
-          },
-          in_progress: {
-            id: 2,
-            taskIds: this.props.in_progress
-          },
-          in_review: {
-            id: 3,
-            taskIds: this.props.in_review
-          },
-          done: {
-            id: 4,
-            taskIds: this.props.done
-          }
-        },
-        numTickets: this.props.allTickets.length,
-        tickets: createTicketsObject(this.props.allTickets)
-      });
+      this.setState(generateNewState(this.props));
     }
 
-    if (prevProps.ticket.id !== this.props.ticket.id) {
-      // console.log('HMMMM');
+    if (
+      prevProps.ticket.id !== this.props.ticket.id ||
+      ((prevProps.ticket.id === this.props.ticket.id &&
+        prevProps.ticket.title !== this.props.ticket.title) ||
+        prevProps.ticket.description !== this.props.ticket.description)
+    ) {
+      this.setState({
+        tickets: createTicketsObject(this.props.allTickets)
+      });
     }
     if (prevProps.match.params.id !== this.props.match.params.id) {
       this.props.getProject();
@@ -170,83 +116,13 @@ class ProjectBoard extends React.Component {
     }
   }
   onDragEnd = result => {
-    const { destination, source, draggableId } = result;
+    const newState = handleDrag(result, this.state);
 
-    if (!destination) {
-      return;
-    }
-
-    if (
-      destination.droppableId === source.droppableId &&
-      destination.index === source.index
-    ) {
-      return;
-    }
-
-    const start = this.state.columns[source.droppableId];
-    const finish = this.state.columns[destination.droppableId];
-
-    if (start === finish) {
-      const newTaskIds = Array.from(start.taskIds);
-      newTaskIds.splice(source.index, 1);
-      newTaskIds.splice(destination.index, 0, draggableId);
-
-      const newColumn = {
-        id: source.droppableId,
-        taskIds: newTaskIds
-      };
-      const newState = {
-        ...this.state,
-        columns: {
-          ...this.state.columns,
-          [newColumn.id]: newColumn
-        }
-      };
-
-      // console.log(newColumn);
-
-      this.props.update(newColumn, null, result);
-
-      this.setState(newState);
-      return;
-    }
-
-    // console.log('start', start, 'finish', finish);
-
-    const startTaskIds = Array.from(start.taskIds);
-
-    startTaskIds.splice(source.index, 1);
-    const newStart = {
-      id: source.droppableId,
-      taskIds: startTaskIds
-    };
-
-    const finishTaskIds = Array.from(finish.taskIds);
-    finishTaskIds.splice(destination.index, 0, draggableId);
-    const newFinish = {
-      id: destination.droppableId,
-      taskIds: finishTaskIds
-    };
-
-    const newState = {
-      ...this.state,
-      columns: {
-        ...this.state.columns,
-        [newStart.id]: newStart,
-        [newFinish.id]: newFinish
-      }
-    };
-
-    // console.log(newStart, newFinish);
-
-    // console.log(result);
-
-    this.props.update(newStart, newFinish, result);
+    this.props.reorder(result);
 
     this.setState(newState);
   };
   render() {
-    // console.log(this.props, this.state);
     return (
       <div>
         <Container className="project-board">
@@ -438,8 +314,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     loadTickets: () => {
       dispatch(getTicketsThunk(projectId));
     },
-    update: (col1, col2, result) => {
-      dispatch(updateColumnsThunk(col1, col2, result, projectId));
+    reorder: result => {
+      dispatch(updateColumnsThunk(result, projectId));
     }
   };
 };

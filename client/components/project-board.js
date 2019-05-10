@@ -144,7 +144,10 @@ class ProjectBoard extends React.Component {
     }
 
     if (prevProps.ticket.id !== this.props.ticket.id) {
-      console.log('HMMMM');
+      console.log('HMMM');
+      this.setState({
+        tickets: createTicketsObject(this.props.allTickets)
+      });
     }
     if (prevProps.match.params.id !== this.props.match.params.id) {
       this.props.getProject();

@@ -80,6 +80,10 @@ class Ticket extends Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    console.log('UPDATED');
+  }
+
   async handleSubmit(event) {
     event.preventDefault();
     this.props.update(this.props.ticket.id, this.props.ticket.projectId, {
@@ -98,8 +102,8 @@ class Ticket extends Component {
   };
 
   render() {
-    const { provided, innerRef, ticket } = this.props;
-    console.log(this.state.userEmail);
+    const { provided, innerRef, ticket, data } = this.props;
+    console.log(ticket, data);
     return (
       <div
         {...provided.draggableProps}
@@ -244,7 +248,7 @@ class Ticket extends Component {
 const mapStateToProps = state => {
   // console.log('mapping state to store', state.ticket)
   return {
-    data: state.ticket,
+    data: state.ticket.ticket,
     allUsers: state.project.users,
     project: state.project.project,
     user: state.user

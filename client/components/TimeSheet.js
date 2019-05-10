@@ -61,14 +61,15 @@ class TimeSheet extends React.Component {
     // this.setState({ tableproperties }, () => {
     //   debugger;
     // });
-  }
-
-  calcTotalTime = () => {
-    const total = this.state.tableproperties.allData.reduce(
-      (prev, curr) => prev + curr,
-      0
+    const totalTime = this.state.tableproperties.allData.reduce(
+      (prev, curr) =>
+        new Date(curr.end).getTime() - new Date(curr.start).getTime()
     );
-  };
+
+    this.setState({
+      totalTime
+    });
+  }
 
   columns = () => {
     return [
@@ -90,8 +91,7 @@ class TimeSheet extends React.Component {
       {
         id: 'end',
         Header: 'End',
-        accessor: d => new Date(d.end).toString().slice(0, 21),
-        Footer: 'Hello'
+        accessor: d => new Date(d.end).toString().slice(0, 21)
       },
       {
         id: 'duration',
@@ -100,7 +100,7 @@ class TimeSheet extends React.Component {
           millisConverted(
             new Date(d.end).getTime() - new Date(d.start).getTime()
           ),
-        footer: 'Total: ' + this.state.totalTime
+        Footer: millisConverted(this.state.totalTime * 1000)
       }
     ];
   };
@@ -124,10 +124,6 @@ class TimeSheet extends React.Component {
     });
   }
 
-  //   render() {
-  //     return <div>Hello</div>;
-  //   }
-
   render() {
     return (
       <div>
@@ -148,6 +144,7 @@ class TimeSheet extends React.Component {
             ref={r => (this.reactTable = r)}
             data={this.state.tableproperties.allData}
             columns={this.columns()}
+            defaultPageSize={10}
             filterable
             defaultFilterMethod={(filter, row) =>
               String(row[filter.id])

@@ -93,6 +93,7 @@ class ProjectBoard extends React.Component {
       });
     }
     if (prevProps.match.params.id !== this.props.match.params.id) {
+      console.log('CHANGING, CAN MAYBE SOCKET.JOIN AND SOCKET.LEAVE HERE ');
       this.props.getProject();
       this.props.loadTickets();
     }

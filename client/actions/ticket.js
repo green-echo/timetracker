@@ -33,6 +33,11 @@ export const getTicketIds = (ids, status) => ({
   status
 });
 
+export const addUserToTicket = userId => ({
+  type: ACTIONS.ADD_USER_TO_TICKET,
+  userId
+});
+
 export const getTicketIdsThunk = (id, status) => {
   return async dispatch => {
     try {
@@ -99,6 +104,33 @@ export const removeTicketThunk = ticket => {
     try {
       await axios.delete(`/api/tickets/${ticket.id}`);
       dispatch(deleteTicket(ticket));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+export const addUserToTicketThunk = (ticketId, userId) => async dispatch => {
+  try {
+    await axios.put(`/api/tickets/${ticketId}/adduser`, { userId: userId });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const removeUserFromTicketThunk = ticketId => async dispatch => {
+  try {
+    await axios.put(`/api/tickets/${ticketId}/removeuser`);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+//get user email for specific ticket
+export const getUserEmailForTicketThunk = id => {
+  return async dispatch => {
+    try {
+      await axios.get(`/api/tickets/${id}/user`);
     } catch (err) {
       console.log(err);
     }

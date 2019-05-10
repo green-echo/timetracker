@@ -138,7 +138,7 @@ router.get('/:id/tickets', async (req, res, next) => {
 
           console.log(result.to_do);
 
-          result.tickets = await project.getTickets();
+          result.tickets = await project.getTickets({ include: User });
           res.json(result);
         }
       }

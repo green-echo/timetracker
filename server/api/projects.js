@@ -361,3 +361,27 @@ router.put('/:id', async (req, res, next) => {
     next(error);
   }
 });
+
+// getting all the tickets for a specific user on a specific project
+// router.get('/:id/userTickets', async (req, res, next) => {
+//   try {
+//     if (!req.isAuthenticated()) {
+//       res.sendStatus(403);
+//     } else {
+//       const project = await Project.findByPk(Number(req.params.id));
+//       if (!project) {
+//         next();
+//       } else {
+//         const authorized = await project.hasUser(req.user);
+//         if (!authorized) {
+//           res.sendStatus(403);
+//         } else {
+//           const users = await project.getUsers();
+//           res.json(users);
+//         }
+//       }
+//     }
+//   } catch (error) {
+//     next(error);
+//   }
+// });

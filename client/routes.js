@@ -9,7 +9,7 @@ import CreateProject from './components/CreateProject';
 
 import Projects from './components/Projects';
 import AddUserToProject from './components/AddUserToProject';
-import Timer from './components/Timer';
+import userTimeTable from './components/userTimeTable';
 
 /**
  * COMPONENT
@@ -32,10 +32,12 @@ class Routes extends Component {
             {/* Routes placed here are only available after logging in */}
             <Route exact path="/newproject" component={CreateProject} />
             <Route path="/home" component={UserHome} />
+            <Route path="/projects/:id/userTickets" component={userTimeTable} />
             <Route exact path="/projects" component={Projects} />
             <Route path="/projects/:id/newticket" component={CreateTicket} />
             <Route path="/projects/:id/adduser" component={AddUserToProject} />
             <Route path="/projects/:id" component={ProjectBoard} />
+
             <Route component={Projects} />
           </Switch>
         )}

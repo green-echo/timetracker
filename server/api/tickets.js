@@ -9,7 +9,7 @@ router.get('/', async (req, res, next) => {
     if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
-      const allTickets = await Ticket.findAll( );
+      const allTickets = await Ticket.findAll();
       res.json(allTickets);
     }
   } catch (error) {
@@ -22,7 +22,7 @@ router.get('/:id', async (req, res, next) => {
     if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
-      const ticket = await Ticket.findByPk(Number(req.params.id),);
+      const ticket = await Ticket.findByPk(Number(req.params.id));
       const project = await Project.findByPk(ticket.projectId);
 
       if (!ticket || !project) {
@@ -69,7 +69,7 @@ router.get('/:id/user', async (req, res, next) => {
   }
 });
 //getting user for the ticket
-router.get('/:id/user', async (req, res, next) => { 
+router.get('/:id/user', async (req, res, next) => {
   try {
     if (!req.isAuthenticated()) {
       res.sendStatus(403);
@@ -83,9 +83,8 @@ router.get('/:id/user', async (req, res, next) => {
         if (!authorized) {
           res.sendStatus(403);
         } else {
-          const user =  ticket.findByPk((Number(req.params.id)))
-            res.json(user);
-          
+          const user = ticket.findByPk(Number(req.params.id));
+          res.json(user);
         }
       }
     }
@@ -151,6 +150,42 @@ router.put('/:id', async (req, res, next) => {
   }
 });
 
+router.put('/:id/reorder', async (req, res, next) => {
+  try {
+    const { result } = req.body;
+
+    const { destination, source, draggableId } = result;
+
+    console.log(source.droppableId, destination.droppableId, draggableId);
+
+    const ticket = await Ticket.findByPk(req.params.id);
+
+    if (source.droppableId === destination.droppableId) {
+      await ticket.insertSameColumn(source.index, destination.index);
+      await ticket.update({
+        order: destination.index
+      });
+
+      res.sendStatus(200);
+    } else {
+      await ticket.removeFromColumn();
+      await Ticket.insertDiffColumn(
+        destination.droppableId,
+        ticket.projectId,
+        destination.index
+      );
+      await ticket.update({
+        status: destination.droppableId,
+        order: destination.index
+      });
+
+      res.sendStatus(200);
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
 // add a user to a specific ticket
 router.put('/:id/adduser', async (req, res, next) => {
   try {
@@ -167,7 +202,6 @@ router.put('/:id/adduser', async (req, res, next) => {
   }
 });
 
-
 // remove  user from specific ticket
 router.put('/:id/removeuser', async (req, res, next) => {
   try {
@@ -175,16 +209,13 @@ router.put('/:id/removeuser', async (req, res, next) => {
       res.sendStatus(403);
     } else {
       const ticket = await Ticket.findByPk(req.params.id);
-      let result = await ticket.update({ userId: null});
+      let result = await ticket.update({ userId: null });
       res.json(result);
     }
   } catch (error) {
     next(error);
   }
 });
-
-
-
 
 router.delete('/:id', async (req, res, next) => {
   try {
@@ -200,6 +231,8 @@ router.delete('/:id', async (req, res, next) => {
         if (!authorized) {
           res.sendStatus(403);
         } else {
+          await ticket.removeFromColumn();
+
           switch (ticket.status) {
             case 'to_do':
               const toDoArr = [];

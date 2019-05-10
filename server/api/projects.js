@@ -55,10 +55,15 @@ router.post('/:id', async (req, res, next) => {
         if (!authorized) {
           res.sendStatus(403);
         } else {
+          const maxOrder = await Ticket.maxOrder('to_do', project.id);
+
+          const order = maxOrder[0].max + 1;
+
           const newTicket = await Ticket.create({
             title,
             description,
-            points
+            points,
+            order
           });
 
           await newTicket.setProject(project);
@@ -74,6 +79,34 @@ router.post('/:id', async (req, res, next) => {
   }
 });
 
+// router.get('/:id/tickets', async (req, res, next) => {
+//   try {
+//     if (!req.isAuthenticated()) {
+//       res.sendStatus(403);
+//     } else {
+//       const project = await Project.findByPk(Number(req.params.id));
+//       if (!project) {
+//         next();
+//       } else {
+//         const authorized = await project.hasUser(req.user);
+//         if (!authorized) {
+//           res.sendStatus(403);
+//         } else {
+//           const result = {};
+//           result.tickets = await project.getTickets();
+//           result.toDo = await project.toDo;
+//           result.inProgress = await project.inProgress;
+//           result.inReview = await project.inReview;
+//           result.done = await project.done;
+//           res.json(result);
+//         }
+//       }
+//     }
+//   } catch (error) {
+//     next(error);
+//   }
+// });
+
 router.get('/:id/tickets', async (req, res, next) => {
   try {
     if (!req.isAuthenticated()) {
@@ -87,12 +120,25 @@ router.get('/:id/tickets', async (req, res, next) => {
         if (!authorized) {
           res.sendStatus(403);
         } else {
+          const statuses = ['to_do', 'in_progress', 'in_review', 'done'];
+
           const result = {};
-          result.tickets = await project.getTickets( { include: User});
-          result.toDo = await project.toDo;
-          result.inProgress = await project.inProgress;
-          result.inReview = await project.inReview;
-          result.done = await project.done;
+
+          for (let i = 0; i < statuses.length; i++) {
+            result[statuses[i]] = await Ticket.findAll({
+              where: {
+                projectId: req.params.id,
+                status: statuses[i]
+              },
+              order: [['order', 'ASC']],
+              attributes: ['id'],
+              raw: true
+            });
+          }
+
+          console.log(result.to_do);
+
+          result.tickets = await project.getTickets({ include: User });
           res.json(result);
         }
       }

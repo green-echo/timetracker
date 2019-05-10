@@ -31,7 +31,7 @@ export const addUser = userId => ({
   userId
 });
 
-export const updateColumnsThunk = (col1, col2, result, projectId) => {
+export const updateColumnsThunk = (result, projectId) => {
   return async dispatch => {
     try {
       const { data } = await axios.put(

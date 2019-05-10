@@ -46,7 +46,6 @@ class AddUserToProject extends Component {
   }
 
   render() {
-    // console.log('PROJECTID', this.state.projectId);
     return (
       <form onSubmit={this.handleSubmit}>
         <label className="formLabel" htmlFor="email">
@@ -68,7 +67,6 @@ class AddUserToProject extends Component {
 }
 
 // const mapStateToProps = state => {
-//   // console.log('mapping state to store', state.selectedCampus)
 //   return { data: state.ticket };
 // };
 

@@ -25,7 +25,7 @@ export default function(state = initialState, action) {
       newState.in_progress = action.payload.in_progress.map(x => x.id);
       newState.in_review = action.payload.in_review.map(x => x.id);
       newState.done = action.payload.done.map(x => x.id);
-      console.log(newState);
+      newState.ticket = {};
       return newState;
 
     case ACTIONS.UPDATE_TICKET:
@@ -40,8 +40,6 @@ export default function(state = initialState, action) {
       return newState;
 
     case ACTIONS.REMOVE_TICKET:
-      console.log('TICKET:', action.ticket);
-      console.log(newState);
       newState.allTickets = newState.allTickets.filter(
         ticket => ticket.id !== action.ticket.id
       );
@@ -49,8 +47,7 @@ export default function(state = initialState, action) {
       newState[action.ticket.status] = newState[action.ticket.status].filter(
         id => id !== action.ticket.id
       );
-
-      console.log('newState:', newState);
+      newState.ticket = {};
       return newState;
     default:
       return state;

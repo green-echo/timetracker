@@ -35,7 +35,7 @@ class Timer extends React.Component {
       });
       this.startTimer();
     }
-    setTimeout(console.log(this.state), 1000);
+    // setTimeout(console.log(this.state), 1000);
   }
 
   async startTimer() {
@@ -63,7 +63,6 @@ class Timer extends React.Component {
   }
 
   render() {
-    // console.log('ticket', this.props.ticket)
     return (
       <div id="timer">
         <div>{this.millisToMinutesAndSeconds(this.state.time)}</div>
@@ -77,24 +76,24 @@ class Timer extends React.Component {
             >
               stop
             </Button>
+          ) : this.props.currentUser === this.props.ticket.userId ? (
+            <Button
+              variant="contained"
+              color="secondary"
+              size="small"
+              onClick={this.startTimer}
+            >
+              start
+            </Button>
           ) : (
-
-this.props.currentUser === this.props.ticket.userId ?
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        size="small"
-                        onClick={this.startTimer}
-                      >
-                        start
-                      </Button> : <Button
-                        variant="contained"
-                        disabled="true"
-                        size="small"
-                        onClick={this.startTimer}
-                      >
-                        start
-                      </Button>
+            <Button
+              variant="contained"
+              disabled
+              size="small"
+              onClick={this.startTimer}
+            >
+              start
+            </Button>
           )}
         </div>
       </div>

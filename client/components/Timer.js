@@ -35,8 +35,8 @@ class Timer extends React.Component {
       // var Seconds_from_T1_to_T2 = diff / 1000;
       // var Seconds_Between_Dates = Math.abs(Seconds_from_T1_to_T2);
       const newDiff = this.millisToMinutesAndSeconds(diff);
-      console.log('DIFF', diff);
-      console.log('TIME BETWEEN', newDiff);
+      // console.log('DIFF', diff);
+      // console.log('TIME BETWEEN', newDiff);
       this.setState({
         time: diff
       });
@@ -85,24 +85,24 @@ class Timer extends React.Component {
             >
               stop
             </Button>
+          ) : this.props.currentUser === this.props.ticket.userId ? (
+            <Button
+              variant="contained"
+              color="secondary"
+              size="small"
+              onClick={this.startTimer}
+            >
+              start
+            </Button>
           ) : (
-
-this.props.currentUser === this.props.ticket.userId ?
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        size="small"
-                        onClick={this.startTimer}
-                      >
-                        start
-                      </Button> : <Button
-                        variant="contained"
-                        disabled="true"
-                        size="small"
-                        onClick={this.startTimer}
-                      >
-                        start
-                      </Button>
+            <Button
+              variant="contained"
+              disabled
+              size="small"
+              onClick={this.startTimer}
+            >
+              start
+            </Button>
           )}
         </div>
       </div>

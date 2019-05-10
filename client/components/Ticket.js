@@ -99,7 +99,7 @@ class Ticket extends Component {
 
   render() {
     const { provided, innerRef, ticket } = this.props;
-    console.log(this.state.userEmail);
+    // console.log(this.state.userEmail);
     return (
       <div
         {...provided.draggableProps}

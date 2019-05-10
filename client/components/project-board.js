@@ -63,7 +63,7 @@ class ProjectBoard extends React.Component {
       btnDropright: false,
       numTickets: 0,
       tickets: {},
-      activeTab: '1'
+      activeTab: 'to_do'
     };
     this.toggle = this.toggle.bind(this);
     this.userToggle = this.userToggle.bind(this);
@@ -144,7 +144,7 @@ class ProjectBoard extends React.Component {
     }
 
     if (prevProps.ticket.id !== this.props.ticket.id) {
-      console.log('HMMMM');
+      // console.log('HMMMM');
     }
     if (prevProps.match.params.id !== this.props.match.params.id) {
       this.props.getProject();
@@ -203,7 +203,7 @@ class ProjectBoard extends React.Component {
         }
       };
 
-      console.log(newColumn);
+      // console.log(newColumn);
 
       this.props.update(newColumn, null, result);
 
@@ -211,7 +211,7 @@ class ProjectBoard extends React.Component {
       return;
     }
 
-    console.log('start', start, 'finish', finish);
+    // console.log('start', start, 'finish', finish);
 
     const startTaskIds = Array.from(start.taskIds);
 
@@ -237,16 +237,16 @@ class ProjectBoard extends React.Component {
       }
     };
 
-    console.log(newStart, newFinish);
+    // console.log(newStart, newFinish);
 
-    console.log(result);
+    // console.log(result);
 
     this.props.update(newStart, newFinish, result);
 
     this.setState(newState);
   };
   render() {
-    console.log(this.props, this.state);
+    // console.log(this.props, this.state);
     return (
       <div>
         <Container className="project-board">
@@ -316,34 +316,42 @@ class ProjectBoard extends React.Component {
             </Row>
             <Row className="board-header">
               <Col
-                className={classnames({ active: this.state.activeTab === '1' })}
+                className={classnames({
+                  active: this.state.activeTab === 'to_do'
+                })}
                 onClick={() => {
-                  this.toggleTab('1');
+                  this.toggleTab('to_do');
                 }}
               >
                 To Do <span> ({this.props.to_do.length})</span>
               </Col>
               <Col
-                className={classnames({ active: this.state.activeTab === '2' })}
+                className={classnames({
+                  active: this.state.activeTab === 'in_progress'
+                })}
                 onClick={() => {
-                  this.toggleTab('2');
+                  this.toggleTab('in_progress');
                 }}
               >
                 In Progress
                 <span> ({this.props.in_progress.length})</span>
               </Col>
               <Col
-                className={classnames({ active: this.state.activeTab === '3' })}
+                className={classnames({
+                  active: this.state.activeTab === 'in_review'
+                })}
                 onClick={() => {
-                  this.toggleTab('3');
+                  this.toggleTab('in_review');
                 }}
               >
                 In Review <span> ({this.props.in_review.length})</span>
               </Col>
               <Col
-                className={classnames({ active: this.state.activeTab === '4' })}
+                className={classnames({
+                  active: this.state.activeTab === 'done'
+                })}
                 onClick={() => {
-                  this.toggleTab('4');
+                  this.toggleTab('done');
                 }}
               >
                 Done <span> ({this.props.done.length})</span>

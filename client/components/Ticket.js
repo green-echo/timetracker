@@ -5,6 +5,9 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import UpdateForm from './UpdateForm';
+import TextField from '@material-ui/core/TextField';
+import { withStyles } from '@material-ui/core/styles';
 import {
   removeTicketThunk,
   updateTicketThunk,
@@ -17,8 +20,6 @@ import {
   Card,
   CardText,
   CardBody,
-  CardTitle,
-  CardSubtitle,
   ButtonDropdown,
   DropdownToggle,
   DropdownMenu,
@@ -26,7 +27,15 @@ import {
 } from 'reactstrap';
 import { getUsersThunk } from '../actions/project';
 import { runInThisContext } from 'vm';
-
+const styles = {
+  cardContainer: {
+    margin: '3px 0',
+    padding: 3
+  },
+  title: {
+    margin: 0
+  }
+};
 class Ticket extends Component {
   constructor(props) {
     super(props);
@@ -37,8 +46,7 @@ class Ticket extends Component {
       dropdownOpen: false,
       btnDropright: false,
       userDropdownOpen: false,
-      userEmail: 'select user' //this.props.ticket.user.email
-      //  projectId: this.props.project.id
+      userEmail: 'select user'
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -99,7 +107,6 @@ class Ticket extends Component {
 
   render() {
     const { provided, innerRef, ticket } = this.props;
-    // console.log(this.state.userEmail);
     return (
       <div
         {...provided.draggableProps}
@@ -108,38 +115,50 @@ class Ticket extends Component {
       >
         <Card style={styles.cardContainer}>
           <CardBody style={styles.cardContainer}>
-            <CardText>
-              {' '}
-              <b>Title: </b>
+            <div className="ticketTitle-button-wrapper">
               {ticket.title}
-            </CardText>
-            <CardText>
-              {' '}
-              <b>Description: </b>
-              {ticket.description}{' '}
-            </CardText>
-
-            <CardText>
-              {' '}
-              <b>Points: </b>
-              {ticket.points}{' '}
-            </CardText>
-            <CardText>
-              {/* {' '}
-              {ticket.userId && (
-                <div>Assigned To: {ticket.currentUserEmail}</div>
-              )}{' '} */}
-            </CardText>
-
-            <div className="button-wrapper">
-              <Button
-                variant="contained"
-                size="small"
-                onClick={this.handleClickOpen}
+              <ButtonDropdown
+                isOpen={this.state.dropdownOpen}
+                toggle={this.toggle}
               >
-                Modify
-              </Button>
-
+                <DropdownToggle
+                  outline
+                  color="secondary"
+                  size="sm"
+                  className="custom-lineheight"
+                >
+                  <i className="fa fa-ellipsis-h" />
+                </DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem divider />
+                  <DropdownItem onClick={this.handleClickOpen}>
+                    Modify
+                  </DropdownItem>
+                  <DropdownItem
+                    onClick={() => {
+                      if (
+                        window.confirm(
+                          'Are you sure you want to delete this ticket?'
+                        )
+                      )
+                        this.props.remove(ticket);
+                    }}
+                  >
+                    Remove
+                  </DropdownItem>
+                </DropdownMenu>
+              </ButtonDropdown>
+            </div>
+            <hr />
+            <CardText>
+              <b>Description: </b>
+              {ticket.description}
+            </CardText>
+            <CardText>
+              <b>Points: </b>
+              {ticket.points}
+            </CardText>
+            <div className="user-timer-wrapper">
               <Dialog
                 open={this.state.open}
                 onClose={this.handleClose}
@@ -147,7 +166,8 @@ class Ticket extends Component {
               >
                 <DialogTitle id="form-dialog-title">Update Ticket</DialogTitle>
                 <DialogContent>
-                  <form onSubmit={this.handleSubmit}>
+                  <UpdateForm handleSubmit={this.handleSubmit} />
+                  {/* <form onSubmit={this.handleSubmit}>
                     <label className="formLabel" htmlFor="title">
                       Title:{' '}
                     </label>
@@ -171,7 +191,7 @@ class Ticket extends Component {
                     <button id="submit" type="submit">
                       Submit
                     </button>
-                  </form>
+                  </form> */}
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={this.handleClose} color="primary">
@@ -179,64 +199,47 @@ class Ticket extends Component {
                   </Button>
                 </DialogActions>
               </Dialog>
-
-              <Button
-                variant="contained"
-                size="small"
-                onClick={() => {
-                  if (
-                    window.confirm(
-                      'Are you sure you want to delete this ticket?'
-                    )
-                  )
-                    this.props.remove(ticket);
-                }}
-              >
-                {' '}
-                Remove{' '}
-              </Button>
+              <div className="assign-user">
+                Assigned To:
+                <ButtonDropdown
+                  isOpen={this.state.userDropdownOpen}
+                  toggle={this.userToggle}
+                >
+                  <DropdownToggle outline caret size="sm">
+                    {this.state.userEmail}
+                  </DropdownToggle>
+                  <DropdownMenu persist>
+                    <DropdownItem header>Select User</DropdownItem>
+                    <DropdownItem divider />
+                    {this.props.allUsers.map(user => {
+                      return (
+                        <DropdownItem
+                          onClick={() => {
+                            this.props.addUserToTix(ticket.id, user.id);
+                            this.select(event);
+                          }}
+                          key={user.id}
+                        >
+                          {user.email}
+                        </DropdownItem>
+                      );
+                    })}
+                    <DropdownItem
+                      onClick={() => {
+                        this.props.removeUserfromTix(ticket.id);
+                        this.setState({ userEmail: 'select user' });
+                      }}
+                    >
+                      {' '}
+                      Unassign
+                    </DropdownItem>
+                  </DropdownMenu>
+                </ButtonDropdown>
+              </div>
               <Timer ticket={ticket} currentUser={this.props.user.id} />
             </div>
           </CardBody>
         </Card>
-
-        <div>
-          Assigned To:
-          <ButtonDropdown
-            isOpen={this.state.userDropdownOpen}
-            toggle={this.userToggle}
-          >
-            <DropdownToggle caret size="sm">
-              {this.state.userEmail}
-            </DropdownToggle>
-            <DropdownMenu persist>
-              <DropdownItem header>Select User</DropdownItem>
-              <DropdownItem divider />
-              {this.props.allUsers.map(user => {
-                return (
-                  <DropdownItem
-                    onClick={() => {
-                      this.props.addUserToTix(ticket.id, user.id);
-                      this.select(event);
-                    }}
-                    key={user.id}
-                  >
-                    {user.email}
-                  </DropdownItem>
-                );
-              })}
-              <DropdownItem
-                onClick={() => {
-                  this.props.removeUserfromTix(ticket.id);
-                  this.setState({ userEmail: 'select user' });
-                }}
-              >
-                {' '}
-                Unassign
-              </DropdownItem>
-            </DropdownMenu>
-          </ButtonDropdown>
-        </div>
       </div>
     );
   }
@@ -274,15 +277,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(removeUserFromTicketThunk(id));
     }
   };
-};
-const styles = {
-  cardContainer: {
-    margin: '3px 0',
-    padding: 3
-  },
-  title: {
-    margin: 0
-  }
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Ticket);

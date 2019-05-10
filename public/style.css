@@ -1,6 +1,6 @@
 @media (max-width: 480px) {
 }
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 768px) {
 }
 
 /*
@@ -10,8 +10,21 @@ font-family: 'Alegreya Sans', sans-serif;
 font-family: 'Open Sans', sans-serif;
 */
 
+.ticketTitle-button-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.btn-group > .btn-group:not(:last-child) > .btn,
+.btn-group > .btn:not(:last-child):not(.dropdown-toggle) {
+  border-radius: 0.2rem;
+}
+button.custom-lineheight.btn.btn-outline-secondary.btn-sm {
+  line-height: 0.5;
+}
 button:focus {
   outline: 0;
+  outline: none;
 }
 p {
   font-family: 'Alegreya Sans', sans-serif;
@@ -60,10 +73,17 @@ form {
 form div {
   display: inline-block;
 }
-.button-wrapper {
+.assign-user {
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.user-timer-wrapper {
+  display: flex;
   justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
 }
 /* project board desktop styles */
 @media screen and (min-width: 768px) {
@@ -71,13 +91,13 @@ form div {
     min-height: 300px;
   }
   .board-header.row .col {
-    border: 2px solid #c9c7c7;
+    border: 2px solid #d7dde8;
     padding: 8px 5px;
     margin: 2px;
   }
   .board-container.row .col {
     border: 2px solid white;
-    background-color: #c9c7c7;
+    background-color: #d7dde8;
     display: block;
   }
   .data-react-beautiful-dnd-droppable {
@@ -97,10 +117,12 @@ form div {
 #submit {
   margin-top: 5px;
 }
-
+.card {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px;
+}
 p.card-text {
   margin: 0;
-  font-family: Helvetica;
   font-size: 14px;
   line-height: 1.5em;
 }
@@ -114,5 +136,8 @@ div.card-title {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: flex-start;
+}
+.assign-user > .btn-group button {
+  margin: 0;
 }

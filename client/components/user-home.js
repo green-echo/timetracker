@@ -24,8 +24,9 @@ class UserHome extends Component {
             {this.props.projects.map(project => {
               return (
                 <Link key={project.id} to={`/projects/${project.id}`}>
-                  {' '}
-                  <p>{project.name}</p>{' '}
+                  <p>
+                    {project.name} <i class="fa fa-caret-right" />
+                  </p>
                 </Link>
               );
             })}

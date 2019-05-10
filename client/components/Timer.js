@@ -22,6 +22,29 @@ class Timer extends React.Component {
     return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
   }
 
+  async componentDidMount() {
+    const id = this.props.ticket.id;
+    const { data } = await axios.get(`/api/userTickets/${id}/open`);
+    // console.log('CURENTTICKET', currentTicket);
+    // if (data.start) {
+    // }
+    if (data.start) {
+      const startTime = new Date(data.start);
+      const currTime = new Date();
+      const diff = currTime.getTime() - startTime.getTime();
+      // var Seconds_from_T1_to_T2 = diff / 1000;
+      // var Seconds_Between_Dates = Math.abs(Seconds_from_T1_to_T2);
+      const newDiff = this.millisToMinutesAndSeconds(diff);
+      console.log('DIFF', diff);
+      console.log('TIME BETWEEN', newDiff);
+      this.setState({
+        time: diff
+      });
+      this.startTimer();
+    }
+    setTimeout(console.log(this.state), 1000);
+  }
+
   async startTimer() {
     this.setState({
       time: this.state.time,

@@ -9,7 +9,18 @@ class UserTimeTable extends React.Component {
     this.props.loadProjects();
   }
   render() {
-    return <div>User time table</div>;
+    return (
+      <div>
+        {this.props.projects.map(project => {
+          return (
+            <div key={project.id}>
+              <div> {project.name}</div>
+              <div> {project.totalTime}</div>
+            </div>
+          );
+        })}
+      </div>
+    );
   }
 }
 const mapState = state => {

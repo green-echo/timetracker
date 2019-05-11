@@ -17,6 +17,29 @@ router.get('/all', async (req, res, next) => {
   }
 });
 
+/* Get all of the tickets that belong to a specific user, include the project route */
+router.get('/user/tickets', async (req, res, next) => {
+  let userId = Number(req.user.id);
+  try {
+    if (!req.isAuthenticated()) {
+      res.sendStatus(403);
+    } else {
+      const user = await User.findByPk(userId);
+      const tickets = await Ticket.findAll({
+        where: {
+          userId: user.id
+        },
+        include: [{ model: Project }]
+      });
+
+      console.log('TICKETS', tickets);
+      res.json(tickets);
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get('/:id', async (req, res, next) => {
   try {
     if (!req.isAuthenticated()) {
@@ -193,6 +216,7 @@ router.get('/:id/tickets/:status', async (req, res, next) => {
     next(error);
   }
 });
+
 /* This gets all the projects that belongs to a user */
 router.get('/', async (req, res, next) => {
   try {
@@ -361,27 +385,3 @@ router.put('/:id', async (req, res, next) => {
     next(error);
   }
 });
-
-// getting all the tickets for a specific user on a specific project
-// router.get('/:id/userTickets', async (req, res, next) => {
-//   try {
-//     if (!req.isAuthenticated()) {
-//       res.sendStatus(403);
-//     } else {
-//       const project = await Project.findByPk(Number(req.params.id));
-//       if (!project) {
-//         next();
-//       } else {
-//         const authorized = await project.hasUser(req.user);
-//         if (!authorized) {
-//           res.sendStatus(403);
-//         } else {
-//           const users = await project.getUsers();
-//           res.json(users);
-//         }
-//       }
-//     }
-//   } catch (error) {
-//     next(error);
-//   }
-// });

@@ -10,7 +10,7 @@ export default function(state = initialState, action) {
   const newState = { ...state };
   switch (action.type) {
     case ACTIONS.CREATE_PROJECT:
-      newState.projects = newState.projects.concat(action.project);
+      newState.projects = newState.projects.concat([action.project]);
       return newState;
     case ACTIONS.GET_PROJECTS:
       return { ...state, projects: action.projects };

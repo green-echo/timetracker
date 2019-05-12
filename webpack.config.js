@@ -27,6 +27,6 @@ module.exports = {
         loader: 'babel-loader'
       }
     ]
-  }
-  // plugins: [new LiveReloadPlugin()]
+  },
+  plugins: [new LiveReloadPlugin()]
 };

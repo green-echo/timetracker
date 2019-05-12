@@ -17,17 +17,17 @@ import { DragDropContext } from 'react-beautiful-dnd';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
+import socket from '../socket';
 
 import {
   getProjectThunk,
   getProjectsThunk,
   getUsersThunk,
-  getProjectUsersThunk,
   addUserThunk,
   updateColumnsThunk
 } from '../actions/project';
-import { createTicketsObject, generateNewState, handleDrag } from '../utils';
-import { getTicketsThunk } from '../actions/ticket';
+import { generateNewState, handleDrag } from '../utils';
+import { getTicketsThunk, reorderTickets } from '../actions/ticket';
 import Column from './Column';
 
 const div = {
@@ -72,14 +72,30 @@ class ProjectBoard extends React.Component {
     this.props.getProject(projectId);
     this.props.loadProjects();
     this.props.loadUsers();
-    this.props.loadProjectUser();
     this.props.loadTickets(projectId);
+    socket.emit('join', projectId);
+    socket.on('board-change', data => {
+      const obj = {};
+      obj.to_do = data.columns['to_do'].taskIds;
+      obj.in_progress = data.columns['in_progress'].taskIds;
+      obj.in_review = data.columns['in_review'].taskIds;
+      obj.done = data.columns['done'].taskIds;
+
+      this.setState(data);
+
+      this.props.reorderProps(obj);
+    });
+    socket.on('new user', () => {
+      this.props.loadUsers();
+    });
     this.setState(generateNewState(this.props));
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.allTickets.length !== this.props.allTickets.length) {
-      this.setState(generateNewState(this.props));
+      const newState = generateNewState(this.props);
+      this.setState(newState);
+      socket.emit('board-change', this.props.match.params.id, newState);
     }
 
     if (
@@ -88,11 +104,16 @@ class ProjectBoard extends React.Component {
         prevProps.ticket.title !== this.props.ticket.title) ||
         prevProps.ticket.description !== this.props.ticket.description)
     ) {
+      const newState = generateNewState(this.props);
+      console.log(newState);
       this.setState({
-        tickets: createTicketsObject(this.props.allTickets)
+        tickets: newState.tickets
       });
+      socket.emit('board-change', this.props.match.params.id, newState);
     }
     if (prevProps.match.params.id !== this.props.match.params.id) {
+      socket.emit('leave', prevProps.match.params.id);
+      socket.emit('join', this.props.match.params.id);
       this.props.getProject();
       this.props.loadTickets();
     }
@@ -116,13 +137,37 @@ class ProjectBoard extends React.Component {
     }
   }
   onDragEnd = result => {
-    const newState = handleDrag(result, this.state);
+    const { destination, source, draggableId } = result;
+
+    if (!result.destination) {
+      return;
+    }
+
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+
+    const newState = handleDrag(source, destination, draggableId, this.state);
+
+    this.setState(newState);
+
+    const obj = {};
+    obj.to_do = newState.columns['to_do'].taskIds;
+    obj.in_progress = newState.columns['in_progress'].taskIds;
+    obj.in_review = newState.columns['in_review'].taskIds;
+    obj.done = newState.columns['done'].taskIds;
+
+    this.props.reorderProps(obj);
 
     this.props.reorder(result);
 
-    this.setState(newState);
+    socket.emit('board-change', this.props.match.params.id, newState);
   };
   render() {
+    // console.log(this.props, this.state);
     return (
       <div>
         <Container className="project-board">
@@ -199,7 +244,8 @@ class ProjectBoard extends React.Component {
                   this.toggleTab('to_do');
                 }}
               >
-                To Do <span> ({this.props.to_do.length})</span>
+                To Do{' '}
+                <span> ({this.state.columns['to_do'].taskIds.length})</span>
               </Col>
               <Col
                 className={classnames({
@@ -210,7 +256,10 @@ class ProjectBoard extends React.Component {
                 }}
               >
                 In Progress
-                <span> ({this.props.in_progress.length})</span>
+                <span>
+                  {' '}
+                  ({this.state.columns['in_progress'].taskIds.length})
+                </span>
               </Col>
               <Col
                 className={classnames({
@@ -220,7 +269,8 @@ class ProjectBoard extends React.Component {
                   this.toggleTab('in_review');
                 }}
               >
-                In Review <span> ({this.props.in_review.length})</span>
+                In Review{' '}
+                <span> ({this.state.columns['in_review'].taskIds.length})</span>
               </Col>
               <Col
                 className={classnames({
@@ -230,7 +280,7 @@ class ProjectBoard extends React.Component {
                   this.toggleTab('done');
                 }}
               >
-                Done <span> ({this.props.done.length})</span>
+                Done <span> ({this.state.columns['done'].taskIds.length})</span>
               </Col>
             </Row>
 
@@ -241,6 +291,7 @@ class ProjectBoard extends React.Component {
                 tickets={this.state.tickets}
                 tabId="1"
                 activetab={this.state.activeTab}
+                allUsers={this.props.allUsers}
               />
 
               <Column
@@ -249,6 +300,7 @@ class ProjectBoard extends React.Component {
                 tickets={this.state.tickets}
                 tabId="2"
                 activetab={this.state.activeTab}
+                allUsers={this.props.allUsers}
               />
 
               <Column
@@ -257,6 +309,7 @@ class ProjectBoard extends React.Component {
                 tickets={this.state.tickets}
                 tabId="3"
                 activetab={this.state.activeTab}
+                allUsers={this.props.allUsers}
               />
 
               <Column
@@ -265,6 +318,7 @@ class ProjectBoard extends React.Component {
                 tickets={this.state.tickets}
                 tabId="4"
                 activetab={this.state.activeTab}
+                allUsers={this.props.allUsers}
               />
             </Row>
           </DragDropContext>
@@ -276,11 +330,6 @@ class ProjectBoard extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    users: [
-      { id: 1, name: 'Ariel' },
-      { id: 2, name: 'Christina' },
-      { id: 3, name: 'Katarina' }
-    ],
     project: state.project.project,
     projects: state.project.projects,
     to_do: state.ticket.to_do,
@@ -305,9 +354,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     loadUsers: () => {
       dispatch(getUsersThunk(projectId));
     },
-    loadProjectUser: () => {
-      dispatch(getProjectUsersThunk(projectId));
-    },
     addUser: userId => {
       dispatch(addUserThunk(projectId, userId));
     },
@@ -316,6 +362,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     reorder: result => {
       dispatch(updateColumnsThunk(result, projectId));
+    },
+    reorderProps: columns => {
+      dispatch(reorderTickets(columns));
     }
   };
 };

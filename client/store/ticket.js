@@ -16,8 +16,9 @@ export default function(state = initialState, action) {
   const newState = { ...state };
   switch (action.type) {
     case ACTIONS.CREATE_TICKET:
-      newState.allTickets.push(action.ticket);
-      newState.to_do.push(action.ticket.id);
+      newState.allTickets = newState.allTickets.concat([action.ticket]);
+      newState.to_do = newState.to_do.concat([action.ticket.id]);
+      newState.ticket = action.ticket;
       return newState;
     case ACTIONS.GET_TICKETS:
       newState.allTickets = action.payload.tickets;
@@ -27,7 +28,6 @@ export default function(state = initialState, action) {
       newState.done = action.payload.done.map(x => x.id);
       newState.ticket = {};
       return newState;
-
     case ACTIONS.UPDATE_TICKET:
       newState.allTickets = newState.allTickets.map(ticket => {
         if (ticket.id === action.ticket.id) {
@@ -38,7 +38,13 @@ export default function(state = initialState, action) {
       });
       newState.ticket = action.ticket;
       return newState;
-
+    case ACTIONS.REORDER_TICKETS:
+      console.log(action.payload);
+      newState.to_do = action.payload.to_do;
+      newState.in_progress = action.payload.in_progress;
+      newState.in_review = action.payload.in_review;
+      newState.done = action.payload.done;
+      return newState;
     case ACTIONS.REMOVE_TICKET:
       newState.allTickets = newState.allTickets.filter(
         ticket => ticket.id !== action.ticket.id

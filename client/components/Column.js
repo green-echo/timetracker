@@ -20,7 +20,7 @@ import DroppableContainer from './DroppableContainer';
 import CreateTicket from './CreateTicket';
 import { connect } from 'react-redux';
 
-const Column = ({ columns, tickets, id, activetab }) => {
+const Column = ({ columns, tickets, id, activetab, allUsers }) => {
   const div = {
     minHeight: '50px'
   };
@@ -43,6 +43,7 @@ const Column = ({ columns, tickets, id, activetab }) => {
                       provided={provided}
                       innerRef={provided.innerRef}
                       ticket={ticket}
+                      allUsers={allUsers}
                     />
                   )}
                 </Draggable>

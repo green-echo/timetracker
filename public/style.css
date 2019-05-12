@@ -66,7 +66,14 @@ button {
 nav a {
   display: inline-block;
   margin: 1em;
+  font-family: 'Alegreya Sans', sans-serif;
+  font-size: 16px;
 }
+nav a:hover {
+  text-decoration: none;
+  font-weight: bold;
+}
+
 form {
   align-items: center;
 }
@@ -111,6 +118,9 @@ form div {
   }
   .right-nav {
     text-align: right;
+  }
+  nav.navbar.navbar-expand-md.navbar-light.bg-light {
+    padding: 0;
   }
 }
 

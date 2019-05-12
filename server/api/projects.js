@@ -17,6 +17,38 @@ router.get('/all', async (req, res, next) => {
   }
 });
 
+/* The is the route for D3 chart: Get all of the tickets that belong to a specific user, include the project route */
+router.get('/user/tickets', async (req, res, next) => {
+  let userId = Number(req.user.id);
+  try {
+    if (!req.isAuthenticated()) {
+      res.sendStatus(403);
+    } else {
+      const user = await User.findByPk(userId);
+      const tickets = await Ticket.findAll({
+        where: {
+          userId: user.id
+        },
+        include: [{ model: Project }]
+      });
+      // TO DO: PUT THIS IN UTIL FUNCTION
+
+      let timePerProject = {};
+      tickets.forEach(ticketProject => {
+        let project = ticketProject.project.name;
+        if (project in timePerProject) {
+          timePerProject[project] += ticketProject.points;
+        } else {
+          timePerProject[project] = ticketProject.points;
+        }
+      });
+      res.json(timePerProject);
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get('/:id', async (req, res, next) => {
   try {
     if (!req.isAuthenticated()) {
@@ -30,7 +62,6 @@ router.get('/:id', async (req, res, next) => {
         if (!authorized) {
           res.sendStatus(403);
         } else {
-          // console.log(project);
           res.json(project);
         }
       }

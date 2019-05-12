@@ -1,34 +1,91 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { logout } from '../store';
+import {
+  Collapse,
+  Navbar,
+  NavbarToggler,
+  NavbarBrand,
+  Nav,
+  NavItem,
+  NavLink,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
+} from 'reactstrap';
 
-const Navbar = ({ handleClick, isLoggedIn }) => (
-  <div>
-    <h1>Time Tracker</h1>
-    <nav>
-      {isLoggedIn ? (
-        <div>
-          {/* The navbar will show these links after you log in */}
-          <Link to="/home">Home</Link>
-          <a href="#" onClick={handleClick}>
-            Logout
-          </a>
-          <Link to="/projects"> Create Project</Link>
-          <Link to="/projects/user/tables">Tickets Per Project</Link>
-        </div>
-      ) : (
-        <div>
-          {/* The navbar will show these links before you log in */}
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link>
-        </div>
-      )}
-    </nav>
-    <hr />
-  </div>
-);
+class MainNav extends Component {
+  constructor() {
+    super();
+    this.state = {
+      isOpen: false
+    };
+    this.toggle = this.toggle.bind(this);
+  }
+  toggle() {
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
+  }
+  render() {
+    return (
+      <div>
+        {/* <h1>Time Tracker</h1> */}
+
+        {this.props.isLoggedIn ? (
+          <div>
+            <Navbar color="light" light expand="md">
+              <NavbarBrand href="/">Time Tracker</NavbarBrand>
+              <NavbarToggler onClick={this.toggle} />
+              <Collapse isOpen={this.state.isOpen} navbar>
+                <Nav className="ml-auto" navbar>
+                  <NavItem>
+                    <Link to="/home">Home</Link>
+                  </NavItem>
+                  <NavItem>
+                    <a href="#" onClick={this.props.handleClick}>
+                      Logout
+                    </a>
+                  </NavItem>
+                  <NavItem>
+                    <Link to="/projects"> My Projects </Link>
+                  </NavItem>
+                  <NavItem>
+                    <Link to="/projects/user/tables">Tickets Per Project</Link>
+                  </NavItem>
+                  <NavItem>
+                    <Link to="/newproject">New Project</Link>
+                  </NavItem>
+                </Nav>
+              </Collapse>
+            </Navbar>
+          </div>
+        ) : (
+          <div>
+            <Navbar color="light" light expand="md">
+              <NavbarBrand href="/">Time Tracker</NavbarBrand>
+              <NavbarToggler onClick={this.toggle} />
+              <Collapse isOpen={this.state.isOpen} navbar>
+                <Nav className="ml-auto" navbar>
+                  <NavItem>
+                    <Link to="/login">Login</Link>
+                  </NavItem>
+                  <NavItem>
+                    <Link to="/signup">Sign Up</Link>
+                  </NavItem>
+                </Nav>
+              </Collapse>
+            </Navbar>
+          </div>
+        )}
+        {/* <hr /> */}
+      </div>
+    );
+  }
+}
 
 /**
  * CONTAINER
@@ -47,12 +104,12 @@ const mapDispatch = dispatch => {
   };
 };
 
-export default connect(mapState, mapDispatch)(Navbar);
+export default connect(mapState, mapDispatch)(MainNav);
 
 /**
  * PROP TYPES
  */
-Navbar.propTypes = {
+MainNav.propTypes = {
   handleClick: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired
 };

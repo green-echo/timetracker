@@ -17,7 +17,7 @@ router.get('/all', async (req, res, next) => {
   }
 });
 
-/* Get all of the tickets that belong to a specific user, include the project route */
+/* The is the route for D3 chart: Get all of the tickets that belong to a specific user, include the project route */
 router.get('/user/tickets', async (req, res, next) => {
   let userId = Number(req.user.id);
   try {

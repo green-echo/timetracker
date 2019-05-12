@@ -25,7 +25,7 @@ class UserHome extends Component {
               return (
                 <Link key={project.id} to={`/projects/${project.id}`}>
                   <p>
-                    {project.name} <i class="fa fa-caret-right" />
+                    {project.name} <i className="fa fa-caret-right" />
                   </p>
                 </Link>
               );

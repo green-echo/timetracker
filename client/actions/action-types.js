@@ -5,7 +5,6 @@ export const CREATE_TICKET = 'CREATE_TICKET';
 export const GET_TICKET = 'GET_TICKET';
 export const UPDATE_TICKET = 'UPDATE_TICKET';
 export const GET_TICKET_IDS = 'GET_TICKET_IDS';
-export const GET_ALL_TICKET_PNTS = 'GET_ALL_TICKET_PNTS';
 
 // Project Constants
 export const CREATE_PROJECT = 'CREATE_PROJECT';

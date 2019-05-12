@@ -9,7 +9,6 @@ import {
   removeTicketThunk,
   updateTicketThunk,
   addUserToTicketThunk,
-  getUserEmailForTicketThunk,
   removeUserFromTicketThunk
 } from '../actions/ticket';
 import Timer from './Timer';
@@ -24,6 +23,7 @@ import {
 } from 'reactstrap';
 import { getUsersThunk } from '../actions/project';
 import { runInThisContext } from 'vm';
+import socket from '../socket';
 
 class Ticket extends Component {
   constructor(props) {
@@ -46,9 +46,36 @@ class Ticket extends Component {
     this.select = this.select.bind(this);
   }
 
+  componentDidMount() {
+    if (this.props.ticket.user) {
+      this.setState({ userEmail: this.props.ticket.user.email });
+    }
+    socket.on('modify', data => {
+      if (this.props.ticket.id === data.id) {
+        console.log(this.props.ticket, data);
+        console.log('MODIFY', data);
+        this.setState(data);
+        console.log('WHY');
+      }
+    });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevProps.data.id !== this.props.data.id &&
+      this.props.ticket.id === this.props.data.id
+    ) {
+      this.setState({
+        title: this.props.data.title,
+        description: this.props.data.description
+      });
+    }
+  }
+
   select(event) {
     this.setState({ userEmail: event.target.innerText });
   }
+
   handleChange(event) {
     this.setState({
       [event.target.name]: event.target.value
@@ -68,24 +95,6 @@ class Ticket extends Component {
     if (this.state.activeTab !== tab) {
       this.setState({
         activeTab: tab
-      });
-    }
-  }
-  componentDidMount() {
-    this.props.loadUsers(this.props.project.id);
-    if (this.props.ticket.user) {
-      this.setState({ userEmail: this.props.ticket.user.email });
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (
-      prevProps.data.id !== this.props.data.id &&
-      this.props.ticket.id === this.props.data.id
-    ) {
-      this.setState({
-        title: this.props.data.title,
-        description: this.props.data.description
       });
     }
   }
@@ -189,7 +198,11 @@ class Ticket extends Component {
                       onChange={this.handleChange}
                     />
                     <br />
-                    <button id="submit" type="submit">
+                    <button
+                      id="submit"
+                      type="submit"
+                      disabled={!this.state.title || !this.state.description}
+                    >
                       Submit
                     </button>
                   </form>
@@ -227,7 +240,10 @@ class Ticket extends Component {
                     })}
                     <DropdownItem
                       onClick={() => {
-                        this.props.removeUserfromTix(ticket.id);
+                        this.props.removeUserfromTix(
+                          ticket.id,
+                          ticket.projectId
+                        );
                         this.setState({ userEmail: 'select user' });
                       }}
                     >
@@ -248,7 +264,6 @@ class Ticket extends Component {
 const mapStateToProps = state => {
   return {
     data: state.ticket.ticket,
-    allUsers: state.project.users,
     project: state.project.project,
     user: state.user
   };
@@ -264,17 +279,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       // update: (id, ticket) => {
       //   dispatch(updateTicketThunk(id, ticket));
     },
-    loadUsers: projectId => {
-      dispatch(getUsersThunk(projectId));
-    },
     addUserToTix: (id, userId) => {
       dispatch(addUserToTicketThunk(id, userId));
     },
-    getUserEmail: id => {
-      dispatch(getUserEmailForTicketThunk(id));
-    },
-    removeUserfromTix: id => {
-      dispatch(removeUserFromTicketThunk(id));
+    removeUserfromTix: (id, projectId) => {
+      dispatch(removeUserFromTicketThunk(id, projectId));
     }
   };
 };

@@ -16,8 +16,9 @@ export default function(state = initialState, action) {
   const newState = { ...state };
   switch (action.type) {
     case ACTIONS.CREATE_TICKET:
-      newState.allTickets.push(action.ticket);
-      newState.to_do.push(action.ticket.id);
+      newState.allTickets = newState.allTickets.concat([action.ticket]);
+      newState.to_do = newState.to_do.concat([action.ticket.id]);
+      newState.ticket = action.ticket;
       return newState;
     case ACTIONS.GET_TICKETS:
       newState.allTickets = action.payload.tickets;

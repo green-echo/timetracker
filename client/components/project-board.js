@@ -17,16 +17,16 @@ import { DragDropContext } from 'react-beautiful-dnd';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
+import socket from '../socket';
 
 import {
   getProjectThunk,
   getProjectsThunk,
   getUsersThunk,
-  getProjectUsersThunk,
   addUserThunk,
   updateColumnsThunk
 } from '../actions/project';
-import { createTicketsObject, generateNewState, handleDrag } from '../utils';
+import { generateNewState, handleDrag } from '../utils';
 import { getTicketsThunk } from '../actions/ticket';
 import Column from './Column';
 
@@ -72,14 +72,25 @@ class ProjectBoard extends React.Component {
     this.props.getProject(projectId);
     this.props.loadProjects();
     this.props.loadUsers();
-    this.props.loadProjectUser();
     this.props.loadTickets(projectId);
+    socket.emit('join', projectId);
+    socket.on('board-change', data => {
+      console.log('received', data);
+      this.setState(data);
+    });
+    socket.on('new user', () => {
+      this.props.loadUsers();
+    });
     this.setState(generateNewState(this.props));
   }
 
   componentDidUpdate(prevProps, prevState) {
+    // console.log(prevProps, this.props);
     if (prevProps.allTickets.length !== this.props.allTickets.length) {
-      this.setState(generateNewState(this.props));
+      console.log(prevProps.allTickets.length, this.props.allTickets.length);
+      const newState = generateNewState(this.props);
+      this.setState(newState);
+      socket.emit('board-change', this.props.match.params.id, newState);
     }
 
     if (
@@ -88,12 +99,18 @@ class ProjectBoard extends React.Component {
         prevProps.ticket.title !== this.props.ticket.title) ||
         prevProps.ticket.description !== this.props.ticket.description)
     ) {
+      console.log('HERE?????????', this.props.ticket, this.props);
+      const newState = generateNewState(this.props);
+      console.log(newState);
       this.setState({
-        tickets: createTicketsObject(this.props.allTickets)
+        tickets: newState.tickets
       });
+      socket.emit('board-change', this.props.match.params.id, newState);
     }
     if (prevProps.match.params.id !== this.props.match.params.id) {
       console.log('CHANGING, CAN MAYBE SOCKET.JOIN AND SOCKET.LEAVE HERE ');
+      socket.emit('leave', prevProps.match.params.id);
+      socket.emit('join', this.props.match.params.id);
       this.props.getProject();
       this.props.loadTickets();
     }
@@ -122,6 +139,8 @@ class ProjectBoard extends React.Component {
     this.props.reorder(result);
 
     this.setState(newState);
+
+    socket.emit('board-change', this.props.match.params.id, newState);
   };
   render() {
     return (
@@ -200,7 +219,8 @@ class ProjectBoard extends React.Component {
                   this.toggleTab('to_do');
                 }}
               >
-                To Do <span> ({this.props.to_do.length})</span>
+                To Do{' '}
+                <span> ({this.state.columns['to_do'].taskIds.length})</span>
               </Col>
               <Col
                 className={classnames({
@@ -211,7 +231,10 @@ class ProjectBoard extends React.Component {
                 }}
               >
                 In Progress
-                <span> ({this.props.in_progress.length})</span>
+                <span>
+                  {' '}
+                  ({this.state.columns['in_progress'].taskIds.length})
+                </span>
               </Col>
               <Col
                 className={classnames({
@@ -221,7 +244,8 @@ class ProjectBoard extends React.Component {
                   this.toggleTab('in_review');
                 }}
               >
-                In Review <span> ({this.props.in_review.length})</span>
+                In Review{' '}
+                <span> ({this.state.columns['in_review'].taskIds.length})</span>
               </Col>
               <Col
                 className={classnames({
@@ -231,7 +255,7 @@ class ProjectBoard extends React.Component {
                   this.toggleTab('done');
                 }}
               >
-                Done <span> ({this.props.done.length})</span>
+                Done <span> ({this.state.columns['done'].taskIds.length})</span>
               </Col>
             </Row>
 
@@ -242,6 +266,7 @@ class ProjectBoard extends React.Component {
                 tickets={this.state.tickets}
                 tabId="1"
                 activetab={this.state.activeTab}
+                allUsers={this.props.allUsers}
               />
 
               <Column
@@ -250,6 +275,7 @@ class ProjectBoard extends React.Component {
                 tickets={this.state.tickets}
                 tabId="2"
                 activetab={this.state.activeTab}
+                allUsers={this.props.allUsers}
               />
 
               <Column
@@ -258,6 +284,7 @@ class ProjectBoard extends React.Component {
                 tickets={this.state.tickets}
                 tabId="3"
                 activetab={this.state.activeTab}
+                allUsers={this.props.allUsers}
               />
 
               <Column
@@ -266,6 +293,7 @@ class ProjectBoard extends React.Component {
                 tickets={this.state.tickets}
                 tabId="4"
                 activetab={this.state.activeTab}
+                allUsers={this.props.allUsers}
               />
             </Row>
           </DragDropContext>
@@ -305,9 +333,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     loadUsers: () => {
       dispatch(getUsersThunk(projectId));
-    },
-    loadProjectUser: () => {
-      dispatch(getProjectUsersThunk(projectId));
     },
     addUser: userId => {
       dispatch(addUserThunk(projectId, userId));

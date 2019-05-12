@@ -75,7 +75,6 @@ class ProjectBoard extends React.Component {
     this.props.loadTickets(projectId);
     socket.emit('join', projectId);
     socket.on('board-change', data => {
-      console.log('received', data);
       this.setState(data);
     });
     socket.on('new user', () => {
@@ -85,9 +84,7 @@ class ProjectBoard extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // console.log(prevProps, this.props);
     if (prevProps.allTickets.length !== this.props.allTickets.length) {
-      console.log(prevProps.allTickets.length, this.props.allTickets.length);
       const newState = generateNewState(this.props);
       this.setState(newState);
       socket.emit('board-change', this.props.match.params.id, newState);
@@ -99,7 +96,6 @@ class ProjectBoard extends React.Component {
         prevProps.ticket.title !== this.props.ticket.title) ||
         prevProps.ticket.description !== this.props.ticket.description)
     ) {
-      console.log('HERE?????????', this.props.ticket, this.props);
       const newState = generateNewState(this.props);
       console.log(newState);
       this.setState({
@@ -108,7 +104,6 @@ class ProjectBoard extends React.Component {
       socket.emit('board-change', this.props.match.params.id, newState);
     }
     if (prevProps.match.params.id !== this.props.match.params.id) {
-      console.log('CHANGING, CAN MAYBE SOCKET.JOIN AND SOCKET.LEAVE HERE ');
       socket.emit('leave', prevProps.match.params.id);
       socket.emit('join', this.props.match.params.id);
       this.props.getProject();

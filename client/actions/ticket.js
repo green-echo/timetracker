@@ -82,8 +82,6 @@ export const updateTicketThunk = (id, projectId, ticket) => {
         `/api/tickets/${id}`,
         ticket
       );
-      console.log('UPDATED', updatedTicket);
-      console.log(typeof projectId);
       dispatch(updateTicket(updatedTicket));
       // socket.emit('modify', projectId, {
       //   id: updatedTicket.id,

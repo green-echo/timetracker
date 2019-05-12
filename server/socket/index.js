@@ -25,7 +25,6 @@ module.exports = io => {
     });
 
     socket.on('modify', (room, data) => {
-      console.log('MODIFY', data);
       socket.broadcast.to(room).emit('modify', data);
     });
 

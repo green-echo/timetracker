@@ -53,9 +53,7 @@ class Ticket extends Component {
     socket.on('modify', data => {
       if (this.props.ticket.id === data.id) {
         console.log(this.props.ticket, data);
-        console.log('MODIFY', data);
         this.setState(data);
-        console.log('WHY');
       }
     });
   }

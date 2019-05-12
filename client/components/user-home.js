@@ -13,12 +13,12 @@ class UserHome extends Component {
 
   render() {
     const userProjects = this.props.projects;
-    if (userProjects) {
-      return (
+    return (
+      <div>
         <div>
-          <div>
-            <h3>Welcome, {this.props.email}</h3>
-          </div>
+          <h3>Welcome, {this.props.email}</h3>
+        </div>
+        {userProjects && (
           <div className="projects">
             <h5>Here are all of your current projects:</h5>
             {this.props.projects.map(project => {
@@ -31,15 +31,9 @@ class UserHome extends Component {
               );
             })}
           </div>
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <h3>Welcome, {this.props.email}</h3>
-        </div>
-      );
-    }
+        )}
+      </div>
+    );
   }
 }
 

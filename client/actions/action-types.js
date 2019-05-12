@@ -13,4 +13,4 @@ export const GET_PROJECT = 'GET_PROJECT';
 export const GET_USERS = 'GET_USERS';
 export const GET_PROJECT_USERS = 'GET_PROJECT_USERS';
 export const ADD_USER = 'ADD_USER';
-export const ADD_USER_TO_TICKET= 'ADD_USER_TO_TICKET';
+export const ADD_USER_TO_TICKET = 'ADD_USER_TO_TICKET';

@@ -31,9 +31,18 @@ router.get('/user/tickets', async (req, res, next) => {
         },
         include: [{ model: Project }]
       });
+      // TO DO: PUT THIS IN UTIL FUNCTION
 
-      console.log('TICKETS', tickets);
-      res.json(tickets);
+      let timePerProject = {};
+      tickets.forEach(ticketProject => {
+        let project = ticketProject.project.name;
+        if (project in timePerProject) {
+          timePerProject[project] += ticketProject.points;
+        } else {
+          timePerProject[project] = ticketProject.points;
+        }
+      });
+      res.json(timePerProject);
     }
   } catch (error) {
     next(error);
@@ -53,7 +62,6 @@ router.get('/:id', async (req, res, next) => {
         if (!authorized) {
           res.sendStatus(403);
         } else {
-          // console.log(project);
           res.json(project);
         }
       }

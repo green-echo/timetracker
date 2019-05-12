@@ -142,11 +142,11 @@ class ProjectBoard extends React.Component {
       return;
     }
 
-    const newState = handleDrag(result, this.state);
-
-    this.props.reorder(result);
+    const newState = handleDrag(source, destination, draggableId, this.state);
 
     this.setState(newState);
+
+    this.props.reorder(result);
 
     socket.emit('board-change', this.props.match.params.id, newState);
   };

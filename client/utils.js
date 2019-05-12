@@ -6,7 +6,7 @@ export function createTicketsObject(tickets) {
   return obj;
 }
 
-export function handleDrag(source, destination, state) {
+export function handleDrag(source, destination, draggableId, state) {
   const start = state.columns[source.droppableId];
   const finish = state.columns[destination.droppableId];
 

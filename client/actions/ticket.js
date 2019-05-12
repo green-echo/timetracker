@@ -3,6 +3,11 @@ import * as ACTIONS from '../actions/action-types';
 import history from '../history';
 import socket from '../socket';
 
+export const reorderTickets = payload => ({
+  type: ACTIONS.REORDER_TICKETS,
+  payload
+});
+
 const deleteTicket = ticket => ({
   type: ACTIONS.REMOVE_TICKET,
   ticket
@@ -83,11 +88,11 @@ export const updateTicketThunk = (id, projectId, ticket) => {
         ticket
       );
       dispatch(updateTicket(updatedTicket));
-      // socket.emit('modify', projectId, {
-      //   id: updatedTicket.id,
-      //   title: updatedTicket.title,
-      //   description: updatedTicket.description
-      // });
+      socket.emit('modify', projectId, {
+        id: updatedTicket.id,
+        title: updatedTicket.title,
+        description: updatedTicket.description
+      });
 
       // history.push(`/projects/${projectId}`);
     } catch (err) {

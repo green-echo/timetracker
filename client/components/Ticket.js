@@ -21,8 +21,8 @@ import {
   DropdownMenu,
   DropdownItem
 } from 'reactstrap';
-import { getUsersThunk } from '../actions/project';
-import { runInThisContext } from 'vm';
+import { updateTicket } from '../actions/ticket';
+
 import socket from '../socket';
 
 class Ticket extends Component {
@@ -52,7 +52,6 @@ class Ticket extends Component {
     }
     socket.on('modify', data => {
       if (this.props.ticket.id === data.id) {
-        console.log(this.props.ticket, data);
         this.setState(data);
       }
     });

@@ -27,7 +27,7 @@ import {
   updateColumnsThunk
 } from '../actions/project';
 import { generateNewState, handleDrag } from '../utils';
-import { getTicketsThunk } from '../actions/ticket';
+import { getTicketsThunk, reorderTickets } from '../actions/ticket';
 import Column from './Column';
 
 const div = {
@@ -75,7 +75,15 @@ class ProjectBoard extends React.Component {
     this.props.loadTickets(projectId);
     socket.emit('join', projectId);
     socket.on('board-change', data => {
+      const obj = {};
+      obj.to_do = data.columns['to_do'].taskIds;
+      obj.in_progress = data.columns['in_progress'].taskIds;
+      obj.in_review = data.columns['in_review'].taskIds;
+      obj.done = data.columns['done'].taskIds;
+
       this.setState(data);
+
+      this.props.reorderProps(obj);
     });
     socket.on('new user', () => {
       this.props.loadUsers();
@@ -146,11 +154,20 @@ class ProjectBoard extends React.Component {
 
     this.setState(newState);
 
+    const obj = {};
+    obj.to_do = newState.columns['to_do'].taskIds;
+    obj.in_progress = newState.columns['in_progress'].taskIds;
+    obj.in_review = newState.columns['in_review'].taskIds;
+    obj.done = newState.columns['done'].taskIds;
+
+    this.props.reorderProps(obj);
+
     this.props.reorder(result);
 
     socket.emit('board-change', this.props.match.params.id, newState);
   };
   render() {
+    // console.log(this.props, this.state);
     return (
       <div>
         <Container className="project-board">
@@ -313,11 +330,6 @@ class ProjectBoard extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    users: [
-      { id: 1, name: 'Ariel' },
-      { id: 2, name: 'Christina' },
-      { id: 3, name: 'Katarina' }
-    ],
     project: state.project.project,
     projects: state.project.projects,
     to_do: state.ticket.to_do,
@@ -350,6 +362,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     reorder: result => {
       dispatch(updateColumnsThunk(result, projectId));
+    },
+    reorderProps: columns => {
+      dispatch(reorderTickets(columns));
     }
   };
 };

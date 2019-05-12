@@ -129,6 +129,19 @@ class ProjectBoard extends React.Component {
     }
   }
   onDragEnd = result => {
+    const { destination, source, draggableId } = result;
+
+    if (!result.destination) {
+      return;
+    }
+
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+
     const newState = handleDrag(result, this.state);
 
     this.props.reorder(result);

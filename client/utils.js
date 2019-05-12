@@ -6,20 +6,7 @@ export function createTicketsObject(tickets) {
   return obj;
 }
 
-export function handleDrag(result, state) {
-  const { destination, source, draggableId } = result;
-
-  if (!destination) {
-    return;
-  }
-
-  if (
-    destination.droppableId === source.droppableId &&
-    destination.index === source.index
-  ) {
-    return;
-  }
-
+export function handleDrag(source, destination, state) {
   const start = state.columns[source.droppableId];
   const finish = state.columns[destination.droppableId];
 

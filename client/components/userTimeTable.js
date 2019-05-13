@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { getProjectsThunk } from '../actions/project';
 import * as d3 from 'd3';
 import { select, scaleBand, scaleLinear } from 'd3';
-
+import { getProjectTicketsThunk } from '../actions/d3data';
 class UserTimeTable extends React.Component {
   constructor() {
     super();
@@ -21,6 +21,7 @@ class UserTimeTable extends React.Component {
   }
   componentDidMount() {
     this.props.loadProjects();
+    this.props.loadTickets();
     window.addEventListener('resize', this.draw);
     this.draw();
   }
@@ -35,28 +36,31 @@ class UserTimeTable extends React.Component {
     const bounds = node.node().getBoundingClientRect();
     const w = bounds.width;
     const h = bounds.height;
-    const { data } = this.state;
+    const { tickets } = this.props;
     const xscale = scaleBand();
-    xscale.domain(data.map(d => d.year));
-    xscale.padding(0, 2);
+    xscale.domain(tickets.map(d => d.project));
+    xscale.padding(0.1);
     xscale.range([0, w]);
 
     const yscale = scaleLinear();
     // yscale.domain(extent(data));
     yscale.domain([0, 100]);
     yscale.range([0, h]);
-    const upd = node.selectAll('rect').data(data);
+    const upd = node.selectAll('rect').data(tickets);
     upd
       .enter()
       .append('rect')
       .merge(upd)
-      .attr('x', d => xscale(d.year))
-      .attr('y', d => h - yscale(d.percent))
+      .attr('x', d => xscale(d.project))
+      .attr('y', d => h - yscale(d.points))
       .attr('width', xscale.bandwidth())
-      .attr('height', d => yscale(d.percent))
-      .attr('fill', 'black');
+      .attr('height', d => yscale(d.points))
+      .attr('fill', 'pink')
+      .append('text')
+      .text(d => xscale(d.project));
   }
   render() {
+    console.log('TICKETS', this.props.tickets);
     return (
       <svg
         style={{ width: '100%', height: '100%' }}
@@ -70,12 +74,16 @@ class UserTimeTable extends React.Component {
 const mapState = state => {
   return {
     email: state.user.email,
-    projects: state.project.projects
+    projects: state.project.projects,
+    tickets: state.d3data.tickets
   };
 };
 const mapDispatch = dispatch => ({
   loadProjects: () => {
     dispatch(getProjectsThunk());
+  },
+  loadTickets: () => {
+    dispatch(getProjectTicketsThunk());
   }
 });
 export default connect(mapState, mapDispatch)(UserTimeTable);

@@ -33,8 +33,6 @@ class MainNav extends Component {
   render() {
     return (
       <div>
-        {/* <h1>Time Tracker</h1> */}
-
         {this.props.isLoggedIn ? (
           <div>
             <Navbar color="light" light expand="md">
@@ -63,7 +61,7 @@ class MainNav extends Component {
         ) : (
           <div>
             <Navbar color="light" light expand="md">
-              <NavbarBrand href="/">Time Tracker</NavbarBrand>
+              <NavbarBrand href="/">Timey</NavbarBrand>
               <NavbarToggler onClick={this.toggle} />
               <Collapse isOpen={this.state.isOpen} navbar>
                 <Nav className="ml-auto" navbar>

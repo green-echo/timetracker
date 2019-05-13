@@ -4,19 +4,11 @@ import { getProjectsThunk } from '../actions/project';
 import * as d3 from 'd3';
 import { select, scaleBand, scaleLinear } from 'd3';
 import { getProjectTicketsThunk } from '../actions/d3data';
+
 class UserTimeTable extends React.Component {
   constructor() {
     super();
-    this.state = {
-      data: [
-        { year: 2012, percent: 50 },
-        { year: 2013, percent: 30 },
-        { year: 2014, percent: 80 },
-        { year: 2015, percent: 20 },
-        { year: 2016, percent: 55 },
-        { year: 2017, percent: 83 }
-      ]
-    };
+
     this.draw = this.draw.bind(this);
   }
   componentDidMount() {
@@ -43,7 +35,6 @@ class UserTimeTable extends React.Component {
     xscale.range([0, w]);
 
     const yscale = scaleLinear();
-    // yscale.domain(extent(data));
     yscale.domain([0, 100]);
     yscale.range([0, h]);
     const upd = node.selectAll('rect').data(tickets);
@@ -51,16 +42,22 @@ class UserTimeTable extends React.Component {
       .enter()
       .append('rect')
       .merge(upd)
-      .attr('x', d => xscale(d.project))
-      .attr('y', d => h - yscale(d.points))
+      .attr('x', (d, i) => xscale(d.project))
+      .attr('y', (d, i) => h - yscale(d.points))
       .attr('width', xscale.bandwidth())
       .attr('height', d => yscale(d.points))
-      .attr('fill', 'pink')
+      .attr('fill', 'pink');
+
+    const textUpd = node.selectAll('text').data(tickets);
+    textUpd
+      .enter()
       .append('text')
-      .text(d => xscale(d.project));
+      .text(d => d.points)
+      .attr('x', (d, i) => xscale(d.project))
+      .attr('y', (d, i) => h - yscale(d.points));
   }
+
   render() {
-    console.log('TICKETS', this.props.tickets);
     return (
       <svg
         style={{ width: '100%', height: '100%' }}

@@ -7,16 +7,18 @@ import Axios from 'axios';
 import { millisConverted } from '../utils';
 import { Button } from 'reactstrap';
 
+import 'react-dates/initialize';
+import { DateRangePicker } from 'react-dates';
+import 'react-dates/lib/css/_datepicker.css';
+
 import DatePicker from 'react-datepicker';
 import DayPicker from 'react-day-picker';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 
 import 'react-day-picker/lib/style.css';
 import 'react-datepicker/dist/react-datepicker.css';
-import { DateRangePicker } from 'react-dates';
 import moment from 'moment';
 // import DayPicker from 'react-day-picker';
-import 'react-dates/lib/css/_datepicker.css';
 
 // import 'react-table/react-table.css';
 // import 'react-dates/lib/css/_datepicker.css';
@@ -32,9 +34,12 @@ class TimeSheet extends React.Component {
       dataToDownload: [],
       selectedDay: undefined,
       isEmpty: true,
-      isDisabled: false
+      isDisabled: false,
+      startDate: null,
+      endDate: null,
+      focusedInput: null
     };
-    this.handleDayChange = this.handleDayChange.bind(this);
+    // this.handleDayChange = this.handleDayChange.bind(this);
   }
 
   async componentDidMount() {
@@ -44,7 +49,7 @@ class TimeSheet extends React.Component {
     tableproperties.allData = data;
     await this.setState({ tableproperties });
 
-    this.calcTotal();
+    // this.calcTotal();
   }
 
   calcTotal = () => {
@@ -65,17 +70,18 @@ class TimeSheet extends React.Component {
     this.setState({ totalTime });
   };
 
-  handleDayChange(selectedDay, modifiers, dayPickerInput) {
-    console.log(`data changed to ${selectedDay}`);
-    const input = dayPickerInput.getInput();
-    this.setState({
-      selectedDay,
-      isEmpty: !input.value.trim(),
-      isDisabled: modifiers.disabled === true,
-      startDate: null,
-      endDate: null
-    });
-  }
+  // handleDayChange(selectedDay, modifiers, dayPickerInput) {
+  //   console.log(`data changed to ${selectedDay}`);
+  //   const input = dayPickerInput.getInput();
+  //   this.setState({
+  //     selectedDay,
+  //     isEmpty: !input.value.trim()
+  //   });
+  // }
+
+  handleEvent = () => {
+    console.log('changed!!!!!!');
+  };
 
   columns = () => {
     return [
@@ -92,27 +98,27 @@ class TimeSheet extends React.Component {
       {
         id: 'start',
         Header: 'Start',
-        accessor: d => new Date(d.start),
+        accessor: d => new Date(d.start).toString(),
         Cell: d => <span>{moment(d.original.start).format('llll')}</span>,
         // filterMethod: (filter, rows) =>
         //   matchSorter(rows, filter.value, { keys: ['Start'] }),
-        filterAll: true,
-        filterRender: ({ filter, onFilterChange }) => (
+        Filter: ({ filter, onFilterChange }) => (
           <DateRangePicker
+            startDateId="startDate"
+            endDateId="endDate"
             startDate={this.state.startDate}
             endDate={this.state.endDate}
             onDatesChange={({ startDate, endDate }) => {
-              this.setState({ startDate: startDate, endDate: endDate });
-              onFilterChange({ startDate, endDate });
+              this.setState({ startDate, endDate });
             }}
             focusedInput={this.state.focusedInput}
-            onFocusChange={focusedInput => this.setState({ focusedInput })}
-            isOutsideRange={() => false}
-            withPortal={true}
-            showClearDates={true}
+            onFocusChange={focusedInput => {
+              this.setState({ focusedInput });
+            }}
           />
         ),
         filterMethod: (filter, row) => {
+          console.log('in filter method');
           if (
             filter.value.startDate === null ||
             filter.value.endDate === null
@@ -285,7 +291,6 @@ class TimeSheet extends React.Component {
       }
     };
   };
-  // getTheadFilterThProps={this.getTheadFilterThProps}
 
   render() {
     return (
@@ -314,10 +319,12 @@ class TimeSheet extends React.Component {
                 .toLowerCase()
                 .includes(filter.value.toLowerCase())
             }
-            onFilteredChange={() => {
-              this.calcTotal();
-            }}
+            // onFilteredChange={() => {
+            //   this.calcTotal();
+            // }}
             className="-striped -highlight"
+            showFilters="true"
+            getTheadFilterThProps={this.getTheadFilterThProps}
           />
         </div>
       </div>

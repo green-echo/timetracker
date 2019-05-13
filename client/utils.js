@@ -1,11 +1,3 @@
-export function createTicketsObject(tickets) {
-  const obj = {};
-  tickets.forEach(ticket => {
-    obj[ticket.id.toString()] = ticket;
-  });
-  return obj;
-}
-
 export function handleDrag(source, destination, draggableId, state) {
   const start = state.columns[source.droppableId];
   const finish = state.columns[destination.droppableId];
@@ -57,30 +49,112 @@ export function handleDrag(source, destination, draggableId, state) {
   return newState;
 }
 
+export function handleDragProps(source, destination, draggableId, props) {
+  const start = props.columns[source.droppableId];
+  const finish = props.columns[destination.droppableId];
+
+  if (start === finish) {
+    const newTaskIds = Array.from(start.taskIds);
+    newTaskIds.splice(source.index, 1);
+    newTaskIds.splice(destination.index, 0, draggableId);
+
+    const newColumn = {
+      id: source.droppableId,
+      taskIds: newTaskIds
+    };
+    const newState = {
+      ...props,
+      columns: {
+        ...props.columns,
+        [newColumn.id]: newColumn
+      }
+    };
+
+    return newState;
+  }
+
+  const startTaskIds = Array.from(start.taskIds);
+
+  startTaskIds.splice(source.index, 1);
+  const newStart = {
+    id: source.droppableId,
+    taskIds: startTaskIds
+  };
+
+  const finishTaskIds = Array.from(finish.taskIds);
+  finishTaskIds.splice(destination.index, 0, draggableId);
+  const newFinish = {
+    id: destination.droppableId,
+    taskIds: finishTaskIds
+  };
+
+  const newState = {
+    ...props,
+    columns: {
+      ...props.columns,
+      [newStart.id]: newStart,
+      [newFinish.id]: newFinish
+    }
+  };
+
+  return newState;
+}
+
+export function createTicketsObject(tickets) {
+  console.log('TICKET', tickets);
+  const obj = {};
+  tickets.forEach(ticket => {
+    obj[ticket.id.toString()] = ticket;
+  });
+  return obj;
+}
+
 export function generateNewState(props) {
   const newState = {
     columns: {
       to_do: {
-        id: 1,
+        id: 'to_do',
         taskIds: props.to_do
       },
       in_progress: {
-        id: 2,
+        id: 'in_progress',
         taskIds: props.in_progress
       },
       in_review: {
-        id: 3,
+        id: 'in_review',
         taskIds: props.in_review
       },
       done: {
-        id: 4,
+        id: 'done',
         taskIds: props.done
       }
     },
-    numTickets: props.allTickets.length,
     tickets: createTicketsObject(props.allTickets)
   };
+  console.log('GENERATE STATE:', newState);
   return newState;
+}
+
+export function generateNewColumns(payload) {
+  console.log('PRE-COLUMN PAYLOAD', payload);
+  return {
+    to_do: {
+      id: 'to_do',
+      taskIds: payload.to_do
+    },
+    in_progress: {
+      id: 'in_progress',
+      taskIds: payload.in_progress
+    },
+    in_review: {
+      id: 'in_review',
+      taskIds: payload.in_review
+    },
+    done: {
+      id: 'done',
+      taskIds: payload.done
+    }
+  };
 }
 
 export function columnName(column) {

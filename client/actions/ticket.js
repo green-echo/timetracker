@@ -33,12 +33,6 @@ export const updateTicket = ticket => ({
   ticket
 });
 
-export const getTicketIds = (ids, status) => ({
-  type: ACTIONS.GET_TICKET_IDS,
-  ids,
-  status
-});
-
 export const addUserToTicket = userId => ({
   type: ACTIONS.ADD_USER_TO_TICKET,
   userId

@@ -25,6 +25,10 @@ const Column = ({ columns, tickets, id, activetab, allUsers }) => {
     minHeight: '50px'
   };
 
+  // console.log('TICKETS:', tickets);
+  // console.log('COLUMNS:', columns);
+  // console.log('ID', id);
+
   return (
     <Droppable droppableId={id} style={div}>
       {provided => (

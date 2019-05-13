@@ -10,6 +10,7 @@ import TimeSheet from './components/TimeSheet';
 
 import Projects from './components/Projects';
 import AddUserToProject from './components/AddUserToProject';
+import userTimeTable from './components/userTimeTable';
 
 /**
  * COMPONENT
@@ -32,11 +33,21 @@ class Routes extends Component {
             {/* Routes placed here are only available after logging in */}
             <Route exact path="/newproject" component={CreateProject} />
             <Route path="/home" component={UserHome} />
+
             <Route exact path="/projects" component={Projects} />
             <Route path="/projects/:id/newticket" component={CreateTicket} />
             <Route path="/projects/:id/adduser" component={AddUserToProject} />
+<<<<<<< HEAD
             <Route path="/projects/:id" component={ProjectBoard} />
             <Route exact path="/timesheet" component={TimeSheet} />
+=======
+            <Route exact path="/projects/:id" component={ProjectBoard} />
+            <Route
+              exact
+              path="/projects/user/tables"
+              component={userTimeTable}
+            />
+>>>>>>> master
             <Route component={Projects} />
           </Switch>
         )}

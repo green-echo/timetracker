@@ -55,7 +55,6 @@ router.get('/:ticketId/open', async (req, res, next) => {
           end: null
         }
       });
-      console.log('USERTICKET', userTicket, req.user.id, req.params.ticketId);
       if (!userTicket) {
         res.json('no open tickets');
       } else {

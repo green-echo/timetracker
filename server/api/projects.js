@@ -17,6 +17,38 @@ router.get('/all', async (req, res, next) => {
   }
 });
 
+/* The is the route for D3 chart: Get all of the tickets that belong to a specific user, include the project route */
+router.get('/user/tickets', async (req, res, next) => {
+  let userId = Number(req.user.id);
+  try {
+    if (!req.isAuthenticated()) {
+      res.sendStatus(403);
+    } else {
+      const user = await User.findByPk(userId);
+      const tickets = await Ticket.findAll({
+        where: {
+          userId: user.id
+        },
+        include: [{ model: Project }]
+      });
+      // TO DO: PUT THIS IN UTIL FUNCTION
+
+      let timePerProject = {};
+      tickets.forEach(ticketProject => {
+        let project = ticketProject.project.name;
+        if (project in timePerProject) {
+          timePerProject[project] += ticketProject.points;
+        } else {
+          timePerProject[project] = ticketProject.points;
+        }
+      });
+      res.json(timePerProject);
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get('/:id', async (req, res, next) => {
   try {
     if (!req.isAuthenticated()) {
@@ -30,7 +62,6 @@ router.get('/:id', async (req, res, next) => {
         if (!authorized) {
           res.sendStatus(403);
         } else {
-          // console.log(project);
           res.json(project);
         }
       }
@@ -68,8 +99,6 @@ router.post('/:id', async (req, res, next) => {
 
           await newTicket.setProject(project);
 
-          await project.appendTicketId(newTicket.id);
-
           res.json(newTicket);
         }
       }
@@ -78,34 +107,6 @@ router.post('/:id', async (req, res, next) => {
     next(error);
   }
 });
-
-// router.get('/:id/tickets', async (req, res, next) => {
-//   try {
-//     if (!req.isAuthenticated()) {
-//       res.sendStatus(403);
-//     } else {
-//       const project = await Project.findByPk(Number(req.params.id));
-//       if (!project) {
-//         next();
-//       } else {
-//         const authorized = await project.hasUser(req.user);
-//         if (!authorized) {
-//           res.sendStatus(403);
-//         } else {
-//           const result = {};
-//           result.tickets = await project.getTickets();
-//           result.toDo = await project.toDo;
-//           result.inProgress = await project.inProgress;
-//           result.inReview = await project.inReview;
-//           result.done = await project.done;
-//           res.json(result);
-//         }
-//       }
-//     }
-//   } catch (error) {
-//     next(error);
-//   }
-// });
 
 router.get('/:id/tickets', async (req, res, next) => {
   try {
@@ -136,9 +137,8 @@ router.get('/:id/tickets', async (req, res, next) => {
             });
           }
 
-          console.log(result.to_do);
-
           result.tickets = await project.getTickets({ include: User });
+
           res.json(result);
         }
       }
@@ -172,27 +172,6 @@ router.get('/:id/users', async (req, res, next) => {
   }
 });
 
-// possibly change this, only require id attributes, to guarantee one source of truth
-router.get('/:id/tickets/:status', async (req, res, next) => {
-  try {
-    const projectId = req.params.id;
-    const status = req.params.status;
-
-    const ticketIds = await Ticket.findAll({
-      where: {
-        projectId,
-        status
-      },
-      attributes: ['id']
-    });
-
-    const idArr = ticketIds.map(x => x.id);
-
-    res.json(idArr);
-  } catch (error) {
-    next(error);
-  }
-});
 /* This gets all the projects that belongs to a user */
 router.get('/', async (req, res, next) => {
   try {
@@ -274,7 +253,7 @@ router.put('/:id/adduser', async (req, res, next) => {
             }
           }
         }
-        res.json(project);
+        res.json(user);
       }
     }
   } catch (error) {
@@ -285,59 +264,17 @@ router.put('/:id/adduser', async (req, res, next) => {
 // changing a project (not including adding users)
 // eslint-disable-next-line complexity
 router.put('/:id', async (req, res, next) => {
-  let toDo, inProgress, inReview, done;
   try {
     if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
-      console.log(req.body);
-      const { name, totalTime, col1, col2 } = req.body;
-
-      switch (col1.id) {
-        case 1:
-          toDo = col1.taskIds;
-          break;
-        case 2:
-          inProgress = col1.taskIds;
-          break;
-        case 3:
-          inReview = col1.taskIds;
-          break;
-        case 4:
-          done = col1.taskIds;
-          break;
-        default:
-          break;
-      }
-
-      if (col2) {
-        switch (col2.id) {
-          case 1:
-            toDo = col2.taskIds;
-            break;
-          case 2:
-            inProgress = col2.taskIds;
-            break;
-          case 3:
-            inReview = col2.taskIds;
-            break;
-          case 4:
-            done = col2.taskIds;
-            break;
-          default:
-            break;
-        }
-      }
-
-      console.log('COLUMNS:', toDo, inProgress, inReview, done);
+      const { name, totalTime } = req.body;
 
       if (typeof Number(req.params.id) !== 'number') {
-        console.log('not id');
         next();
       } else {
         const project = await Project.findByPk(req.params.id);
         if (!project) {
-          console.log('not project');
           next();
         } else {
           const authorized = await project.hasUser(req.user);
@@ -346,11 +283,7 @@ router.put('/:id', async (req, res, next) => {
           } else {
             await project.update({
               name,
-              totalTime,
-              toDo,
-              inProgress,
-              inReview,
-              done
+              totalTime
             });
           }
           res.json(project);

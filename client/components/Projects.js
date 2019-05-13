@@ -18,14 +18,15 @@ class Project extends React.Component {
   render() {
     return (
       <div>
-        <Link to="/newproject">
+        {/* Commenting this button out becuase I've included it in the main nav */}
+        {/* <Link to="/newproject">
           {' '}
           <Button color="danger">New Project</Button>
-        </Link>
+        </Link> */}
         <ListGroup>
           {this.props.projects.map(project => {
             return (
-              <Link to={`/projects/${project.id}`}>
+              <Link key={project.id} to={`/projects/${project.id}`}>
                 <ListGroupItem>{project.name}</ListGroupItem>
               </Link>
             );

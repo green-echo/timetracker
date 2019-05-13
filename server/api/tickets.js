@@ -156,8 +156,6 @@ router.put('/:id/reorder', async (req, res, next) => {
 
     const { destination, source, draggableId } = result;
 
-    console.log(source.droppableId, destination.droppableId, draggableId);
-
     const ticket = await Ticket.findByPk(req.params.id);
 
     if (source.droppableId === destination.droppableId) {
@@ -193,8 +191,12 @@ router.put('/:id/adduser', async (req, res, next) => {
       res.sendStatus(403);
     } else {
       const ticket = await Ticket.findByPk(req.params.id);
-
-      let result = await ticket.update({ userId: req.body.userId });
+      const user = await User.findByPk(req.body.userId);
+      await ticket.setUser(user);
+      const result = {};
+      result.ticket = ticket;
+      result.userEmail = user.email;
+      // let result = await ticket.update({ userId: req.body.userId });
       res.json(result);
     }
   } catch (error) {
@@ -232,56 +234,6 @@ router.delete('/:id', async (req, res, next) => {
           res.sendStatus(403);
         } else {
           await ticket.removeFromColumn();
-
-          switch (ticket.status) {
-            case 'to_do':
-              const toDoArr = [];
-              project.toDo.forEach(x => {
-                if (x !== ticket.id) {
-                  toDoArr.push(x);
-                }
-              });
-              await project.update({
-                toDo: toDoArr
-              });
-              break;
-            case 'in_progress':
-              const inProgressArr = [];
-              project.inProgress.forEach(x => {
-                if (x !== ticket.id) {
-                  inProgressArr.push(x);
-                }
-              });
-              console.log('inProgressArr:', inProgressArr);
-              await project.update({
-                inProgress: inProgressArr
-              });
-              break;
-            case 'in_review':
-              const inReviewArr = [];
-              project.inReview.forEach(x => {
-                if (x !== ticket.id) {
-                  inReviewArr.push(x);
-                }
-              });
-              await project.update({
-                inReview: inReviewArr
-              });
-              break;
-            case 'done':
-              const doneArr = [];
-              project.done.forEach(x => {
-                if (x !== ticket.id) {
-                  doneArr.push(x);
-                }
-              });
-              await project.update({
-                done: doneArr
-              });
-              break;
-            default:
-              break;
-          }
           await ticket.destroy();
           res.sendStatus(200);
         }

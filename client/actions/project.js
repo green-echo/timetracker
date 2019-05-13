@@ -1,6 +1,7 @@
 import axios from 'axios';
 import * as ACTIONS from './action-types';
 import history from '../history';
+import socket from '../socket';
 
 export const getProjects = projects => ({
   type: ACTIONS.GET_PROJECTS,
@@ -21,20 +22,16 @@ export const getUsers = users => ({
   users
 });
 
-export const getProjectUsers = projectUsers => ({
-  type: ACTIONS.GET_PROJECT_USERS,
-  projectUsers
-});
-
-export const addUser = userId => ({
+export const addUser = user => ({
   type: ACTIONS.ADD_USER,
-  userId
+  user
 });
 
 export const updateColumnsThunk = (result, projectId) => {
   return async dispatch => {
     try {
       const { data } = await axios.put(
+        // draggableId is the ticketId
         `/api/tickets/${result.draggableId}/reorder`,
         {
           result
@@ -89,22 +86,15 @@ export const getUsersThunk = id => async dispatch => {
   }
 };
 
-export const getProjectUsersThunk = projectId => async dispatch => {
-  try {
-    const { data } = await axios.get(`/api/projects/${projectId}/users`);
-    dispatch(getProjectUsers(data));
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 export const addUserThunk = (projectId, userId) => async dispatch => {
   try {
     const { data } = await axios.put(
       `/api/projects/${projectId}/adduser`,
       userId
     );
-    dispatch(addUser(data));
+    console.log(data);
+    // dispatch(addUser(data));
+    socket.emit('new user', projectId);
     history.push(`/projects/${projectId}`);
   } catch (error) {
     console.error(error);

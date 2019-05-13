@@ -8,7 +8,7 @@ export const reorderTickets = payload => ({
   payload
 });
 
-const deleteTicket = ticket => ({
+export const deleteTicket = ticket => ({
   type: ACTIONS.REMOVE_TICKET,
   ticket
 });
@@ -33,12 +33,6 @@ export const updateTicket = ticket => ({
   ticket
 });
 
-export const getTicketIds = (ids, status) => ({
-  type: ACTIONS.GET_TICKET_IDS,
-  ids,
-  status
-});
-
 export const addUserToTicket = userId => ({
   type: ACTIONS.ADD_USER_TO_TICKET,
   userId
@@ -49,7 +43,7 @@ export const createTicketThunk = (ticket, id) => {
     try {
       const { data } = await axios.post(`/api/projects/${id}`, ticket);
       dispatch(createTicket(data));
-      // socket.emit()
+      socket.emit('new ticket', id, data);
       history.push(`/projects/${id}`);
     } catch (err) {
       console.log(err);
@@ -87,12 +81,16 @@ export const updateTicketThunk = (id, projectId, ticket) => {
         `/api/tickets/${id}`,
         ticket
       );
+
       dispatch(updateTicket(updatedTicket));
+
       socket.emit('modify', projectId, {
         id: updatedTicket.id,
         title: updatedTicket.title,
         description: updatedTicket.description
       });
+
+      socket.emit('update ticket', projectId, updatedTicket);
 
       // history.push(`/projects/${projectId}`);
     } catch (err) {
@@ -106,6 +104,7 @@ export const removeTicketThunk = ticket => {
     try {
       await axios.delete(`/api/tickets/${ticket.id}`);
       dispatch(deleteTicket(ticket));
+      socket.emit('remove ticket', ticket.projectId, ticket);
     } catch (err) {
       console.log(err);
     }
@@ -118,11 +117,11 @@ export const addUserToTicketThunk = (ticketId, userId) => async dispatch => {
       `/api/tickets/${ticketId}/adduser`,
       { userId: userId }
     );
-    console.log('RESULT', result);
     socket.emit('modify', result.ticket.projectId, {
       id: result.ticket.id,
       userEmail: result.userEmail
     });
+    socket.emit('update ticket', result.ticket.projectId, result.ticket);
   } catch (error) {
     console.error(error);
   }
@@ -133,11 +132,14 @@ export const removeUserFromTicketThunk = (
   projectId
 ) => async dispatch => {
   try {
-    await axios.put(`/api/tickets/${ticketId}/removeuser`);
+    const { data: updatedTicket } = await axios.put(
+      `/api/tickets/${ticketId}/removeuser`
+    );
     socket.emit('modify', projectId, {
       id: ticketId,
-      userEmail: 'select user'
+      userEmail: 'Select User'
     });
+    socket.emit('update ticket', projectId, updatedTicket);
   } catch (error) {
     console.error(error);
   }

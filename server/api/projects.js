@@ -268,16 +268,13 @@ router.put('/:id', async (req, res, next) => {
     if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
-      console.log(req.body);
       const { name, totalTime } = req.body;
 
       if (typeof Number(req.params.id) !== 'number') {
-        console.log('not id');
         next();
       } else {
         const project = await Project.findByPk(req.params.id);
         if (!project) {
-          console.log('not project');
           next();
         } else {
           const authorized = await project.hasUser(req.user);

@@ -156,8 +156,6 @@ router.put('/:id/reorder', async (req, res, next) => {
 
     const { destination, source, draggableId } = result;
 
-    console.log(source.droppableId, destination.droppableId, draggableId);
-
     const ticket = await Ticket.findByPk(req.params.id);
 
     if (source.droppableId === destination.droppableId) {

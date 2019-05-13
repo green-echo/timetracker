@@ -31,6 +31,7 @@ export const updateColumnsThunk = (result, projectId) => {
   return async dispatch => {
     try {
       const { data } = await axios.put(
+        // draggableId is the ticketId
         `/api/tickets/${result.draggableId}/reorder`,
         {
           result

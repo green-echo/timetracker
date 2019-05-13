@@ -19,6 +19,10 @@ export default function(state = initialState, action) {
   const newState = { ...state };
   switch (action.type) {
     case ACTIONS.CREATE_TICKET:
+      newState.allTicketsObject = {
+        ...newState.allTicketsObject,
+        [action.ticket.id]: action.ticket
+      };
       newState.allTickets = [...newState.allTickets, action.ticket];
       newState.to_do = [...newState.to_do, action.ticket.id];
       newState.ticket = action.ticket;

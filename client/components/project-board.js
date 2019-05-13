@@ -27,7 +27,7 @@ import {
   addUserThunk,
   updateColumnsThunk
 } from '../actions/project';
-import { generateNewState, handleDrag, handleDragProps } from '../utils';
+import { generateNewState, handleDragProps } from '../utils';
 import { getTicketsThunk, reorderTickets } from '../actions/ticket';
 import Column from './Column';
 
@@ -39,27 +39,8 @@ class ProjectBoard extends React.Component {
   constructor() {
     super();
     this.state = {
-      columns: {
-        to_do: {
-          id: 1,
-          taskIds: []
-        },
-        in_progress: {
-          id: 2,
-          taskIds: []
-        },
-        in_review: {
-          id: 3,
-          taskIds: []
-        },
-        done: {
-          id: 4,
-          taskIds: []
-        }
-      },
       dropdownOpen: false,
       btnDropright: false,
-      tickets: {},
       activeTab: 'to_do'
     };
     this.toggle = this.toggle.bind(this);
@@ -74,43 +55,47 @@ class ProjectBoard extends React.Component {
     this.props.loadUsers();
     this.props.loadTickets(projectId);
     socket.emit('join', projectId);
-    socket.on('board-change', data => {
-      // const obj = {};
-      // obj.to_do = data.columns['to_do'].taskIds;
-      // obj.in_progress = data.columns['in_progress'].taskIds;
-      // obj.in_review = data.columns['in_review'].taskIds;
-      // obj.done = data.columns['done'].taskIds;
-
-      this.setState(data);
-
-      this.props.reorderProps(data.columns);
-    });
+    // socket.on('board-change', data => {
+    //   // const obj = {};
+    //   // obj.to_do = data.columns['to_do'].taskIds;
+    //   // obj.in_progress = data.columns['in_progress'].taskIds;
+    //   // obj.in_review = data.columns['in_review'].taskIds;
+    //   // obj.done = data.columns['done'].taskIds;
+    //   console.log('BOARD-CHANGE');
+    //   // this.setState(data);
+    //   this.props.reorderProps(data.columns);
+    //   this.props.loadTickets();
+    //   // this.props.loadProject()
+    // });
     socket.on('new user', () => {
       this.props.loadUsers();
     });
-    this.setState(generateNewState(this.props));
+    // this.setState(generateNewState(this.props));
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.allTickets.length !== this.props.allTickets.length) {
-      const newState = generateNewState(this.props);
-      this.setState(newState);
-      socket.emit('board-change', this.props.match.params.id, newState);
-    }
+    // if (prevProps.allTickets.length !== this.props.allTickets.length) {
+    //   const newState = generateNewState(this.props);
+    //   // this.setState(newState);
+    //   // console.log('PREVPROPS 1');
+    //   // socket.emit('board-change', this.props.match.params.id, newState);
+    // }
 
-    if (
-      prevProps.ticket.id !== this.props.ticket.id ||
-      ((prevProps.ticket.id === this.props.ticket.id &&
-        prevProps.ticket.title !== this.props.ticket.title) ||
-        prevProps.ticket.description !== this.props.ticket.description)
-    ) {
-      const newState = generateNewState(this.props);
-      console.log(newState);
-      this.setState({
-        tickets: newState.tickets
-      });
-      socket.emit('board-change', this.props.match.params.id, newState);
-    }
+    // if (
+    //   prevProps.ticket.id !== this.props.ticket.id ||
+    //   ((prevProps.ticket.id === this.props.ticket.id &&
+    //     prevProps.ticket.title !== this.props.ticket.title) ||
+    //     prevProps.ticket.description !== this.props.ticket.description)
+    // ) {
+    //   console.log('PREVPROPS 2');
+
+    //   const newState = generateNewState(this.props);
+    //   console.log(newState);
+    //   // this.setState({
+    //   //   tickets: newState.tickets
+    //   // });
+    //   // socket.emit('board-change', this.props.match.params.id, newState);
+    // }
     if (prevProps.match.params.id !== this.props.match.params.id) {
       socket.emit('leave', prevProps.match.params.id);
       socket.emit('join', this.props.match.params.id);
@@ -150,7 +135,6 @@ class ProjectBoard extends React.Component {
       return;
     }
 
-    const newState = handleDrag(source, destination, draggableId, this.state);
     const newProps = handleDragProps(
       source,
       destination,
@@ -158,27 +142,19 @@ class ProjectBoard extends React.Component {
       this.props
     );
 
-    console.log(newProps, newState);
-
-    this.setState(newState);
-
-    // const obj = {};
-    // obj.to_do = newState.columns['to_do'].taskIds;
-    // obj.in_progress = newState.columns['in_progress'].taskIds;
-    // obj.in_review = newState.columns['in_review'].taskIds;
-    // obj.done = newState.columns['done'].taskIds;
+    console.log(newProps);
 
     this.props.reorderProps(newProps.columns); //frontend
 
     this.props.reorder(result); //backend
 
-    socket.emit('board-change', this.props.match.params.id, newState);
+    socket.emit('reorder', this.props.match.params.id, newProps.columns);
   };
   render() {
     console.log(this.props, this.state);
 
     if (!this.props.columns['to_do'] || !this.props.allTickets) {
-      console.log('HELLO THERE WE HAVE NOT RENDERED YET', this.props);
+      console.log('NOT RENDERED YET', this.props);
       return '';
     }
 

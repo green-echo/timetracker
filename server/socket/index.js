@@ -32,6 +32,22 @@ module.exports = io => {
       socket.broadcast.to(room).emit('new user');
     });
 
+    socket.on('new ticket', (room, ticket) => {
+      socket.broadcast.to(room).emit('new ticket', ticket);
+    });
+
+    socket.on('remove ticket', (room, ticket) => {
+      socket.broadcast.to(room).emit('remove ticket', ticket);
+    });
+
+    socket.on('update ticket', (room, ticket) => {
+      socket.broadcast.to(room).emit('update ticket', ticket);
+    });
+
+    socket.on('reorder', (room, columns) => {
+      socket.broadcast.to(room).emit('reorder', columns);
+    });
+
     socket.on('disconnect', () => {
       console.log(`Connection ${socket.id} has left the building`);
     });

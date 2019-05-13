@@ -101,7 +101,6 @@ export function handleDragProps(source, destination, draggableId, props) {
 }
 
 export function createTicketsObject(tickets) {
-  console.log('TICKET', tickets);
   const obj = {};
   tickets.forEach(ticket => {
     obj[ticket.id.toString()] = ticket;
@@ -131,7 +130,6 @@ export function generateNewState(props) {
     },
     tickets: createTicketsObject(props.allTickets)
   };
-  console.log('GENERATE STATE:', newState);
   return newState;
 }
 
@@ -155,21 +153,6 @@ export function generateNewColumns(payload) {
       taskIds: payload.done
     }
   };
-}
-
-export function columnName(column) {
-  switch (column.id) {
-    case 1:
-      return ['toDo', column.taskIds];
-    case 2:
-      return ['inProgress', column.taskIds];
-    case 3:
-      return ['inReview', column.taskIds];
-    case 4:
-      return ['done', column.taskIds];
-    default:
-      return null;
-  }
 }
 
 const tickets = {

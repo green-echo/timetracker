@@ -36,7 +36,7 @@ class Ticket extends Component {
       dropdownOpen: false,
       btnDropright: false,
       userDropdownOpen: false,
-      userEmail: 'select user'
+      userEmail: 'Select User'
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);

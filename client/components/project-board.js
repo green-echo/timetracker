@@ -55,47 +55,12 @@ class ProjectBoard extends React.Component {
     this.props.loadUsers();
     this.props.loadTickets(projectId);
     socket.emit('join', projectId);
-    // socket.on('board-change', data => {
-    //   // const obj = {};
-    //   // obj.to_do = data.columns['to_do'].taskIds;
-    //   // obj.in_progress = data.columns['in_progress'].taskIds;
-    //   // obj.in_review = data.columns['in_review'].taskIds;
-    //   // obj.done = data.columns['done'].taskIds;
-    //   console.log('BOARD-CHANGE');
-    //   // this.setState(data);
-    //   this.props.reorderProps(data.columns);
-    //   this.props.loadTickets();
-    //   // this.props.loadProject()
-    // });
     socket.on('new user', () => {
       this.props.loadUsers();
     });
-    // this.setState(generateNewState(this.props));
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // if (prevProps.allTickets.length !== this.props.allTickets.length) {
-    //   const newState = generateNewState(this.props);
-    //   // this.setState(newState);
-    //   // console.log('PREVPROPS 1');
-    //   // socket.emit('board-change', this.props.match.params.id, newState);
-    // }
-
-    // if (
-    //   prevProps.ticket.id !== this.props.ticket.id ||
-    //   ((prevProps.ticket.id === this.props.ticket.id &&
-    //     prevProps.ticket.title !== this.props.ticket.title) ||
-    //     prevProps.ticket.description !== this.props.ticket.description)
-    // ) {
-    //   console.log('PREVPROPS 2');
-
-    //   const newState = generateNewState(this.props);
-    //   console.log(newState);
-    //   // this.setState({
-    //   //   tickets: newState.tickets
-    //   // });
-    //   // socket.emit('board-change', this.props.match.params.id, newState);
-    // }
     if (prevProps.match.params.id !== this.props.match.params.id) {
       socket.emit('leave', prevProps.match.params.id);
       socket.emit('join', this.props.match.params.id);
@@ -142,8 +107,6 @@ class ProjectBoard extends React.Component {
       this.props
     );
 
-    console.log(newProps);
-
     this.props.reorderProps(newProps.columns); //frontend
 
     this.props.reorder(result); //backend
@@ -151,10 +114,7 @@ class ProjectBoard extends React.Component {
     socket.emit('reorder', this.props.match.params.id, newProps.columns);
   };
   render() {
-    console.log(this.props, this.state);
-
     if (!this.props.columns['to_do'] || !this.props.allTickets) {
-      console.log('NOT RENDERED YET', this.props);
       return '';
     }
 

@@ -7,8 +7,8 @@ module.exports = io => {
     // NOTE: a socket CAN be part of more than 1 room
     socket.on('join', function(room) {
       socket.join(room);
-      console.log(room);
-      console.log(io.sockets.adapter.rooms[room].sockets);
+      // console.log(room);
+      // console.log(io.sockets.adapter.rooms[room].sockets);
     });
 
     socket.on('leave', function(room) {

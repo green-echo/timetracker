@@ -25,6 +25,10 @@ export default function(state = initialState, action) {
       };
       newState.allTickets = [...newState.allTickets, action.ticket];
       newState.to_do = [...newState.to_do, action.ticket.id];
+      newState.columns[action.ticket.status].taskIds = [
+        ...newState.columns[action.ticket.status].taskIds,
+        action.ticket.id
+      ];
       newState.ticket = action.ticket;
       return newState;
     case ACTIONS.GET_TICKETS:
@@ -35,7 +39,6 @@ export default function(state = initialState, action) {
       newState.done = action.payload.done.map(x => x.id);
       newState.allTicketsObject = createTicketsObject(newState.allTickets);
       newState.columns = generateNewColumns(newState);
-      console.log('POST GET TICKETS COLUMNS', newState.columns);
       newState.ticket = {};
       return newState;
     case ACTIONS.UPDATE_TICKET:
@@ -53,14 +56,11 @@ export default function(state = initialState, action) {
       newState.ticket = action.ticket;
       return newState;
     case ACTIONS.REORDER_TICKETS:
-      console.log('PAYLOAD:', action.payload);
       newState.to_do = action.payload['to_do'].taskIds;
       newState.in_progress = action.payload['in_progress'].taskIds;
       newState.in_review = action.payload['in_review'].taskIds;
       newState.done = action.payload['done'].taskIds;
-      console.log('PRE-REORDER DATA', newState);
       newState.columns = generateNewColumns(newState); // possibly just reassign the one/two affected columns instead of all of them
-      console.log('POST REORDER COLUMNS: ', newState.columns);
       return newState;
     case ACTIONS.REMOVE_TICKET:
       newState.allTickets = newState.allTickets.filter(

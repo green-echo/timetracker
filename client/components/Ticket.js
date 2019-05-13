@@ -273,8 +273,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     update: (id, projectId, ticket) => {
       dispatch(updateTicketThunk(id, projectId, ticket));
-      // update: (id, ticket) => {
-      //   dispatch(updateTicketThunk(id, ticket));
     },
     addUserToTix: (id, userId) => {
       dispatch(addUserToTicketThunk(id, userId));

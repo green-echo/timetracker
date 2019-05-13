@@ -134,7 +134,6 @@ export function generateNewState(props) {
 }
 
 export function generateNewColumns(payload) {
-  console.log('PRE-COLUMN PAYLOAD', payload);
   return {
     to_do: {
       id: 'to_do',

@@ -51,9 +51,6 @@ class MainNav extends Component {
                     </a>
                   </NavItem>
                   <NavItem>
-                    <Link to="/projects"> My Projects </Link>
-                  </NavItem>
-                  <NavItem>
                     <Link to="/projects/user/tables">Tickets Per Project</Link>
                   </NavItem>
                   <NavItem>

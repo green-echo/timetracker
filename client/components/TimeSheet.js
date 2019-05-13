@@ -7,15 +7,15 @@ import Axios from 'axios';
 import { millisConverted } from '../utils';
 import { Button } from 'reactstrap';
 
-import DatePicker from 'react-datepicker';
+// import DatePicker from 'react-datepicker';
 // import DayPicker from 'react-day-picker';
-import DayPickerInput from 'react-day-picker/DayPickerInput';
+// import DayPickerInput from 'react-day-picker/DayPickerInput';
 
-import 'react-day-picker/lib/style.css';
+// import 'react-day-picker/lib/style.css';
 // import 'react-datepicker/dist/react-datepicker.css';
 // import { DateRangePicker } from 'react-dates';
 import moment from 'moment';
-import DayPicker from 'react-day-picker';
+// import DayPicker from 'react-day-picker';
 
 // import 'react-table/react-table.css';
 // import 'react-dates/lib/css/_datepicker.css';

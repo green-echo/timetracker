@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getProjectsThunk } from '../actions/project';
 import { Link } from 'react-router-dom';
+import Project from './Projects';
 /**
  * COMPONENT
  */
@@ -18,7 +19,8 @@ class UserHome extends Component {
         <div>
           <h3>Welcome, {this.props.email}</h3>
         </div>
-        {userProjects && (
+        <Project />
+        {/* {userProjects && (
           <div className="projects">
             <h5>Here are all of your current projects:</h5>
             {this.props.projects.map(project => {
@@ -31,7 +33,7 @@ class UserHome extends Component {
               );
             })}
           </div>
-        )}
+        )} */}
       </div>
     );
   }

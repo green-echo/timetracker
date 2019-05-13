@@ -7,15 +7,16 @@ import Axios from 'axios';
 import { millisConverted } from '../utils';
 import { Button } from 'reactstrap';
 
-// import DatePicker from 'react-datepicker';
-// import DayPicker from 'react-day-picker';
-// import DayPickerInput from 'react-day-picker/DayPickerInput';
+import DatePicker from 'react-datepicker';
+import DayPicker from 'react-day-picker';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
 
-// import 'react-day-picker/lib/style.css';
-// import 'react-datepicker/dist/react-datepicker.css';
-// import { DateRangePicker } from 'react-dates';
+import 'react-day-picker/lib/style.css';
+import 'react-datepicker/dist/react-datepicker.css';
+import { DateRangePicker } from 'react-dates';
 import moment from 'moment';
 // import DayPicker from 'react-day-picker';
+import 'react-dates/lib/css/_datepicker.css';
 
 // import 'react-table/react-table.css';
 // import 'react-dates/lib/css/_datepicker.css';
@@ -72,8 +73,7 @@ class TimeSheet extends React.Component {
       isEmpty: !input.value.trim(),
       isDisabled: modifiers.disabled === true,
       startDate: null,
-      endDate: null,
-      ranges: null
+      endDate: null
     });
   }
 
@@ -92,10 +92,47 @@ class TimeSheet extends React.Component {
       {
         id: 'start',
         Header: 'Start',
-        accessor: d => moment(new Date(d.start)).format('MM/DD/YYYY HH:mm:ss'),
+        accessor: d => new Date(d.start),
+        Cell: d => <span>{moment(d.original.start).format('llll')}</span>,
         // filterMethod: (filter, rows) =>
         //   matchSorter(rows, filter.value, { keys: ['Start'] }),
         filterAll: true,
+        filterRender: ({ filter, onFilterChange }) => (
+          <DateRangePicker
+            startDate={this.state.startDate}
+            endDate={this.state.endDate}
+            onDatesChange={({ startDate, endDate }) => {
+              this.setState({ startDate: startDate, endDate: endDate });
+              onFilterChange({ startDate, endDate });
+            }}
+            focusedInput={this.state.focusedInput}
+            onFocusChange={focusedInput => this.setState({ focusedInput })}
+            isOutsideRange={() => false}
+            withPortal={true}
+            showClearDates={true}
+          />
+        ),
+        filterMethod: (filter, row) => {
+          if (
+            filter.value.startDate === null ||
+            filter.value.endDate === null
+          ) {
+            // Incomplet or cleared date picker
+            console.log('Incomplet or cleared date picker');
+            return true;
+          }
+
+          if (
+            moment(row[filter.id]).isBetween(
+              filter.value.startDate,
+              filter.value.endDate
+            )
+          ) {
+            // Found row matching filter
+            console.log('Found row matching filter');
+            return true;
+          }
+        }
         // Filter: ({ filter, onChange }) => (
         //   <div>
         //     <DateRangePicker
@@ -128,81 +165,87 @@ class TimeSheet extends React.Component {
         //     onDayChange={this.handleDayChange}
         //   />
         // ),
-        filterMethod: (filter, row) => {
-          console.log('hello');
-          if (
-            filter.value.startDate === null ||
-            filter.value.endDate === null
-          ) {
-            // Incomplet or cleared date picker
-            return true;
-          }
+        // filterMethod: (filter, row) => {
+        //   console.log('hello');
+        //   if (
+        //     filter.value.startDate === null ||
+        //     filter.value.endDate === null
+        //   ) {
+        //     // Incomplet or cleared date picker
+        //     return true;
+        //   }
 
-          if (
-            moment(row[filter.id]).isBetween(
-              filter.value.startDate,
-              filter.value.endDate
-            )
-          ) {
-            // Found row matching filter
-            return true;
-          }
-        }
+        //   if (
+        //     moment(row[filter.id]).isBetween(
+        //       filter.value.startDate,
+        //       filter.value.endDate
+        //     )
+        //   ) {
+        //     // Found row matching filter
+        //     return true;
+        //   }
+        // }
+        // {
+        //   id: 'start',
+        //   Header: 'Start',
+        //   accessor: d => new Date(d.start).toString().slice(0, 21),
+        //   // filterMethod: (filter, rows) =>
+        //   //   matchSorter(rows, filter.value, { keys: ['start'] }),
+        //   // filterAll: true,
+        //   Filter: ({ filter, onChange }) => (
+        //     <DatePicker showTimeSelect withPortal />
+        //   )
+        // },
+        // {
+        //   id: 'start',
+        //   Header: 'Start',
+        //   accessor: d =>
+        //     moment(new Date(d.start))
+        //       .format('DD.MM.YYYY')
+        //       .toString(),
+        //   // filterMethod: (filter, rows) =>
+        //   //   matchSorter(rows, filter.value, { keys: ['Start'] }),
+        //   // filterAll: true,
+        //   render: row => <div>{moment(row.value).format('DD.MM.YYYY')}</div>,
+        //   filterRender: ({ filter, onFilterChange }) => <DateRangePicker />,
+        //   filterMethod: (filter, row) => {
+        //     if (
+        //       filter.value.startDate === null ||
+        //       filter.value.endDate === null
+        //     ) {
+        //       // Incomplet or cleared date picker
+        //       return true;
+        //     }
+
+        //     if (
+        //       moment(row[filter.id]).isBetween(
+        //         filter.value.startDate,
+        //         filter.value.endDate
+        //       )
+        //     ) {
+        //       // Found row matching filter
+        //       return true;
+        //     }
+        //   }
+        // },
       },
-      // {
-      //   id: 'start',
-      //   Header: 'Start',
-      //   accessor: d => new Date(d.start).toString().slice(0, 21),
-      //   // filterMethod: (filter, rows) =>
-      //   //   matchSorter(rows, filter.value, { keys: ['start'] }),
-      //   // filterAll: true,
-      //   Filter: ({ filter, onChange }) => (
-      //     <DatePicker showTimeSelect withPortal />
-      //   )
-      // },
-      // {
-      //   id: 'start',
-      //   Header: 'Start',
-      //   accessor: d =>
-      //     moment(new Date(d.start))
-      //       .format('DD.MM.YYYY')
-      //       .toString(),
-      //   // filterMethod: (filter, rows) =>
-      //   //   matchSorter(rows, filter.value, { keys: ['Start'] }),
-      //   // filterAll: true,
-      //   render: row => <div>{moment(row.value).format('DD.MM.YYYY')}</div>,
-      //   filterRender: ({ filter, onFilterChange }) => <DateRangePicker />,
-      //   filterMethod: (filter, row) => {
-      //     if (
-      //       filter.value.startDate === null ||
-      //       filter.value.endDate === null
-      //     ) {
-      //       // Incomplet or cleared date picker
-      //       return true;
-      //     }
-
-      //     if (
-      //       moment(row[filter.id]).isBetween(
-      //         filter.value.startDate,
-      //         filter.value.endDate
-      //       )
-      //     ) {
-      //       // Found row matching filter
-      //       return true;
-      //     }
-      //   }
-      // },
       {
         id: 'end',
         Header: 'End',
-        accessor: d => new Date(d.end).toString().slice(0, 21)
+        accessor: d => new Date(d.end),
+        Cell: d => <span>{moment(d.original.end).format('llll')}</span>
       },
       {
         id: 'duration',
         Header: 'Duration',
-        accessor: d =>
+        accessor: d => new Date(d.end).getTime() - new Date(d.start).getTime(),
+        // Cell: d => {
+        //   debugger;
+        // }
+        Cell: d =>
           millisConverted(
-            new Date(d.end).getTime() - new Date(d.start).getTime()
+            new Date(d.original.end).getTime() -
+              new Date(d.original.start).getTime()
           ),
         Footer: this.state.totalTime
       }
@@ -242,6 +285,7 @@ class TimeSheet extends React.Component {
       }
     };
   };
+  // getTheadFilterThProps={this.getTheadFilterThProps}
 
   render() {
     return (
@@ -274,7 +318,6 @@ class TimeSheet extends React.Component {
               this.calcTotal();
             }}
             className="-striped -highlight"
-            getTheadFilterThProps={this.getTheadFilterThProps}
           />
         </div>
       </div>

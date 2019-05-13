@@ -6,6 +6,7 @@ import { Login, Signup, UserHome, ProjectBoard } from './components';
 import { me } from './store';
 import CreateTicket from './components/CreateTicket';
 import CreateProject from './components/CreateProject';
+import TimeSheet from './components/TimeSheet';
 
 import Projects from './components/Projects';
 import AddUserToProject from './components/AddUserToProject';
@@ -36,12 +37,17 @@ class Routes extends Component {
             <Route exact path="/projects" component={Projects} />
             <Route path="/projects/:id/newticket" component={CreateTicket} />
             <Route path="/projects/:id/adduser" component={AddUserToProject} />
+<<<<<<< HEAD
+            <Route path="/projects/:id" component={ProjectBoard} />
+            <Route exact path="/timesheet" component={TimeSheet} />
+=======
             <Route exact path="/projects/:id" component={ProjectBoard} />
             <Route
               exact
               path="/projects/user/tables"
               component={userTimeTable}
             />
+>>>>>>> master
             <Route component={Projects} />
           </Switch>
         )}

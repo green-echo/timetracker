@@ -92,30 +92,35 @@ class TimeSheet extends React.Component {
       {
         id: 'start',
         Header: 'Start',
-        accessor: d => moment(new Date(d.start)).format("MM/DD/YYYY HH:mm:ss"),
+        accessor: d => moment(new Date(d.start)).format('MM/DD/YYYY HH:mm:ss'),
         // filterMethod: (filter, rows) =>
         //   matchSorter(rows, filter.value, { keys: ['Start'] }),
         filterAll: true,
-        Filter: ({ filter, onChange }) =>
-       <div>
-        <DateRangePicker  startDate={this.state.startDate}
-                          endDate={this.state.endDate} ranges={this.state.ranges} 
-                          onEvent={this.handleEvent} 
-                          >
-
-        <Button className="selected-date-range-btn" style={{width:'100%'}}>
-
-
-            <span >
-            <input type="text" name="labrl" value={label }
-            onChange={event => onChange(event.target.value)} readOnly 
-            />
-            </span>
-            <span className="caret"></span>
-
-        </Button>
-      </DateRangePicker>
-      </div>
+        // Filter: ({ filter, onChange }) => (
+        //   <div>
+        //     <DateRangePicker
+        //       startDate={this.state.startDate}
+        //       endDate={this.state.endDate}
+        //       ranges={this.state.ranges}
+        //       onEvent={this.handleEvent}
+        //     >
+        //       <Button
+        //         className="selected-date-range-btn"
+        //         style={{ width: '100%' }}
+        //       >
+        //         <span>
+        //           <input
+        //             type="text"
+        //             name="labrl"
+        //             onChange={event => onChange(event.target.value)}
+        //             readOnly
+        //           />
+        //         </span>
+        //         <span className="caret" />
+        //       </Button>
+        //     </DateRangePicker>
+        //   </div>
+        // ),
 
         // Filter: ({ filter, onChange }) => (
         //   <DayPickerInput
@@ -124,7 +129,7 @@ class TimeSheet extends React.Component {
         //   />
         // ),
         filterMethod: (filter, row) => {
-          console.log('hello')
+          console.log('hello');
           if (
             filter.value.startDate === null ||
             filter.value.endDate === null

@@ -156,6 +156,10 @@ export function generateNewColumns(payload) {
 
 export function d3DataObject(array) {
   return array.map(object => {
-    return { project: object['project.name'], points: Number(object.points) };
+    return {
+      project: object['project.name'],
+      points: Number(object.points),
+      id: object.id
+    };
   });
 }

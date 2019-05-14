@@ -35,6 +35,7 @@ class MainNav extends Component {
       <div>
         {this.props.isLoggedIn ? (
           <div>
+
             <Navbar color="light" light expand="md">
               <NavbarBrand
                 href="/"
@@ -43,6 +44,7 @@ class MainNav extends Component {
               >
                 Timey
               </NavbarBrand>
+
               <NavbarToggler onClick={this.toggle} />
               <Collapse isOpen={this.state.isOpen} navbar>
                 <Nav className="ml-auto" navbar>
@@ -50,8 +52,10 @@ class MainNav extends Component {
                     <Link to="/home">Home</Link>
                   </NavItem>
                   <NavItem>
-                    <a href="#" onClick={this.props.handleClick}>
-                      Logout
+                    <a href="#" onClick={ () =>{if (window.confirm('Are you sure you wish to log out?'))
+                     this.props.handleClick}
+                   }>
+                   Logout
                     </a>
                   </NavItem>
                   <NavItem>

@@ -17,6 +17,15 @@ class Timer extends React.Component {
     this.millisToMinutesAndSeconds = this.millisToMinutesAndSeconds.bind(this);
   }
 
+
+
+  millisToMinutesAndSeconds(millis) {
+    var minutes = Math.floor(millis / 60000);
+    var seconds = ((millis % 60000) / 1000).toFixed(0);
+    return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+  }
+
+
   async componentDidMount() {
     const id = this.props.ticket.id;
     const { data } = await axios.get(`/api/userTickets/${id}/open`);

@@ -243,7 +243,8 @@ class Ticket extends Component {
                           ticket.id,
                           ticket.projectId
                         );
-                        this.setState({ userEmail: 'select user' });
+                        this.setState({ userEmail: 'select user', newUser:0 });
+                        
                       }}
                     >
                       {' '}

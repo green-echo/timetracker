@@ -71,10 +71,6 @@ class TimeSheet extends React.Component {
   //   });
   // }
 
-  handleEvent = () => {
-    console.log('changed!!!!!!');
-  };
-
   columns = () => {
     return [
       {
@@ -148,9 +144,6 @@ class TimeSheet extends React.Component {
         id: 'duration',
         Header: 'Duration',
         accessor: d => new Date(d.end).getTime() - new Date(d.start).getTime(),
-        // Cell: d => {
-        //   debugger;
-        // }
         Cell: d =>
           millisConverted(
             new Date(d.original.end).getTime() -

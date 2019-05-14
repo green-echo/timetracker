@@ -38,14 +38,10 @@ class MainNav extends Component {
         {this.props.isLoggedIn ? (
           <div>
             <Navbar color="light" light expand="md">
-<<<<<<< HEAD
             <NavbarBrand href="/"> 
               <img src="/timeylogo.jpeg"  
               width="70" height="70"
              /></NavbarBrand>
-=======
-              <NavbarBrand href="/">Timey</NavbarBrand>
->>>>>>> 235f64bc157a881ab32f2cdd3ac259821dc56399
               <NavbarToggler onClick={this.toggle} />
               <Collapse isOpen={this.state.isOpen} navbar>
                 <Nav className="ml-auto" navbar>

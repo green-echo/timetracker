@@ -1,0 +1,22 @@
+{
+  "name": "TimeTracker",
+  "short_name": "timetracker",
+  "icons": [
+    {
+      "src":
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUpc2oyh8yF_R9yMxOZlph-obPF3UlHKYfObGReJfByXt2421J",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src":
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUpc2oyh8yF_R9yMxOZlph-obPF3UlHKYfObGReJfByXt2421J",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "https://timetrackerboard.herokuapp.com",
+  "display": "standalone",
+  "background_color": "#3E4EB8",
+  "theme_color": "#2F3BA2"
+}

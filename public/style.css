@@ -10,6 +10,10 @@ font-family: 'Alegreya Sans', sans-serif;
 font-family: 'Open Sans', sans-serif;
 */
 
+.title {
+  font-family: 'Bungee Shade', cursive;
+}
+
 .ticketTitle-button-wrapper {
   display: flex;
   justify-content: space-between;
@@ -152,10 +156,9 @@ div.card-title {
   margin: 0;
 }
 
-
 a.navbar-brand {
   margin-right: 0px !important;
   margin-left: 20px;
-  margin-top:3px;
-  margin-bottom:2px;
+  margin-top: 3px;
+  margin-bottom: 2px;
 }

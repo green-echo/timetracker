@@ -11,6 +11,14 @@ import { Button } from 'reactstrap';
 import { DateRangePicker } from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
 
+import Picker from './Picker';
+
+import 'react-datepicker/dist/react-datepicker.css';
+
+var debounce = require('lodash.debounce');
+
+import DRP from './DRP';
+
 import moment from 'moment';
 
 class TimeSheet extends React.Component {
@@ -29,10 +37,7 @@ class TimeSheet extends React.Component {
       endDate: null,
       focusedInput: null
     };
-    // this.handleDayChange = this.handleDayChange.bind(this);
   }
-
-  falseFunc = () => false;
 
   async componentDidMount() {
     const { data } = await Axios.get(`/api/users/timesheet`);
@@ -43,6 +48,22 @@ class TimeSheet extends React.Component {
 
     this.calcTotal();
   }
+
+  // handleChange = ({ startDate, endDate }) => {
+  //   console.log('IN HANDLESTARTCHANGE');
+  //   this.setState({
+  //     startDate,
+  //     endDate
+  //   });
+  // };
+
+  handleStartChange = start => {
+    this.setState({ startDate: start });
+  };
+
+  handleEndChange = end => {
+    this.setState({ endDate: end });
+  };
 
   calcTotal = () => {
     let totalTime;
@@ -62,15 +83,6 @@ class TimeSheet extends React.Component {
     this.setState({ totalTime });
   };
 
-  // handleDayChange(selectedDay, modifiers, dayPickerInput) {
-  //   console.log(`data changed to ${selectedDay}`);
-  //   const input = dayPickerInput.getInput();
-  //   this.setState({
-  //     selectedDay,
-  //     isEmpty: !input.value.trim()
-  //   });
-  // }
-
   columns = () => {
     return [
       {
@@ -88,36 +100,32 @@ class TimeSheet extends React.Component {
         Header: 'Start',
         accessor: d => new Date(d.start).toString(),
         Cell: d => <span>{moment(d.original.start).format('llll')}</span>,
+        // Filter: cellInfo => <DRP cellInfo={cellInfo} />,
         Filter: cellInfo => (
-          <DateRangePicker
-            withPortal={true}
-            startDateId="startDate"
-            endDateId="endDate"
+          // <DRP
+          //   cellInfo={cellInfo}
+          //   handleChange={this.handleChange}
+          //   startDate={this.state.startDate}
+          //   endDate={this.state.endDate}
+          // />
+          <Picker
+            cellInfo={cellInfo}
+            handleStartChange={this.handleStartChange}
+            handleEndChange={this.handleEndChange}
             startDate={this.state.startDate}
             endDate={this.state.endDate}
-            isOutsideRange={this.falseFunc}
-            showClearDates={true}
-            // onDatesChange={({ startDate, endDate }) => {
-            //   this.setState({ startDate, endDate });
-            //   cellInfo.onChange({ startDate, endDate });
-            // }}
-            onDatesChange={({ startDate, endDate }) => {
-              this.setState({ startDate, endDate }, () => {
-                cellInfo.onChange({ startDate, endDate });
-              });
-            }}
-            focusedInput={this.state.focusedInput}
-            onFocusChange={focusedInput => this.setState({ focusedInput })}
           />
         ),
         filterMethod: (filter, row) => {
-          console.log('in filter method', filter);
+          // console.log('FILTER', filter.value);
+
+          // console.log('in filter method', filter);
           if (
             filter.value.startDate === null ||
             filter.value.endDate === null
           ) {
-            // Incomplet or cleared date picker
-            console.log('Incomplet or cleared date picker');
+            // Incomplete or cleared date picker
+            console.log('Incomplete or cleared date picker');
             return true;
           }
 
@@ -129,6 +137,7 @@ class TimeSheet extends React.Component {
           ) {
             // Found row matching filter
             console.log('Found row matching filter');
+            console.log(row[filter.id]);
             return true;
           }
         }
@@ -215,7 +224,19 @@ class TimeSheet extends React.Component {
                 .toLowerCase()
                 .includes(filter.value.toLowerCase())
             }
-            // onFilteredChange={() => {
+            onFilteredChange={() => this.calcTotal()}
+            // onFilteredChange={filter => {
+            //   console.log('FILLLLTERRRR', filter);
+            //   const startFilter = filter.find(el => el.id === 'start');
+            //   if (startFilter) {
+            //     if (startFilter.value) {
+            //       if (startFilter.value.endDate) {
+            //         this.calcTotal();
+            //       }
+            //     }
+            //   } else {
+            //     this.calcTotal();
+            //   }
             //   this.calcTotal();
             // }}
             className="-striped -highlight"

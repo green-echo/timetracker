@@ -37,8 +37,10 @@ class Ticket extends Component {
       btnDropright: false,
       userDropdownOpen: false,
       userEmail: 'Select User',
+
       newUser: this.props.ticket.userId, 
       disabled: ''
+
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -253,7 +255,10 @@ class Ticket extends Component {
                           ticket.id,
                           ticket.projectId
                         );
-                        this.setState({ userEmail: 'select user', newUser: 0 });
+                        this.setState({
+                          userEmail: 'Select User',
+                          newUser: {}
+                        });
                       }}
                     >
                       {' '}

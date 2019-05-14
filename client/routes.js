@@ -11,6 +11,7 @@ import TimeSheet from './components/TimeSheet';
 import Projects from './components/Projects';
 import AddUserToProject from './components/AddUserToProject';
 import userTimeTable from './components/userTimeTable';
+import Chart from './components/Chart';
 
 /**
  * COMPONENT
@@ -36,14 +37,10 @@ class Routes extends Component {
 
             <Route path="/projects/:id/newticket" component={CreateTicket} />
             <Route path="/projects/:id/adduser" component={AddUserToProject} />
-            <Route path="/projects/:id" component={ProjectBoard} />
+            <Route exact path="/projects/:id" component={ProjectBoard} />
             <Route exact path="/timesheet" component={TimeSheet} />
             <Route exact path="/projects/:id" component={ProjectBoard} />
-            <Route
-              exact
-              path="/projects/user/tables"
-              component={userTimeTable}
-            />
+            <Route exact path="/projects/user/tables" component={Chart} />
             <Route component={Projects} />
           </Switch>
         )}

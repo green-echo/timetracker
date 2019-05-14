@@ -1,3 +1,4 @@
+const Sequelize = require('sequelize');
 /* eslint-disable no-case-declarations */
 /* eslint-disable no-lonely-if */
 const router = require('express').Router();
@@ -29,20 +30,26 @@ router.get('/user/tickets', async (req, res, next) => {
         where: {
           userId: user.id
         },
-        include: [{ model: Project }]
+        attributes: [
+          'project.id',
+          [Sequelize.fn('sum', Sequelize.col('points')), 'points']
+        ],
+        group: ['project.id'],
+        include: [{ model: Project }],
+        raw: true
       });
       // TO DO: PUT THIS IN UTIL FUNCTION
-
-      let timePerProject = {};
-      tickets.forEach(ticketProject => {
-        let project = ticketProject.project.name;
-        if (project in timePerProject) {
-          timePerProject[project] += ticketProject.points;
-        } else {
-          timePerProject[project] = ticketProject.points;
-        }
-      });
-      res.json(timePerProject);
+      res.json(tickets);
+      // let timePerProject = {};
+      // tickets.forEach(ticketProject => {
+      //   let project = ticketProject.project.name;
+      //   if (project in timePerProject) {
+      //     timePerProject[project] += ticketProject.points;
+      //   } else {
+      //     timePerProject[project] = ticketProject.points;
+      //   }
+      // });
+      // res.json(timePerProject);
     }
   } catch (error) {
     next(error);

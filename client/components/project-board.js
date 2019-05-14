@@ -148,7 +148,6 @@ class ProjectBoard extends React.Component {
                 toggle={this.userToggle}
               >
                 <DropdownToggle caret size="sm">
-                  {' '}
                   Users On Project
                 </DropdownToggle>
                 <DropdownMenu>

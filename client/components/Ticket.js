@@ -36,7 +36,8 @@ class Ticket extends Component {
       dropdownOpen: false,
       btnDropright: false,
       userDropdownOpen: false,
-      userEmail: 'Select User'
+      userEmail: 'Select User',
+     newUser: {}
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -225,11 +226,12 @@ class Ticket extends Component {
                     {this.props.allUsers.map(user => {
                       return (
                         <DropdownItem
+                          key={user.id}
                           onClick={() => {
                             this.props.addUserToTix(ticket.id, user.id);
+                            this.setState({newUser: user.id})
                             this.select(event);
                           }}
-                          key={user.id}
                         >
                           {user.email}
                         </DropdownItem>
@@ -241,7 +243,8 @@ class Ticket extends Component {
                           ticket.id,
                           ticket.projectId
                         );
-                        this.setState({ userEmail: 'select user' });
+                        this.setState({ userEmail: 'select user', newUser:0 });
+                        
                       }}
                     >
                       {' '}
@@ -250,7 +253,11 @@ class Ticket extends Component {
                   </DropdownMenu>
                 </ButtonDropdown>
               </div>
-              <Timer ticket={ticket} currentUser={this.props.user.id} />
+              <Timer
+                newUser={this.state.newUser}
+                ticket={ticket}
+                currentUser={this.props.user.id}
+              />
             </div>
           </CardBody>
         </Card>

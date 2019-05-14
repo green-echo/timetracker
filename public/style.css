@@ -151,3 +151,11 @@ div.card-title {
 .assign-user > .btn-group button {
   margin: 0;
 }
+
+
+a.navbar-brand {
+  margin-right: 0px !important;
+  margin-left: 20px;
+  margin-top:3px;
+  margin-bottom:2px;
+}

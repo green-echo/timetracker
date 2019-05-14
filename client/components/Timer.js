@@ -62,7 +62,6 @@ class Timer extends React.Component {
   }
 
   render() {
-    console.log('HELLO');
     return (
       <div id="timer">
         <div>{this.millisToMinutesAndSeconds(this.state.time)}</div>

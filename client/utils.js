@@ -177,3 +177,13 @@ export const millisConverted = milli => {
   const sDisplay = s > 0 ? s + (s == 1 ? ' second' : ' seconds') : '';
   return dDisplay + hDisplay + mDisplay + sDisplay;
 };
+
+export function d3PieChartData(array) {
+  return array.map(object => {
+    return {
+      points: Number(object.points),
+      user: object['user.email'],
+      id: object.id
+    };
+  });
+}

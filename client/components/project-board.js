@@ -156,11 +156,7 @@ class ProjectBoard extends React.Component {
                   <DropdownItem divider />
                   {this.props.allUsers.map(user => {
                     return (
-                      <DropdownItem
-                        key={user.id}
-                      >
-                        {user.email}
-                      </DropdownItem>
+                      <DropdownItem key={user.id}>{user.email}</DropdownItem>
                     );
                   })}
                 </DropdownMenu>
@@ -172,6 +168,11 @@ class ProjectBoard extends React.Component {
               </Link>
             </Col>
             <Col xs={6} className="right-nav">
+              <Link to={`/projects/${this.props.project.id}/ticketdata`}>
+                <Button outline color="info" size="sm">
+                  Data
+                </Button>
+              </Link>
               <Link to={`/projects/${this.props.project.id}/newticket`}>
                 <Button outline color="info" size="sm">
                   New Ticket
@@ -316,7 +317,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   const projectId = ownProps.match.params.id;
-  console.log('PROJECTID', projectId);
   return {
     getProject: () => {
       dispatch(getProjectThunk(projectId));

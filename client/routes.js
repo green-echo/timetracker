@@ -10,8 +10,8 @@ import TimeSheet from './components/TimeSheet';
 
 import Projects from './components/Projects';
 import AddUserToProject from './components/AddUserToProject';
-import userTimeTable from './components/userTimeTable';
 import Chart from './components/Chart';
+import PieChart from './components/PieChart';
 
 /**
  * COMPONENT
@@ -41,6 +41,7 @@ class Routes extends Component {
             <Route exact path="/timesheet" component={TimeSheet} />
             <Route exact path="/projects/:id" component={ProjectBoard} />
             <Route exact path="/projects/user/tables" component={Chart} />
+            <Route exact path="/projects/:id/ticketdata" component={PieChart} />
             <Route component={Projects} />
           </Switch>
         )}

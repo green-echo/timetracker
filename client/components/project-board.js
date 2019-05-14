@@ -50,6 +50,7 @@ class ProjectBoard extends React.Component {
 
   componentDidMount() {
     const projectId = this.props.match.params.id;
+    console.log('projectId inside component did mount', projectId);
     this.props.getProject(projectId);
     this.props.loadProjects();
     this.props.loadUsers();
@@ -126,7 +127,7 @@ class ProjectBoard extends React.Component {
                 isOpen={this.state.dropdownOpen}
                 toggle={this.toggle}
               >
-                <DropdownToggle caret size="sm">
+                <DropdownToggle caret size="sm" color="info">
                   {this.props.project.name}
                 </DropdownToggle>
                 <DropdownMenu>
@@ -146,7 +147,8 @@ class ProjectBoard extends React.Component {
                 isOpen={this.state.userDropdownOpen}
                 toggle={this.userToggle}
               >
-                <DropdownToggle caret size="sm">
+                <DropdownToggle caret size="sm" color="info">
+                  {' '}
                   Users On Project
                 </DropdownToggle>
                 <DropdownMenu>
@@ -163,13 +165,13 @@ class ProjectBoard extends React.Component {
                   })}
                 </DropdownMenu>
               </ButtonDropdown>
-            </Col>
-            <Col xs={6} className="right-nav">
               <Link to={`/timesheet`}>
                 <Button color="info" size="sm">
                   Timesheets
                 </Button>
               </Link>
+            </Col>
+            <Col xs={6} className="right-nav">
               <Link to={`/projects/${this.props.project.id}/newticket`}>
                 <Button outline color="info" size="sm">
                   New Ticket
@@ -314,6 +316,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   const projectId = ownProps.match.params.id;
+  console.log('PROJECTID', projectId);
   return {
     getProject: () => {
       dispatch(getProjectThunk(projectId));

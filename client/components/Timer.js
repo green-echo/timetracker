@@ -3,32 +3,17 @@ import axios from 'axios';
 //import { Button } from 'reactstrap';
 import Button from '@material-ui/core/Button';
 class Timer extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
       time: 0,
       start: 0,
       isOn: false,
-      status: false,
+      status: false
     };
     this.startTimer = this.startTimer.bind(this);
     this.stopTimer = this.stopTimer.bind(this);
     this.millisToMinutesAndSeconds = this.millisToMinutesAndSeconds.bind(this);
-  }
-
-
-//   componentWillReceiveProps(nextProps) {
-//     console.log('---nextProps---', nextProps)
-//     console.log('---this.props---', this.props)
-//    // this.setState({})
-// }
-
-
-  millisToMinutesAndSeconds(millis) {
-    var minutes = Math.floor(millis / 60000);
-    var seconds = ((millis % 60000) / 1000).toFixed(0);
-    return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
   }
 
   async componentDidMount() {
@@ -44,7 +29,12 @@ class Timer extends React.Component {
       });
       this.startTimer();
     }
-    // setTimeout(console.log(this.state), 1000);
+  }
+
+  millisToMinutesAndSeconds(millis) {
+    let minutes = Math.floor(millis / 60000);
+    let seconds = ((millis % 60000) / 1000).toFixed(0);
+    return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
   }
 
   async startTimer() {
@@ -76,7 +66,6 @@ class Timer extends React.Component {
   }
 
   render() {
-
     return (
       <div id="timer">
         <div>{this.millisToMinutesAndSeconds(this.state.time)}</div>
@@ -94,10 +83,7 @@ class Timer extends React.Component {
             >
               stop
             </Button>
-
-          ) : this.props.currentUser ===this.props.newUser ? 
-          
-          (
+          ) : this.props.currentUser === this.props.newUser ? (
             <Button
               variant="contained"
               color="secondary"

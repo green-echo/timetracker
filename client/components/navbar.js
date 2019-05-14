@@ -53,7 +53,7 @@ class MainNav extends Component {
                   </NavItem>
                   <NavItem>
                     <a href="#" onClick={ () =>{if (window.confirm('Are you sure you wish to log out?'))
-                     this.props.handleClick}
+                     this.props.handleClick()}
                    }>
                    Logout
                     </a>

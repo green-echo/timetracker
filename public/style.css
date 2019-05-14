@@ -10,6 +10,12 @@ font-family: 'Alegreya Sans', sans-serif;
 font-family: 'Open Sans', sans-serif;
 */
 
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+}
+
 .ticketTitle-button-wrapper {
   display: flex;
   justify-content: space-between;
@@ -152,10 +158,25 @@ div.card-title {
   margin: 0;
 }
 
+/* d3 styles */
+.Axis path,
+.Axis line {
+  stroke: #e0e0e0;
+}
+
+.Axis text {
+  font-size: 11px;
+  fill: black;
+}
+
+.Axis-Bottom text {
+  transform: rotate(-45deg);
+  text-anchor: end;
+}
 
 a.navbar-brand {
   margin-right: 0px !important;
   margin-left: 20px;
-  margin-top:3px;
-  margin-bottom:2px;
+  margin-top: 3px;
+  margin-bottom: 2px;
 }

@@ -37,7 +37,7 @@ class Routes extends Component {
 
             <Route path="/projects/:id/newticket" component={CreateTicket} />
             <Route path="/projects/:id/adduser" component={AddUserToProject} />
-            <Route path="/projects/:id" component={ProjectBoard} />
+            <Route exact path="/projects/:id" component={ProjectBoard} />
             <Route exact path="/timesheet" component={TimeSheet} />
             <Route exact path="/projects/:id" component={ProjectBoard} />
             <Route exact path="/projects/user/tables" component={Chart} />

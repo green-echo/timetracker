@@ -67,9 +67,9 @@ const mapState = state => {
   };
 };
 const mapDispatch = dispatch => ({
-  loadProjects: () => {
-    dispatch(getProjectsThunk());
-  },
+  // loadProjects: () => {
+  //   dispatch(getProjectsThunk());
+  // },
   loadTickets: () => {
     dispatch(getProjectTicketsThunk());
   }

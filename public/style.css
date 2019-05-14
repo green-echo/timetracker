@@ -173,3 +173,10 @@ div.card-title {
   transform: rotate(-45deg);
   text-anchor: end;
 }
+
+a.navbar-brand {
+  margin-right: 0px !important;
+  margin-left: 20px;
+  margin-top: 3px;
+  margin-bottom: 2px;
+}

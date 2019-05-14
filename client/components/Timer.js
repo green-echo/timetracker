@@ -18,13 +18,6 @@ class Timer extends React.Component {
   }
 
 
-//   componentWillReceiveProps(nextProps) {
-//     console.log('---nextProps---', nextProps)
-//     console.log('---this.props---', this.props)
-//    // this.setState({})
-// }
-
-
   millisToMinutesAndSeconds(millis) {
     var minutes = Math.floor(millis / 60000);
     var seconds = ((millis % 60000) / 1000).toFixed(0);

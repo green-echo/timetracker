@@ -47,7 +47,7 @@ class Timer extends React.Component {
         this.setState({
           time: Date.now() - this.state.start
         }),
-      60000
+      1000
     );
     this.setState({ status: true });
     const id = this.props.ticket.id;

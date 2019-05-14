@@ -122,7 +122,7 @@ class ProjectBoard extends React.Component {
       <div>
         <Container className="project-board">
           <Row>
-            <Col xs={6}>
+            <Col sm={12} xs={12}  md={6}>
               <ButtonDropdown
                 isOpen={this.state.dropdownOpen}
                 toggle={this.toggle}
@@ -165,6 +165,10 @@ class ProjectBoard extends React.Component {
                   })}
                 </DropdownMenu>
               </ButtonDropdown>
+
+            </Col>
+            <Col  sm={12} xs={12} md={6} className="right-nav">
+
               <Link to={`/timesheet`}>
                 <Button color="info" size="sm">
                   Timesheets

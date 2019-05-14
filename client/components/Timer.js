@@ -16,12 +16,6 @@ class Timer extends React.Component {
     this.millisToMinutesAndSeconds = this.millisToMinutesAndSeconds.bind(this);
   }
 
-  millisToMinutesAndSeconds(millis) {
-    var minutes = Math.floor(millis / 60000);
-    var seconds = ((millis % 60000) / 1000).toFixed(0);
-    return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
-  }
-
   async componentDidMount() {
     const id = this.props.ticket.id;
     const { data } = await axios.get(`/api/userTickets/${id}/open`);
@@ -35,7 +29,12 @@ class Timer extends React.Component {
       });
       this.startTimer();
     }
-    // setTimeout(console.log(this.state), 1000);
+  }
+
+  millisToMinutesAndSeconds(millis) {
+    let minutes = Math.floor(millis / 60000);
+    let seconds = ((millis % 60000) / 1000).toFixed(0);
+    return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
   }
 
   async startTimer() {
@@ -48,7 +47,7 @@ class Timer extends React.Component {
         this.setState({
           time: Date.now() - this.state.start
         }),
-      1
+      1000
     );
     this.setState({ status: true });
     const id = this.props.ticket.id;
@@ -63,6 +62,7 @@ class Timer extends React.Component {
   }
 
   render() {
+    console.log('HELLO');
     return (
       <div id="timer">
         <div>{this.millisToMinutesAndSeconds(this.state.time)}</div>
@@ -76,7 +76,7 @@ class Timer extends React.Component {
             >
               stop
             </Button>
-          ) : this.props.currentUser === this.props.ticket.userId ? (
+          ) : this.props.currentUser === this.props.newUser ? (
             <Button
               variant="contained"
               color="secondary"

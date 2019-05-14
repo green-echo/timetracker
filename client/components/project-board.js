@@ -165,17 +165,14 @@ class ProjectBoard extends React.Component {
                   })}
                 </DropdownMenu>
               </ButtonDropdown>
-
-            </Col>
-            <Col  sm={12} xs={12} md={6} className="right-nav">
-
               <Link to={`/timesheet`}>
                 <Button color="info" size="sm">
                   Timesheets
                 </Button>
               </Link>
             </Col>
-            <Col xs={6} className="right-nav">
+        
+            <Col xs={12}   sm={12} md={6}   className="right-nav">
               <Link to={`/projects/${this.props.project.id}/newticket`}>
                 <Button outline color="info" size="sm">
                   New Ticket

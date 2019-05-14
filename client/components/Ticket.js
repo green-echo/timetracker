@@ -37,7 +37,7 @@ class Ticket extends Component {
       btnDropright: false,
       userDropdownOpen: false,
       userEmail: 'Select User',
-     newUser: {}
+      newUser:  this.props.ticket.userId
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -68,6 +68,7 @@ class Ticket extends Component {
         description: this.props.data.description
       });
     }
+   // this.setState({newUser: this.props})
   }
 
   select(event) {
@@ -115,6 +116,7 @@ class Ticket extends Component {
   };
 
   render() {
+  
     const { provided, innerRef, ticket } = this.props;
     return (
       <div
@@ -229,7 +231,7 @@ class Ticket extends Component {
                           key={user.id}
                           onClick={() => {
                             this.props.addUserToTix(ticket.id, user.id);
-                            this.setState({newUser: user.id})
+                            this.setState({ newUser: user.id });
                             this.select(event);
                           }}
                         >
@@ -243,8 +245,7 @@ class Ticket extends Component {
                           ticket.id,
                           ticket.projectId
                         );
-                        this.setState({ userEmail: 'select user', newUser:0 });
-                        
+                        this.setState({ userEmail: 'select user', newUser: 0 });
                       }}
                     >
                       {' '}

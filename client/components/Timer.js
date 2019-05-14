@@ -87,7 +87,7 @@ class Timer extends React.Component {
               stop
             </Button>
 
-          ) : this.props.currentUser ===this.props.newUser? 
+          ) : this.props.currentUser ===this.props.newUser ? 
           
           (
             <Button

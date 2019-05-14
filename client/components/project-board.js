@@ -108,7 +108,6 @@ class ProjectBoard extends React.Component {
     );
 
     this.props.reorderProps(newProps.columns); //frontend
-
     this.props.reorder(result); //backend
 
     socket.emit('reorder', this.props.match.params.id, newProps.columns);
@@ -157,7 +156,6 @@ class ProjectBoard extends React.Component {
                     return (
                       <DropdownItem
                         key={user.id}
-                        // onClick={() => this.props.addUser(user.id)}
                       >
                         {user.email}
                       </DropdownItem>

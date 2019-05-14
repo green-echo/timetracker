@@ -48,6 +48,7 @@ class Timer extends React.Component {
   }
 
   async startTimer() {
+
     this.setState({
       time: this.state.time,
       start: Date.now() - this.state.time
@@ -57,11 +58,13 @@ class Timer extends React.Component {
         this.setState({
           time: Date.now() - this.state.start
         }),
-      1
+      1000
     );
     this.setState({ status: true });
     const id = this.props.ticket.id;
     await axios.post(`/api/userTickets/${id}`);
+    this.props.deactivateList()
+  
   }
   async stopTimer() {
     this.setState({ isOn: false, time: 0 });
@@ -69,6 +72,7 @@ class Timer extends React.Component {
     const id = this.props.ticket.id;
     this.setState({ status: false });
     await axios.put(`/api/userTickets/${id}`);
+    this.props.activateList()
   }
 
   render() {
@@ -77,7 +81,11 @@ class Timer extends React.Component {
       <div id="timer">
         <div>{this.millisToMinutesAndSeconds(this.state.time)}</div>
         <div>
-          {this.state.status === true ? (
+          {
+            
+           
+            
+           ( this.state.status === true  ? (
             <Button
               variant="contained"
               color="secondary"
@@ -107,7 +115,10 @@ class Timer extends React.Component {
             >
               start
             </Button>
-          )}
+          )
+        
+           )
+        }
         </div>
       </div>
     );

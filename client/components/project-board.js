@@ -50,6 +50,7 @@ class ProjectBoard extends React.Component {
 
   componentDidMount() {
     const projectId = this.props.match.params.id;
+    console.log('projectId inside component did mount', projectId);
     this.props.getProject(projectId);
     this.props.loadProjects();
     this.props.loadUsers();
@@ -317,6 +318,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   const projectId = ownProps.match.params.id;
+  console.log('PROJECTID', projectId);
   return {
     getProject: () => {
       dispatch(getProjectThunk(projectId));

@@ -37,7 +37,7 @@ class Ticket extends Component {
       btnDropright: false,
       userDropdownOpen: false,
       userEmail: 'Select User',
-      newUser: {}
+      newUser: this.props.ticket.userId
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -68,6 +68,7 @@ class Ticket extends Component {
         description: this.props.data.description
       });
     }
+    // this.setState({newUser: this.props})
   }
 
   select(event) {

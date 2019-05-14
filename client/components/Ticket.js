@@ -38,9 +38,8 @@ class Ticket extends Component {
       userDropdownOpen: false,
       userEmail: 'Select User',
 
-      newUser: this.props.ticket.userId, 
+      newUser: this.props.ticket.userId,
       disabled: ''
-
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -48,7 +47,8 @@ class Ticket extends Component {
     this.userToggle = this.userToggle.bind(this);
     this.toggleTab = this.toggleTab.bind(this);
     this.select = this.select.bind(this);
-    this.deactivateList = this.deactivateList.bind(this)
+    this.deactivateList = this.deactivateList.bind(this);
+    this.activateList = this.activateList.bind(this);
   }
 
   componentDidMount() {
@@ -57,7 +57,11 @@ class Ticket extends Component {
     }
     socket.on('modify', data => {
       if (this.props.ticket.id === data.id) {
-        this.setState(data);
+        // console.log(data);
+        this.setState({
+          userEmail: data.userEmail,
+          newUser: data.userId
+        });
       }
     });
   }
@@ -119,12 +123,12 @@ class Ticket extends Component {
   };
 
   deactivateList = () => {
-   this.setState({disabled: 'disabled'})
-  }
+    this.setState({ disabled: 'disabled' });
+  };
 
   activateList = () => {
-   this.setState({disabled: ''})
-  }
+    this.setState({ disabled: '' });
+  };
 
   render() {
     const { provided, innerRef, ticket } = this.props;
@@ -225,19 +229,20 @@ class Ticket extends Component {
               </Dialog>
               <div className="assign-user">
                 Assigned To:
-                <ButtonDropdown 
+                <ButtonDropdown
                   isOpen={this.state.userDropdownOpen}
                   toggle={this.userToggle}
                 >
                   <DropdownToggle outline caret size="sm">
                     {this.state.userEmail}
                   </DropdownToggle>
-                  <DropdownMenu  persist>
-                    <DropdownItem     header>Select User</DropdownItem>
-                    <DropdownItem  divider />
+                  <DropdownMenu persist>
+                    <DropdownItem header>Select User</DropdownItem>
+                    <DropdownItem divider />
                     {this.props.allUsers.map(user => {
                       return (
-                        <DropdownItem   className={this.state.disabled}
+                        <DropdownItem
+                          className={this.state.disabled}
                           key={user.id}
                           onClick={() => {
                             this.props.addUserToTix(ticket.id, user.id);
@@ -249,7 +254,8 @@ class Ticket extends Component {
                         </DropdownItem>
                       );
                     })}
-                    <DropdownItem   className={this.state.disabled}
+                    <DropdownItem
+                      className={this.state.disabled}
                       onClick={() => {
                         this.props.removeUserfromTix(
                           ticket.id,
@@ -273,6 +279,7 @@ class Ticket extends Component {
                 currentUser={this.props.user.id}
                 deactivateList={this.deactivateList}
                 activateList={this.activateList}
+                currentProject={this.props.user.projectId}
               />
             </div>
           </CardBody>

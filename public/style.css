@@ -199,15 +199,27 @@ a.navbar-brand {
 
 
 
-#create-form  {
+div#create-form  {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center !important;
   flex-direction: column;
   width: 100%;
-  text-align: left !important;
-  margin: 10% 0;
-  align-items: left;
+  text-align: center !important;
+  margin:5% 0;
+  align-items: center;
+
+
+
+  background: #FAFAFA;
+  padding: 30px;
+	box-shadow: 3px 3px 30px rgba(0, 0, 0, 0.35);
+	border-radius: 10px;
+	border: 3px solid #305A72;
+  max-width: 450px;
+
+
+  
 }
 
 

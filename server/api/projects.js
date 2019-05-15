@@ -109,7 +109,7 @@ router.post('/:id', async (req, res, next) => {
         } else {
           const maxOrder = await Ticket.maxOrder('to_do', project.id);
 
-          const order = maxOrder[0].max + 1;
+          const order = maxOrder[0].max ? maxOrder[0].max + 1 : 0;
 
           const newTicket = await Ticket.create({
             title,

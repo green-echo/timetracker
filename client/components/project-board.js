@@ -142,25 +142,11 @@ class ProjectBoard extends React.Component {
                   })}
                 </DropdownMenu>
               </ButtonDropdown>
-
-              <ButtonDropdown
-                isOpen={this.state.userDropdownOpen}
-                toggle={this.userToggle}
-              >
-                <DropdownToggle caret size="sm" color="info">
-                  {' '}
+              <Link to={`/projects/${this.props.project.id}/ticketdata`}>
+                <Button color="info" size="sm">
                   Users On Project
-                </DropdownToggle>
-                <DropdownMenu>
-                  <DropdownItem header>Users On Project</DropdownItem>
-                  <DropdownItem divider />
-                  {this.props.allUsers.map(user => {
-                    return (
-                      <DropdownItem key={user.id}>{user.email}</DropdownItem>
-                    );
-                  })}
-                </DropdownMenu>
-              </ButtonDropdown>
+                </Button>
+              </Link>
               <Link to={`/timesheet`}>
                 <Button color="info" size="sm">
                   Timesheets
@@ -168,11 +154,6 @@ class ProjectBoard extends React.Component {
               </Link>
             </Col>
             <Col xs={6} className="right-nav">
-              <Link to={`/projects/${this.props.project.id}/ticketdata`}>
-                <Button outline color="info" size="sm">
-                  Data
-                </Button>
-              </Link>
               <Link to={`/projects/${this.props.project.id}/newticket`}>
                 <Button outline color="info" size="sm">
                   New Ticket

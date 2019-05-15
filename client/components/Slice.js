@@ -19,13 +19,30 @@ class Slice extends Component {
       return (
         <React.Fragment>
           <path d={arc(slice)} fill={sliceColor} />
-          <text
+          {/* <text
             transform={`translate(${arc.centroid(slice)})`}
             fill="white"
             dy=".35em"
           >
             {slice.value}
-          </text>>
+          </text>> */}
+          {/* {this.props.alldata.map(object => {
+            return (
+              <text
+                transform={`translate(${arc.centroid(slice)})`}
+                fill="white"
+                key={object.id}
+                dy=".35em"
+              >
+                {object.user}
+              </text>
+            );
+          })} */}
+          {Object.keys(this.props.alldata)
+            .filter(key => this.props.alldata[key] === slice.data)
+            .map((key, index) => {
+              return <text key={key}> {this.props.alldata[key].user}</text>;
+            })}
         </React.Fragment>
       );
     });

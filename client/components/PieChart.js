@@ -14,8 +14,8 @@ class PieChart extends Component {
   }
   render() {
     console.log('DATA', this.props.userdata);
-    const height = 400;
-    const width = 400;
+    const height = 500;
+    const width = 500;
 
     if (this.props.userdata.length) {
       let data = this.props.userdata.map(object => object.points);

@@ -1,8 +1,9 @@
-const passport = require('passport')
-const router = require('express').Router()
-const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
-const {User} = require('../db/models')
-module.exports = router
+const passport = require('passport');
+const router = require('express').Router();
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const { User } = require('../db/models');
+//const { clientID, clientSecret, callbackURL } = require('./secrets');
+module.exports = router;
 
 /**
  * For OAuth keys and other secrets, your Node process will search
@@ -18,39 +19,35 @@ module.exports = router
  * process.env.GOOGLE_CALLBACK = '/your/google/callback'
  */
 
-process.env.GOOGLE_CLIENT_ID = '98235962795-rh5rl7n20i4a8627o4f3fi9iv6lkqt9c.apps.googleusercontent.com'
-process.env.GOOGLE_CLIENT_SECRET = 'JXcD3gdAhZeLqqDWCfaHguGU'
-process.env.GOOGLE_CALLBACK = 'http://localhost:8080/auth/google/callback'
-
 if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
-  console.log('Google client ID / secret not found. Skipping Google OAuth.')
+  console.log('Google client ID / secret not found. Skipping Google OAuth.');
 } else {
   const googleConfig = {
     clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET ,
     callbackURL: process.env.GOOGLE_CALLBACK
-  }
+  };
 
   const strategy = new GoogleStrategy(
     googleConfig,
     (token, refreshToken, profile, done) => {
-      const googleId = profile.id
-      const name = profile.displayName
-      const email = profile.emails[0].value
-      const profilePic =  profile.photos ? profile.photos[0].value : undefined
+      const googleId = profile.id;
+      const name = profile.displayName;
+      const email = profile.emails[0].value;
+      const profilePic = profile.photos ? profile.photos[0].value : undefined;
 
       User.findOrCreate({
-        where: {googleId},
-        defaults: {name, email, profilePic}
+        where: { googleId },
+        defaults: { name, email, profilePic }
       })
         .then(([user]) => done(null, user))
-        .catch(done)
+        .catch(done);
     }
-  )
+  );
 
-  passport.use(strategy)
+  passport.use(strategy);
 
-  router.get('/', passport.authenticate('google', {scope: 'email'}))
+  router.get('/', passport.authenticate('google', { scope: 'email' }));
 
   router.get(
     '/callback',
@@ -58,5 +55,5 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
       successRedirect: '/',
       failureRedirect: '/login'
     })
-  )
+  );
 }

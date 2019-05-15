@@ -35,7 +35,6 @@ class MainNav extends Component {
       <div>
         {this.props.isLoggedIn ? (
           <div>
-
             <Navbar color="light" light expand="md">
               <NavbarBrand
                 href="/"
@@ -52,11 +51,13 @@ class MainNav extends Component {
                     <Link to="/home">Home</Link>
                   </NavItem>
                   <NavItem>
-                    <a href="#" onClick={ () =>{if (window.confirm('Are you sure you wish to log out?'))
-                     this.props.handleClick()}
-                   }>
-                   Logout
-                    </a>
+                    <Link
+                      onClick={() => {
+                        this.props.handleClick();
+                      }}
+                    >
+                      Logout
+                    </Link>
                   </NavItem>
                   <NavItem>
                     <Link to="/projects/user/tables">Tickets Per Project</Link>

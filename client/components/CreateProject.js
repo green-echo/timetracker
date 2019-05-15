@@ -45,11 +45,11 @@ class CreateProject extends Component {
 
   render() {
     return (
-      <div>
-        <h1>Create a New Project</h1>
-        <form onSubmit={this.handleSubmit}>
+      <div id='create-form' >
+       
+        <form   onSubmit={this.handleSubmit}>
           <label className="formLabel" htmlFor="name">
-            name:{' '}
+            Project Name:{' '}
           </label>
           <input
             type="text"
@@ -76,6 +76,7 @@ class CreateProject extends Component {
             Submit
           </button>
         </form>
+   
       </div>
     );
   }

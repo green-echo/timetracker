@@ -117,7 +117,8 @@ class TimeSheet extends React.Component {
           />
         ),
         filterMethod: (filter, row) => {
-          // console.log('FILTER', filter.value);
+          console.log('FILTER', filter.value.startDate);
+          console.log('FILTER', filter.value.endDate);
 
           // console.log('in filter method', filter);
           if (
@@ -129,17 +130,19 @@ class TimeSheet extends React.Component {
             return true;
           }
 
-          if (
-            moment(row[filter.id]).isBetween(
-              filter.value.startDate,
-              filter.value.endDate
-            )
-          ) {
-            // Found row matching filter
-            console.log('Found row matching filter');
-            console.log(row[filter.id]);
-            return true;
-          }
+          // if (
+          return moment(row[filter.id]).isBetween(
+            filter.value.startDate,
+            filter.value.endDate,
+            'days',
+            '[]'
+          );
+          // ) {
+          //   // Found row matching filter
+          //   // console.log('Found row matching filter');
+          //   console.log('ROW', moment(row[filter.id]));
+          //   return true;
+          // }
         }
       },
       {
@@ -224,20 +227,19 @@ class TimeSheet extends React.Component {
                 .toLowerCase()
                 .includes(filter.value.toLowerCase())
             }
-            onFilteredChange={() => this.calcTotal()}
+            onFilteredChange={this.calcTotal}
+            // onFilteredChange={debounce(() => this.calcTotal(), 10000)}
             // onFilteredChange={filter => {
             //   console.log('FILLLLTERRRR', filter);
-            //   const startFilter = filter.find(el => el.id === 'start');
-            //   if (startFilter) {
-            //     if (startFilter.value) {
-            //       if (startFilter.value.endDate) {
-            //         this.calcTotal();
-            //       }
-            //     }
-            //   } else {
-            //     this.calcTotal();
-            //   }
-            //   this.calcTotal();
+            //   // const startFilter = filter.find(el => el.id === 'start');
+            //   // if (startFilter) {
+            //   //   if (startFilter.value) {
+            //   //     if (startFilter.value.endDate) {
+            //   //       console.log('recalculating');
+            //   //       this.calcTotal();
+            //   //     }
+            //   //   }
+            //   // }
             // }}
             className="-striped -highlight"
             showFilters="true"

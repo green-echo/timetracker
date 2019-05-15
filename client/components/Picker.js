@@ -25,6 +25,11 @@ export default class Picker extends Component {
         endDate: this.props.endDate
       });
     }
+
+    // this.props.cellInfo.onChange({
+    //   startDate: this.props.startDate,
+    //   endDate: this.props.endDate
+    // });
   }
 
   handleChange = date => {

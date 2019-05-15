@@ -21,12 +21,10 @@ class PieChart extends Component {
     this.props.getProject();
     window.addEventListener('resize', this.calculatePosition);
   }
-  componentDidUpdate(prevProps) {
-    console.log('PREVPROPS INSIDE PIECHART', prevProps);
+  componentDidUpdate() {
     this.calculatePosition();
   }
   calculatePosition() {
-    console.log('THIS IS GETTING CALLED');
     width = window.innerWidth;
     height = window.innerHeight;
     minViewportSize = Math.min(width, height);
@@ -52,7 +50,7 @@ class PieChart extends Component {
       let totalPoints = data.reduce((current, next) => {
         return current + next;
       });
-      console.log(totalPoints);
+
       let pie = d3.pie()(data);
       return (
         <React.Fragment>
@@ -73,12 +71,7 @@ class PieChart extends Component {
         </React.Fragment>
       );
     } else {
-      return (
-        <Spinner color="info" className="spinner">
-          {' '}
-          Loading your Data
-        </Spinner>
-      );
+      return <Spinner color="info" className="spinner" />;
     }
   }
 }

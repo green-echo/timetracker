@@ -211,15 +211,16 @@ a.navbar-brand {
 }
 
 
-#loginform {
+#loginform, #loginForm1 {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   width: 100%;
   text-align: left !important;
-  margin: 10% 0;
+
   align-items: left;
+
 }
 
 body { padding: 2em; }

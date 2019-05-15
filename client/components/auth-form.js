@@ -26,8 +26,8 @@ const AuthForm = props => {
   const { name, displayName, handleSubmit, error, classes } = props;
 
   return (
-   <div>
-      <form id='loginform' className={classes.container} onSubmit={handleSubmit} name={name}>
+   <div  id='loginform' >
+      <form id='loginForm1'className={classes.container} onSubmit={handleSubmit} name={name}>
         {/* I am saving the old formfields until these pass testing  */}
         {/* <div>
           <label htmlFor="email">
@@ -74,16 +74,16 @@ const AuthForm = props => {
         </Button>
         </div>
         {error && error.response && <div> {error.response.data} </div>}
-        <div> <form method='get' action='/auth/google'>
+        {/* <div> <form method='get' action='/auth/google'>
       <button type='submit'  className="loginBtn loginBtn--google">Login with Google</button>
-    </form></div>
+    </form></div> */}
       </form>
     
       {/* Commenting out google OAuth until its implemented  */}
       {/* <a href="/auth/google">{displayName} with Google</a> */}
-      {/* <form method='get' action='/auth/google'>
+      <form method='get' action='/auth/google'>
       <button type='submit'  className="loginBtn loginBtn--google">Login with Google</button>
-    </form> */}
+    </form>
   </div>
   );
 };

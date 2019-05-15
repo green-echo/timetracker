@@ -18,6 +18,10 @@ module.exports = router
  * process.env.GOOGLE_CALLBACK = '/your/google/callback'
  */
 
+process.env.GOOGLE_CLIENT_ID = '98235962795-rh5rl7n20i4a8627o4f3fi9iv6lkqt9c.apps.googleusercontent.com'
+process.env.GOOGLE_CLIENT_SECRET = 'JXcD3gdAhZeLqqDWCfaHguGU'
+process.env.GOOGLE_CALLBACK = 'http://localhost:8080/auth/google/callback'
+
 if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
   console.log('Google client ID / secret not found. Skipping Google OAuth.')
 } else {
@@ -33,10 +37,11 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
       const googleId = profile.id
       const name = profile.displayName
       const email = profile.emails[0].value
+      const profilePic =  profile.photos ? profile.photos[0].value : undefined
 
       User.findOrCreate({
         where: {googleId},
-        defaults: {name, email}
+        defaults: {name, email, profilePic}
       })
         .then(([user]) => done(null, user))
         .catch(done)
@@ -50,7 +55,7 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
   router.get(
     '/callback',
     passport.authenticate('google', {
-      successRedirect: '/home',
+      successRedirect: '/',
       failureRedirect: '/login'
     })
   )

@@ -47,7 +47,7 @@ class AddUserToProject extends Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form  id='create-form'onSubmit={this.handleSubmit}>
         <label className="formLabel" htmlFor="email">
           Email:
         </label>

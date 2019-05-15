@@ -54,7 +54,7 @@ self.addEventListener('fetch', function(event) {
                   var resCopy = response.clone();
 
 
-                  caches.open(cacheName)
+                  caches.open('offline')
                   .then(function(cache) {
                       return cache.put(reqCopy, resCopy); 
                   });

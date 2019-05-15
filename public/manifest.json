@@ -3,14 +3,12 @@
   "short_name": "timetracker",
   "icons": [
     {
-      "src":
-        "timey-icon.png",
+      "src": "timey-icon.png",
       "sizes": "128x128",
       "type": "image/png"
     },
     {
-      "src":
-      "timey-icon.png",
+      "src": "timey-icon.png",
       "type": "image/png",
       "sizes": "512x512"
     }

@@ -27,8 +27,8 @@ if (process.env.NODE_ENV === 'test') {
  * Node process on process.env
  */
 if (process.env.NODE_ENV !== 'production') {
-  const dotenv = require('dotenv');
-  dotenv.config();
+  // const dotenv = require('dotenv');
+  // dotenv.config();
 }
 
 // passport registration

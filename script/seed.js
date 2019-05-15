@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 'use strict';
 
 const db = require('../server/db');
@@ -544,6 +545,28 @@ async function seed() {
     await huluTickets[i].setProject(projects[4]);
   }
 
+  const allTickets = netflixTickets
+    .concat(hersheyFrontEndTickets)
+    .concat(hersheyBackEndTickets)
+    .concat(spotifyTickets)
+    .concat(huluTickets);
+
+  // console.log(randomDate(new Date(2012, 0, 1), new Date()));
+  const uTix = [];
+
+  for (let i = 0; i < allTickets.length; i++) {
+    for (let j = 0; j < users.length; j++) {
+      let start = randomDate(new Date(2019, 0, 1), new Date());
+      let end = randomDate(new Date(start), new Date());
+      let userTicket = await UserTicket.create({
+        start: new Date(start),
+        end: new Date(end)
+      });
+      await userTicket.setTicket(allTickets[i]);
+      await userTicket.setUser(users[j]);
+    }
+  }
+
   console.log(`seeded ${users.length} users`);
   console.log(`seeded successfully`);
 }
@@ -570,6 +593,13 @@ async function runSeed() {
 // any errors that might occur inside of `seed`.
 if (module === require.main) {
   runSeed();
+}
+
+function randomDate(start, end) {
+  const random = new Date(
+    start.getTime() + Math.random() * (end.getTime() - start.getTime())
+  );
+  return random;
 }
 
 // we export the seed function for testing purposes (see `./seed.spec.js`)

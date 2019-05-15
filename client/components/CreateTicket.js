@@ -46,47 +46,53 @@ class CreateTicket extends Component {
 
   render() {
     return (
-      <form id='create-form' onSubmit={this.handleSubmit}>
-        <label className="formLabel" htmlFor="title">
-          Title:{' '}
-        </label>
-        <input
-          type="text"
-          name="title"
-          value={this.state.title}
-          onChange={this.handleChange}
-        />
-        <br />
-        <label className="formLabel" htmlFor="description">
-          Description:{' '}
-        </label>
-        <input
-          type="text"
-          name="description"
-          value={this.state.description}
-          onChange={this.handleChange}
-        />
-        <br />
-        <label className="formLabel" htmlFor="points">
-          Points:
-        </label>
-        <input
-          type="number"
-          name="points"
-          min="1"
-          value={this.state.points}
-          onChange={this.handleChange}
-        />
-        <br />
-        <button
-          type="submit"
-          disabled={
-            !this.state.title || !this.state.description || !this.state.points
-          }
-        >
-          Submit
-        </button>
-      </form>
+      <div className='create-form' >
+      <div>
+       <form  id='abc' onSubmit={this.handleSubmit}>
+            <label className="formLabel" htmlFor="title">
+              Title:{' '}
+            </label>
+            <input
+              type="text"
+              name="title"
+              value={this.state.title}
+              onChange={this.handleChange}
+            />
+            <br />
+            <label className="formLabel" htmlFor="description">
+              Description:{' '}
+            </label>
+            <input
+              type="text"
+              name="description"
+              value={this.state.description}
+              onChange={this.handleChange}
+            />
+            <br />
+            <label className="formLabel" htmlFor="points">
+              Points:
+            </label>
+            <input
+              type="number"
+              name="points"
+              min="1"
+              value={this.state.points}
+              onChange={this.handleChange}
+            />
+            <br />
+            <button
+              type="submit"
+              disabled={
+                !this.state.title ||
+                !this.state.description ||
+                !this.state.points
+              }
+            >
+              Submit
+            </button>
+          </form>
+        </div>
+      </div>
     );
   }
 }

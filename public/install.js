@@ -1,4 +1,4 @@
-// //window.addEventListener('beforeinstallprompt', deferredInstallPrompt);
+// window.addEventListener('beforeinstallprompt', deferredInstallPrompt);
 
 // deferredInstallPrompt = evt;
 // installButton.removeAttribute('hidden');
@@ -20,3 +20,4 @@
 //     window.addEventListener('appinstalled', logAppInstalled);
 
 //     console.log('Weather App was installed.', evt);
+

@@ -45,9 +45,9 @@ class CreateProject extends Component {
 
   render() {
     return (
-      <div>
-       
-        <form  id='create-form' onSubmit={this.handleSubmit}>
+      <div className='create-form' >
+       <div>
+        <form  id='abc' onSubmit={this.handleSubmit}>
           <label className="formLabel" htmlFor="name">
             Project Name:{' '}
           </label>
@@ -59,7 +59,7 @@ class CreateProject extends Component {
           />
           <br />
           <label className="formLabel" htmlFor="totalTime">
-            Total Points:
+            Total Points:{' '}
           </label>
           <input
             type="number"
@@ -69,6 +69,7 @@ class CreateProject extends Component {
             onChange={this.handleChange}
           />
           <br />
+          <br />
           <button
             type="submit"
             disabled={!this.state.name || !this.state.totalTime}
@@ -76,6 +77,7 @@ class CreateProject extends Component {
             Submit
           </button>
         </form>
+        </div>
       </div>
     );
   }

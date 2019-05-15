@@ -10,11 +10,10 @@ import TimeSheet from './components/TimeSheet';
 
 import Projects from './components/Projects';
 import AddUserToProject from './components/AddUserToProject';
-import userTimeTable from './components/userTimeTable';
 import Chart from './components/Chart';
-import NotFound from './components/NotFound'
-import AuthForm from './components/auth-form'
-
+import PieChart from './components/PieChart';
+import NotFound from './components/NotFound';
+import AuthForm from './components/auth-form';
 
 /**
  * COMPONENT
@@ -43,17 +42,14 @@ class Routes extends Component {
             <Route exact path="/timesheet" component={TimeSheet} />
             <Route exact path="/projects/:id" component={ProjectBoard} />
             <Route exact path="/projects/user/tables" component={Chart} />
-            <Route exact path='/' component={Projects} />
-            <Route exact path='/projects' component={Projects} />
+            <Route exact path="/projects/:id/ticketdata" component={PieChart} />
+            <Route component={Projects} />
+            <Route exact path="/" component={Projects} />
+            <Route exact path="/projects" component={Projects} />
             <Route path="*" component={NotFound} />
-
-
-
-           
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
-   
       </Switch>
     );
   }

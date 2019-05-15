@@ -142,29 +142,11 @@ class ProjectBoard extends React.Component {
                   })}
                 </DropdownMenu>
               </ButtonDropdown>
-
-              <ButtonDropdown
-                isOpen={this.state.userDropdownOpen}
-                toggle={this.userToggle}
-              >
-                <DropdownToggle caret size="sm" color="info">
-                  {' '}
+              <Link to={`/projects/${this.props.project.id}/ticketdata`}>
+                <Button color="info" size="sm">
                   Users On Project
-                </DropdownToggle>
-                <DropdownMenu>
-                  <DropdownItem header>Users On Project</DropdownItem>
-                  <DropdownItem divider />
-                  {this.props.allUsers.map(user => {
-                    return (
-                      <DropdownItem
-                        key={user.id}
-                      >
-                        {user.email}
-                      </DropdownItem>
-                    );
-                  })}
-                </DropdownMenu>
-              </ButtonDropdown>
+                </Button>
+              </Link>
               <Link to={`/timesheet`}>
                 <Button color="info" size="sm">
                   Timesheets
@@ -317,7 +299,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   const projectId = ownProps.match.params.id;
-  console.log('PROJECTID', projectId);
   return {
     getProject: () => {
       dispatch(getProjectThunk(projectId));

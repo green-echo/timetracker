@@ -20,11 +20,11 @@ router.get('/all', async (req, res, next) => {
 
 /* The is the route for D3 chart: Get all of the tickets that belong to a specific user, include the project route */
 router.get('/user/tickets', async (req, res, next) => {
-  let userId = Number(req.user.id);
   try {
     if (!req.isAuthenticated()) {
       res.sendStatus(403);
     } else {
+      let userId = Number(req.user.id);
       const user = await User.findByPk(userId);
       const tickets = await Ticket.findAll({
         where: {
@@ -38,18 +38,7 @@ router.get('/user/tickets', async (req, res, next) => {
         include: [{ model: Project }],
         raw: true
       });
-      // TO DO: PUT THIS IN UTIL FUNCTION
       res.json(tickets);
-      // let timePerProject = {};
-      // tickets.forEach(ticketProject => {
-      //   let project = ticketProject.project.name;
-      //   if (project in timePerProject) {
-      //     timePerProject[project] += ticketProject.points;
-      //   } else {
-      //     timePerProject[project] = ticketProject.points;
-      //   }
-      // });
-      // res.json(timePerProject);
     }
   } catch (error) {
     next(error);
@@ -77,6 +66,31 @@ router.get('/:id', async (req, res, next) => {
     next(error);
   }
 });
+/* get all tickets for a project a group them by the user  */
+router.get('/:id/ticketdata', async (req, res, next) => {
+  try {
+    if (!req.isAuthenticated()) {
+      res.sendStatus(403);
+    } else {
+      const tickets = await Ticket.findAll({
+        where: {
+          projectId: req.params.id
+        },
+        attributes: [
+          'user.id',
+          [Sequelize.fn('sum', Sequelize.col('points')), 'points']
+        ],
+        group: ['user.id'],
+        include: [{ model: User }],
+        raw: true
+      });
+      console.log('TICKETS', tickets);
+      res.json(tickets);
+    }
+  } catch (error) {
+    next(error);
+  }
+});
 
 // add a ticket to a specific project
 router.post('/:id', async (req, res, next) => {
@@ -95,7 +109,7 @@ router.post('/:id', async (req, res, next) => {
         } else {
           const maxOrder = await Ticket.maxOrder('to_do', project.id);
 
-          const order = maxOrder[0].max + 1;
+          const order = maxOrder[0].max ? maxOrder[0].max + 1 : 0;
 
           const newTicket = await Ticket.create({
             title,

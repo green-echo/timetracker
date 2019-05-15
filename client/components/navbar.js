@@ -51,13 +51,13 @@ class MainNav extends Component {
                     <Link to="/home">Home</Link>
                   </NavItem>
                   <NavItem>
-                    <a
+                    <Link
                       onClick={() => {
                         this.props.handleClick();
                       }}
                     >
                       Logout
-                    </a>
+                    </Link>
                   </NavItem>
                   <NavItem>
                     <Link to="/projects/user/tables">Tickets Per Project</Link>

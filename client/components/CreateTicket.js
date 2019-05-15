@@ -25,11 +25,6 @@ class CreateTicket extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   this.setState({title: nextProps.selectedStudent.firstName, lastName:nextProps.selectedStudent.lastName
-  //   , email:nextProps.selectedStudent.email})
-  //  }
-
   handleChange(event) {
     this.setState({
       [event.target.name]: event.target.value
@@ -51,7 +46,7 @@ class CreateTicket extends Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form id='create-form' onSubmit={this.handleSubmit}>
         <label className="formLabel" htmlFor="title">
           Title:{' '}
         </label>

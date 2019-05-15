@@ -12,6 +12,8 @@ import Projects from './components/Projects';
 import AddUserToProject from './components/AddUserToProject';
 import Chart from './components/Chart';
 import PieChart from './components/PieChart';
+import NotFound from './components/NotFound';
+import AuthForm from './components/auth-form';
 
 /**
  * COMPONENT
@@ -34,7 +36,6 @@ class Routes extends Component {
             {/* Routes placed here are only available after logging in */}
             <Route exact path="/newproject" component={CreateProject} />
             <Route path="/home" component={UserHome} />
-
             <Route path="/projects/:id/newticket" component={CreateTicket} />
             <Route path="/projects/:id/adduser" component={AddUserToProject} />
             <Route exact path="/projects/:id" component={ProjectBoard} />
@@ -43,6 +44,9 @@ class Routes extends Component {
             <Route exact path="/projects/user/tables" component={Chart} />
             <Route exact path="/projects/:id/ticketdata" component={PieChart} />
             <Route component={Projects} />
+            <Route exact path="/" component={Projects} />
+            <Route exact path="/projects" component={Projects} />
+            <Route path="*" component={NotFound} />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}

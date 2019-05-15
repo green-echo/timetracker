@@ -43,6 +43,7 @@ class MainNav extends Component {
               >
                 Timey
               </NavbarBrand>
+
               <NavbarToggler onClick={this.toggle} />
               <Collapse isOpen={this.state.isOpen} navbar>
                 <Nav className="ml-auto" navbar>
@@ -50,7 +51,11 @@ class MainNav extends Component {
                     <Link to="/home">Home</Link>
                   </NavItem>
                   <NavItem>
-                    <a href="#" onClick={this.props.handleClick}>
+                    <a
+                      onClick={() => {
+                        this.props.handleClick();
+                      }}
+                    >
                       Logout
                     </a>
                   </NavItem>

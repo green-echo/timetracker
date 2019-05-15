@@ -1,53 +1,70 @@
-self.addEventListener('install', function(event) {
-  event.waitUntil(preLoad());
-});
+// const MY_CACHE = ['/projects/', 
+// '/project', '/',
+//  '/offline.html',
+//  ]
 
-var preLoad = function() {
-  console.log('Installing web app');
-  return caches.open('offline').then(function(cache) {
-    console.log('caching index and important routes');
-    return cache.addAll(['/projects/', '/project', '/', '/offline.html']);
-  });
-};
 
-self.addEventListener('fetch', function(event) {
-  event.respondWith(
-    checkResponse(event.request).catch(function() {
-      return returnFromCache(event.request);
-    })
-  );
-  event.waitUntil(addToCache(event.request));
-});
 
-var checkResponse = function(request) {
-  return new Promise(function(fulfill, reject) {
-    fetch(request).then(function(response) {
-      if (response.status !== 404) {
-        fulfill(response);
-      } else {
-        reject();
-      }
-    }, reject);
-  });
-};
+// self.addEventListener('install', function(event) {
+//   event.waitUntil(preLoad());
+// });
 
-var addToCache = function(request) {
-  return caches.open('offline').then(function(cache) {
-    return fetch(request).then(function(response) {
-      console.log(response.url + ' was cached');
-      return cache.put(request, response);
-    });
-  });
-};
+// var preLoad = function() {
+//   console.log('Installing web app');
+//   return caches.open('offline').then(function(cache) {
+//     console.log('caching index and important routes');
+//     return cache.addAll(MY_CACHE);
+//   });
+// };
 
-var returnFromCache = function(request) {
-  return caches.open('offline').then(function(cache) {
-    return cache.match(request).then(function(matching) {
-      if (!matching || matching.status == 404) {
-        return cache.match('offline.html');
-      } else {
-        return matching;
-      }
-    });
-  });
-};
+// // self.addEventListener('fetch', function(event) {
+// //   event.respondWith(
+// //       caches.match(event.request)
+// //       .then(function(response) {
+// //           if(response){
+// //               return response
+// //           }
+// //           // not in cache, return from network
+// //           return fetch(event.request, {credentials: 'include'});
+// //       })
+// //   );
+// // });
+
+
+
+// self.addEventListener('fetch', function(event) {
+//   event.respondWith(
+//       caches.match(event.request)
+//       .then(function(response) {
+//           if(response){
+//               return response
+//           }
+//           else{
+             
+//               var reqCopy = event.request.clone();
+              
+//               return fetch(reqCopy, {credentials: 'include'}) 
+//               .then(function(response) {
+               
+//                   if(!response || response.status !== 200 || response.type !== 'basic') {
+//                       return response; 
+//                   }
+
+              
+//                   var resCopy = response.clone();
+
+
+//                   caches.open('offline')
+//                   .then(function(cache) {
+//                       return cache.put(reqCopy, resCopy); 
+//                   });
+
+             
+
+
+//                   return response; 
+//               })
+//           }
+//       })
+//   );
+//     })
